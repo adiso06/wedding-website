@@ -1,0 +1,205 @@
+/* NYT-Inspired Wedding Website - Global Styles */
+
+:root {
+  /* Colors */
+  --color-black: #000000;
+  --color-newsprint: #F7F7F5;
+  --color-accent: #8B0000; /* Deep crimson for links and breaking news */
+  --color-border: #000000;
+
+  /* Typography */
+  --font-headline: 'PT Serif', Georgia, serif;
+  --font-body: Arial, 'Franklin Gothic', sans-serif;
+  --font-caption: 'Libre Baskerville', serif;
+  --font-blackletter: 'UnifrakturMaguntia', cursive;
+
+  /* Grid */
+  --column-gap: 16px;
+  --row-gap: 16px;
+  --border-width: 1px;
+
+  /* Spacing */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+  --spacing-2xl: 48px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-newsprint);
+  color: var(--color-black);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-headline);
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
+}
+
+h1 {
+  font-size: 3.5rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+h2 {
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+h5 {
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+h6 {
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+p {
+  margin: 0 0 1em 0;
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+a:hover {
+  opacity: 0.7;
+  text-decoration: underline;
+}
+
+/* Utility Classes */
+.border-top {
+  border-top: var(--border-width) solid var(--color-border);
+}
+
+.border-bottom {
+  border-bottom: var(--border-width) solid var(--color-border);
+}
+
+.border-left {
+  border-left: var(--border-width) solid var(--color-border);
+}
+
+.border-right {
+  border-right: var(--border-width) solid var(--color-border);
+}
+
+.border-all {
+  border: var(--border-width) solid var(--color-border);
+}
+
+.caption {
+  font-family: var(--font-caption);
+  font-size: 0.75rem;
+  font-style: italic;
+  color: #333;
+  line-height: 1.4;
+}
+
+.byline {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-sm);
+}
+
+.dateline {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  color: #666;
+  margin-bottom: var(--spacing-sm);
+}
+
+/* Button Styles */
+button {
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--color-black);
+  color: var(--color-newsprint);
+  border: var(--border-width) solid var(--color-black);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+button:hover {
+  background-color: var(--color-newsprint);
+  color: var(--color-black);
+}
+
+button.secondary {
+  background-color: transparent;
+  color: var(--color-black);
+  border: var(--border-width) solid var(--color-black);
+}
+
+button.secondary:hover {
+  background-color: var(--color-black);
+  color: var(--color-newsprint);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+  }
+}
