@@ -4,6 +4,8 @@ import Navigation from './components/Navigation';
 import RSVPModal from './components/RSVPModal';
 import ArticleModal from './components/ArticleModal';
 import MiniCrossword from './components/MiniCrossword';
+import FilmStrip from './components/FilmStrip';
+import PhotoEssay from './components/PhotoEssay';
 import './styles/App.css';
 
 // Article data
@@ -130,30 +132,30 @@ const articles: Article[] = [
         <h3>Friday, March 14th (Select Guests Only)</h3>
 
         <p><strong>2:00 PM - Haldi Ceremony</strong><br />
-        Traditional pre-wedding ritual. Dress Code: Indian attire recommended. Duration approximately 3 hours.</p>
+          Traditional pre-wedding ritual. Dress Code: Indian attire recommended. Duration approximately 3 hours.</p>
 
         <p><strong>5:00 PM - Dinner Service</strong><br />
-        Meal service for Haldi attendees.</p>
+          Meal service for Haldi attendees.</p>
 
         <p><strong>6:00 PM - Evening Gathering</strong><br />
-        Informal celebrations continue through 9:00 PM.</p>
+          Informal celebrations continue through 9:00 PM.</p>
 
         <h3>Saturday, March 15th (All Guests)</h3>
 
         <p><strong>10:30 AM - Baraat Assembly</strong><br />
-        <em>Critical Advisory:</em> The Baraat procession will mobilize at 10:30 AM sharp. While the couple respects cultural traditions regarding "Indian Standard Time," this event operates on a strict Western schedule. Delegates arriving late risk missing the procession entirely. The Events Committee cannot overstate the importance of punctuality.</p>
+          <em>Critical Advisory:</em> The Baraat procession will mobilize at 10:30 AM sharp. While the couple respects cultural traditions regarding "Indian Standard Time," this event operates on a strict Western schedule. Delegates arriving late risk missing the procession entirely. The Events Committee cannot overstate the importance of punctuality.</p>
 
         <p><strong>11:00 AM - Wedding Ceremony</strong><br />
-        BAPS Mandir, Chino Hills. Traditional Hindu wedding ceremony. Dress Code: Indian attire strongly preferred; formal suits acceptable. Ceremony duration approximately 2-3 hours. <strong>Important:</strong> Modest attire required for temple entry.</p>
+          BAPS Mandir, Chino Hills. Traditional Hindu wedding ceremony. Dress Code: Indian attire strongly preferred; formal suits acceptable. Ceremony duration approximately 2-3 hours. <strong>Important:</strong> Modest attire required for temple entry.</p>
 
         <p><strong>1:30 PM - Lunch Service</strong><br />
-        Following ceremony at BAPS Mandir. Traditional Indian cuisine will be served.</p>
+          Following ceremony at BAPS Mandir. Traditional Indian cuisine will be served.</p>
 
         <p><strong>6:00 PM - Reception Begins</strong><br />
-        Majestic Banquet Hall, Chino Hills. Dress Code: Indo-Western fusion or Western formal attire. The committee encourages creative interpretation while maintaining elegance.</p>
+          Majestic Banquet Hall, Chino Hills. Dress Code: Indo-Western fusion or Western formal attire. The committee encourages creative interpretation while maintaining elegance.</p>
 
         <p><strong>12:00 AM - Closing</strong><br />
-        Reception concludes. Delegates responsible for their own transportation back to accommodations.</p>
+          Reception concludes. Delegates responsible for their own transportation back to accommodations.</p>
 
         <h3>Dress Code Clarifications</h3>
         <ul>
@@ -166,6 +168,114 @@ const articles: Article[] = [
       </>
     ),
   },
+
+  {
+    id: 'market-analysis',
+    title: 'Wedding Registry Market Shows Bullish Trends',
+    subtitle: 'Analysts Predict High Yields on Cuisinart Futures',
+    author: 'The Financial Desk',
+    date: 'Dec. 15, 2024',
+    category: 'MARKETS',
+    summary: 'Investors are flocking to high-quality domestic assets. "The Le Creuset index is looking particularly strong," notes one analyst.',
+    content: (
+      <>
+        <p><strong>NEW YORK</strong> — Financial markets opened higher today as news of the registry release sent shockwaves through the domestic goods sector.</p>
+        <p>"We are seeing unprecedented demand for high-end cookware," said Jim Cramer on his evening show. "Buy, buy, buy!"</p>
+      </>
+    ),
+  },
+  {
+    id: 'opinion-merger',
+    title: 'Why This Merger Makes Sense',
+    subtitle: 'A strategic analysis of the union',
+    author: 'The Editorial Board',
+    date: 'Dec. 15, 2024',
+    category: 'OPINION',
+    summary: 'Critics said it wouldn\'t work. They were wrong. Here is why the synergy is undeniable.',
+    content: (
+      <>
+        <p>Many skeptics pointed to the geographic distance. Others cited the disparate industries of Tech and Medicine. But they failed to account for the most important variable: Love (and FaceTime).</p>
+      </>
+    ),
+  },
+  {
+    id: 'tech-gastro',
+    title: 'AI in Gastroenterology: A Dinner Table Debate',
+    author: 'Tech & Health',
+    date: 'Dec. 15, 2024',
+    category: 'TECH',
+    summary: 'When a PM meets a Doctor, the conversation inevitably turns to "optimizing the digestive workflow."',
+    content: (
+      <>
+        <p>It started as a joke. Now, they are writing a white paper. We explore the implications of "Agile Digestion."</p>
+      </>
+    ),
+  },
+  {
+    id: 'travel-guide',
+    title: '36 Hours in Chino Hills',
+    author: 'Travel & Leisure',
+    date: 'Dec. 15, 2024',
+    category: 'TRAVEL',
+    summary: 'It\'s not just a suburb. It\'s a destination. Where to eat, stay, and shop.',
+    content: (
+      <>
+        <p>Forget Paris. Chino Hills is where the action is this March. We list the top 5 boba spots you must visit.</p>
+      </>
+    ),
+  },
+  {
+    id: 'style-watch',
+    title: 'The Return of the Nehru Jacket',
+    author: 'Fashion Week',
+    date: 'Dec. 15, 2024',
+    category: 'STYLE',
+    summary: 'Designers say the classic look is back, just in time for the Sangeet.',
+    content: (
+      <>
+        <p>Modest, elegant, and timeless. The Nehru jacket is making a comeback on runways from Milan to Mumbai.</p>
+      </>
+    ),
+  },
+  {
+    id: 'sports-cricket',
+    title: 'Groom Squad vs. Bride Squad: The Cricket Match of the Century',
+    author: 'Sports Desk',
+    date: 'Dec. 15, 2024',
+    category: 'SPORTS',
+    summary: 'Odds are 50-50 as the teams prepare for the pre-wedding showdown.',
+    content: (
+      <>
+        <p>The trash talk has already begun in the family WhatsApp group. "They don't have the bowling depth," claims the Groom's cousin.</p>
+      </>
+    ),
+  },
+  {
+    id: 'real-estate',
+    title: 'Housing Market in Chino Hills Heats Up',
+    author: 'Real Estate',
+    date: 'Dec. 15, 2024',
+    category: 'REAL ESTATE',
+    summary: 'Inventory remains low as wedding guests snap up Airbnbs.',
+    content: (
+      <>
+        <p>Local hosts are rejoicing. "I'm fully booked for March 15th," says one Superhost.</p>
+      </>
+    ),
+  },
+  {
+    id: 'arts-dance',
+    title: 'Choreography Leaks: Is the Groom Practicing?',
+    author: 'Arts & Culture',
+    date: 'Dec. 15, 2024',
+    category: 'ARTS',
+    summary: 'Sources say late-night rehearsals are happening. Expectations are managed.',
+    content: (
+      <>
+        <p>A blurred video surfaced on Instagram. Is that the Groom attempting a Bhangra step? Experts remain divided.</p>
+      </>
+    ),
+  }
 ];
 
 function App() {
@@ -177,41 +287,109 @@ function App() {
       <Masthead onRSVPClick={() => setShowRSVP(true)} />
       <Navigation onRSVPClick={() => setShowRSVP(true)} />
 
+      {/* Film Strip Marquee */}
+      <FilmStrip />
+
       {/* Hero Section */}
       <section className="hero-section">
         <div className="grid-5col">
-          {/* Main Story */}
+          {/* Left Column - News List */}
+          <div className="col-span-3 left-column">
+            <div className="sidebar-articles">
+              <article className="article-card sidebar-card" onClick={() => setSelectedArticle(articles[1])}> {/* FBLA Story */}
+                <h3 className="sidebar-headline">{articles[1].title}</h3>
+                <p className="article-summary-small">{articles[1].summary}</p>
+                <div className="article-time">4 min read</div>
+              </article>
+
+              <div className="divider-line"></div>
+
+              <article className="article-card sidebar-card" onClick={() => setSelectedArticle(articles[2])}> {/* Accommodations */}
+                <h3 className="sidebar-headline">{articles[2].title}</h3>
+                <p className="article-summary-small">{articles[2].summary}</p>
+                <div className="article-time">2 min read</div>
+              </article>
+
+              <div className="divider-line"></div>
+
+              <article className="article-card sidebar-card" onClick={() => setSelectedArticle(articles[4])}> {/* Registry/Market */}
+                <h3 className="sidebar-headline">{articles[4].title}</h3>
+                <p className="article-summary-small">{articles[4].summary}</p>
+                <div className="article-time">3 min read</div>
+              </article>
+
+              <div className="divider-line"></div>
+
+              <article className="article-card sidebar-card" onClick={() => setSelectedArticle(articles[10])}> {/* Real Estate */}
+                <div className="kicker-small">{articles[10].category}</div>
+                <h3 className="sidebar-headline">{articles[10].title}</h3>
+                <p className="article-summary-small">{articles[10].summary}</p>
+              </article>
+            </div>
+          </div>
+
+          {/* Center Column - Main Story */}
           <article
-            className="article-card col-span-8"
+            className="article-card col-span-6 main-story"
             onClick={() => setSelectedArticle(articles[0])}
           >
-            <div className="article-category">{articles[0].category}</div>
+            <div className="kicker-center">OFFICIAL WEDDING INVITATION</div>
             <h1 className="article-headline">{articles[0].title}</h1>
             <h2 className="article-subheadline">{articles[0].subtitle}</h2>
-            <div className="article-image-placeholder"></div>
-            <p className="article-summary">{articles[0].summary}</p>
+
+            <div className="article-image-container">
+              <img src="/A&C-105.jpg" alt="The happy couple" className="article-image" />
+              <div className="article-caption">
+                The couple in Long Island City shortly after the proposal. Sources say the negotiations were brief and highly successful. (Photo: The Archives)
+              </div>
+            </div>
+
+            <div className="article-content-preview">
+              <p className="article-summary">{articles[0].summary}</p>
+            </div>
             <div className="article-byline">By {articles[0].author}</div>
           </article>
 
-          {/* Sidebar Articles */}
-          <div className="col-span-4 sidebar-articles">
-            <article
-              className="article-card sidebar-card"
-              onClick={() => setSelectedArticle(articles[1])}
-            >
-              <div className="article-category">{articles[1].category}</div>
-              <h3 className="sidebar-headline">{articles[1].title}</h3>
-              <p className="article-summary-small">{articles[1].summary}</p>
-            </article>
+          {/* Right Column - Opinion & Lifestyle */}
+          <div className="col-span-3 right-column">
+            <div className="sidebar-header">OPINION</div>
+            <div className="sidebar-articles">
+              <article className="article-card sidebar-card opinion-card" onClick={() => setSelectedArticle(articles[5])}>
+                <div className="opinion-author-image"></div>
+                <h3 className="sidebar-headline italic">{articles[5].title}</h3>
+                <div className="article-byline">By {articles[5].author}</div>
+              </article>
 
-            <article
-              className="article-card sidebar-card border-top"
-              onClick={() => setSelectedArticle(articles[2])}
-            >
-              <div className="article-category">{articles[2].category}</div>
-              <h3 className="sidebar-headline">{articles[2].title}</h3>
-              <p className="article-summary-small">{articles[2].summary}</p>
-            </article>
+              <div className="divider-line"></div>
+
+              <article className="article-card sidebar-card opinion-card" onClick={() => setSelectedArticle(articles[3])}> {/* Schedule/Events moved here potentially or referenced */}
+                <h3 className="sidebar-headline italic">The Schedule: A Western Timeframe for an Eastern Event</h3>
+                <div className="article-byline">By The Events Committee</div>
+              </article>
+
+              <div className="divider-line double"></div>
+
+              <div className="sidebar-header">LIFE & ARTS</div>
+
+              <article className="article-card sidebar-card" onClick={() => setSelectedArticle(articles[7])}> {/* Travel */}
+                <div className="article-category">{articles[7].category}</div>
+                <h3 className="sidebar-headline">{articles[7].title}</h3>
+              </article>
+
+              <div className="divider-line"></div>
+
+              <article className="article-card sidebar-card" onClick={() => setSelectedArticle(articles[8])}> {/* Style */}
+                <div className="article-category">{articles[8].category}</div>
+                <h3 className="sidebar-headline">{articles[8].title}</h3>
+              </article>
+
+              <div className="divider-line"></div>
+
+              <article className="article-card sidebar-card" onClick={() => setSelectedArticle(articles[11])}> {/* Arts */}
+                <div className="article-category">{articles[11].category}</div>
+                <h3 className="sidebar-headline">{articles[11].title}</h3>
+              </article>
+            </div>
           </div>
         </div>
       </section>
@@ -236,6 +414,9 @@ function App() {
         </div>
       </section>
 
+      {/* Interactive Photo Essay */}
+      <PhotoEssay />
+
       {/* Registry Section */}
       <section className="registry-section border-top">
         <div className="grid-5col">
@@ -254,17 +435,26 @@ function App() {
             <p className="registry-footer"><em>A secure drop-box for cards and envelopes will be available at the Reception. Please direct questions to the couple via the RSVP form.</em></p>
           </div>
         </div>
-      </section>
+
+        <div className="quote-section border-top-double">
+          <div className="quote-container">
+            <span className="quote-label">Quote of the Day:</span>
+            <span className="quote-text">"I knew it was a bull market when she agreed to the second date." — Aditya Sood, on the early days of the merger.</span>
+          </div>
+        </div>
+      </section >
 
       {/* Modals */}
       {showRSVP && <RSVPModal onClose={() => setShowRSVP(false)} />}
-      {selectedArticle && (
-        <ArticleModal
-          article={selectedArticle}
-          onClose={() => setSelectedArticle(null)}
-        />
-      )}
-    </div>
+      {
+        selectedArticle && (
+          <ArticleModal
+            article={selectedArticle}
+            onClose={() => setSelectedArticle(null)}
+          />
+        )
+      }
+    </div >
   );
 }
 

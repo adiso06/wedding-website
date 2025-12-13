@@ -4,191 +4,163 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  padding: var(--spacing-lg);
-  overflow-y: auto;
+  z-index: 2000;
+  padding: var(--spacing-md);
+  backdrop-filter: blur(2px);
 }
 
-.modal-content {
-  background-color: var(--color-newsprint);
-  border: 2px solid var(--color-black);
-  max-width: 600px;
+.modal-content.paywall-modal {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  max-width: 450px;
   width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+  padding: 2rem;
   position: relative;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
-.modal-header {
-  padding: var(--spacing-xl) var(--spacing-lg);
-  background-color: var(--color-newsprint);
-  position: relative;
-}
-
-.modal-title {
-  font-family: var(--font-headline);
-  font-size: 2rem;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  margin-bottom: var(--spacing-xs);
-}
-
-.modal-subtitle {
-  font-family: var(--font-body);
-  font-size: 0.875rem;
-  color: #666;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
+/* Close Button */
 .modal-close {
   position: absolute;
-  top: var(--spacing-lg);
-  right: var(--spacing-lg);
+  top: 0.5rem;
+  right: 0.5rem;
+  font-size: 1.5rem;
+  color: #9ca3af;
   background: none;
   border: none;
-  font-size: 2rem;
-  line-height: 1;
   cursor: pointer;
-  padding: 0;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--color-black);
-  transition: opacity 0.2s;
+  padding: 0.5rem;
+  line-height: 1;
+  transition: color 0.2s;
+  width: auto;
+  height: auto;
+  display: block;
 }
 
 .modal-close:hover {
-  opacity: 0.7;
+  color: #000;
   background: none;
-  color: var(--color-black);
+  opacity: 1;
 }
 
-.rsvp-form {
-  padding: var(--spacing-lg);
+/* Header */
+.paywall-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
 }
 
-.form-section {
-  margin-bottom: var(--spacing-lg);
+.paywall-title {
+  font-family: var(--font-headline, serif);
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+  color: #000;
 }
 
-.form-label {
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  font-weight: 900;
+.paywall-subtitle {
+  font-family: var(--font-body, sans-serif);
+  color: #4b5563;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Features */
+.paywall-features {
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1.25rem 0;
+  margin-bottom: 1.5rem;
+}
+
+.feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-body, sans-serif);
+  font-size: 0.9rem;
+  color: #374151;
+  margin-bottom: 0.75rem;
+}
+
+.feature-item:last-child {
+  margin-bottom: 0;
+}
+
+.checkmark {
+  margin-right: 0.75rem;
+  font-weight: bold;
+  color: #000;
+}
+
+/* Action */
+.paywall-action {
+  text-align: center;
+}
+
+.subscribe-button {
+  display: block;
+  width: 100%;
+  background-color: #000;
+  color: #fff;
+  font-family: var(--font-body, sans-serif);
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  display: block;
-  margin-bottom: var(--spacing-sm);
-  color: var(--color-black);
-}
-
-.form-input,
-.form-select,
-.form-textarea {
-  font-family: var(--font-body);
-  font-size: 0.9375rem;
-  width: 100%;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-newsprint);
-  color: var(--color-black);
-  transition: border-color 0.2s;
-}
-
-.form-input:focus,
-.form-select:focus,
-.form-textarea:focus {
-  outline: none;
-  border-color: var(--color-black);
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
-}
-
-.form-input::placeholder,
-.form-textarea::placeholder {
-  color: #999;
-  font-style: italic;
-}
-
-.form-textarea {
-  resize: vertical;
-  min-height: 100px;
-  font-family: var(--font-caption);
-  line-height: 1.6;
-}
-
-.form-actions {
-  display: flex;
-  gap: var(--spacing-md);
-  margin-top: var(--spacing-xl);
-  padding-top: var(--spacing-lg);
-  border-top: 1px solid var(--color-border);
-}
-
-.form-submit {
-  flex: 1;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: 0.875rem 1rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
+  box-sizing: border-box;
   font-size: 0.875rem;
 }
 
-.form-actions .secondary {
-  flex: 0 0 auto;
-  padding: var(--spacing-md) var(--spacing-lg);
+.subscribe-button:hover {
+  background-color: #333;
 }
 
-.form-note {
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  color: #666;
-  text-align: center;
-  margin-top: var(--spacing-md);
+.paywall-footer {
+  margin-top: 1rem;
+  font-size: 0.7rem;
+  color: #9ca3af;
   font-style: italic;
+  font-family: var(--font-body, sans-serif);
+  line-height: 1.4;
 }
 
-@media (max-width: 768px) {
+.access-code {
+  display: block;
+  margin-top: 2px;
+  font-weight: bold;
+  color: #6b7280;
+  font-style: normal;
+}
+
+@media (max-width: 480px) {
   .modal-overlay {
     padding: 0;
-    align-items: flex-start;
+    align-items: flex-end;
+    /* Sheet style on mobile or just center? Let's stick to center for now but ensure padding */
+    padding: 1rem;
   }
 
-  .modal-content {
-    max-width: 100%;
-    max-height: 100vh;
-    border: none;
+  .modal-content.paywall-modal {
+    padding: 1.5rem;
   }
 
-  .modal-header {
-    padding: var(--spacing-lg) var(--spacing-md);
-  }
-
-  .modal-title {
-    font-size: 1.5rem;
-    padding-right: var(--spacing-xl);
-  }
-
-  .modal-close {
-    top: var(--spacing-md);
-    right: var(--spacing-md);
-  }
-
-  .rsvp-form {
-    padding: var(--spacing-md);
-  }
-
-  .form-actions {
-    flex-direction: column;
-  }
-
-  .form-submit,
-  .form-actions .secondary {
-    width: 100%;
+  .paywall-title {
+    font-size: 1.25rem;
   }
 }
