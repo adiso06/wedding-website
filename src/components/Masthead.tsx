@@ -11,13 +11,13 @@ const Masthead: React.FC<MastheadProps> = ({ onRSVPClick }) => {
       <div className="masthead-container">
         <div className="masthead-top">
           <div className="masthead-left">
-            <span className="masthead-date">Saturday, October 12, 2024</span>
+            <span className="masthead-date">Saturday, March 15, 2025</span>
             <span className="masthead-separator">•</span>
-            <span className="masthead-location">Napa Valley, CA</span>
+            <span className="masthead-location">Chino Hills, CA</span>
           </div>
 
           <div className="masthead-logo">
-            <h1>The Wedding Times</h1>
+            <h1>The Arora-Sood Times</h1>
           </div>
 
           <div className="masthead-right">

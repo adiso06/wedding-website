@@ -21,117 +21,148 @@ interface Article {
 const articles: Article[] = [
   {
     id: 'merger',
-    title: 'Long-Awaited Merger Finalized in Napa Valley',
-    subtitle: 'Thompson-Anderson Union Set to Transform Two Families; Sources Confirm "Unprecedented Levels of Joy"',
+    title: 'Amazon PM and Future GI Fellow Announce Merger in Southern California',
+    subtitle: 'Arora-Sood Union Set to Transform Two Families; Sources Confirm "It Has Been a Slow, Steady Bull Market"',
     author: 'The Editorial Board',
-    date: 'Jan. 15, 2024',
+    date: 'Dec. 15, 2024',
     category: 'BREAKING NEWS',
-    summary: 'In what industry insiders are calling "the union of the century," Sarah Thompson and James Anderson announce their merger.',
+    summary: 'In a move anticipated by close friends and family for years, Chhaya Arora, an Amazon Product Manager, and Aditya Sood, a future Gastroenterology Fellow, announce their merger.',
     content: (
       <>
-        <p><strong>NAPA VALLEY, Calif.</strong> — In what industry insiders are calling "the union of the century," Sarah Elizabeth Thompson, 29, of San Francisco, and James Michael Anderson, 31, of Oakland, announced their intention to merge operations effective October 12, 2024.</p>
+        <p><strong>CHINO HILLS, Calif.</strong> — In a move anticipated by close friends and family for years, Chhaya Arora, a Senior Product Manager at Amazon, and Dr. Aditya Sood, a future Gastroenterology Fellow, announced their intention to merge operations effective March 15, 2025.</p>
 
-        <p>The proposed merger, first discussed over craft cocktails at a North Beach establishment in March 2021, has been under careful negotiation ever since. Sources close to both parties report that the deal was sealed during a weekend retreat in Mendocino, when Mr. Anderson presented a comprehensive proposal that Ms. Thompson found "completely irresistible."</p>
+        <p>The proposed merger, first discussed during an FBLA competition years ago when both parties were ostensibly focused on competitive business analysis, has been under careful negotiation ever since. Sources close to both parties report that the initial acquisition strategy was "awkward but charming," though it proved successful in the long term.</p>
 
-        <p>"We have conducted extensive due diligence," said Ms. Thompson in a prepared statement, "and we are confident that this partnership will yield significant returns in happiness, adventure, and possibly golden retrievers."</p>
+        <p>"We have conducted extensive due diligence over the years," said Ms. Arora in a prepared statement. "The data suggests this partnership will yield significant returns in happiness, shared adventures, and quite possibly, excellent home-cooked meals."</p>
 
-        <p>The merger is expected to combine the Thompson family's renowned expertise in sustainable architecture with the Anderson family's long-standing tradition of artisanal coffee roasting and dad jokes.</p>
+        <p>The merger is expected to combine Ms. Arora's expertise in product strategy and innovation with Dr. Sood's commitment to gastroenterological excellence and patient care. Industry analysts predict a strong synergy between technology and medicine, with potential expansion into joint ventures yet to be announced.</p>
 
-        <h3>The Proposal</h3>
+        <h3>The Ratification</h3>
 
-        <p>Fast forward to September 2023. Mr. Anderson had been planning for months. He knew Sarah loved the coast, particularly the rugged beauty of Mendocino. He booked a weekend at a cliffside inn, arranged for a private dinner on the terrace, and carried the ring in his pocket for two days, waiting for the perfect moment.</p>
+        <p>After years of steady partnership growth, Dr. Sood formally moved to ratify the relationship in Long Island City. The proposal took place at a carefully selected location, with Dr. Sood presenting the ring in a moment he had been planning in advance.</p>
 
-        <p>It came during a sunset walk along the headlands. As the sky turned brilliant shades of orange and pink, he stopped, took her hands, and delivered a speech he'd been rehearsing for weeks.</p>
+        <p>"I was completely surprised," Ms. Arora stated in a recent interview. "I thought we were just going out for the day."</p>
 
-        <p>"I completely forgot everything I planned to say," Mr. Anderson admitted. "But it didn't matter. She said yes before I even got the ring out of my pocket."</p>
+        <p>The proposal was accepted immediately, with no conditions or amendments. Bystanders reported the weather was favorable, and the entire negotiation concluded successfully within minutes.</p>
+
+        <p>"It has been a slow, steady bull market ever since we met," Dr. Sood noted, referencing their years-long partnership.</p>
       </>
     ),
   },
   {
     id: 'investigation',
-    title: 'An Investigation into the First Date: Sources Allege Instant Chemistry',
-    subtitle: 'Eyewitnesses report "disgustingly cute" behavior at North Beach establishment',
-    author: 'Special Investigative Report',
-    date: 'Jan. 15, 2024',
-    category: 'SPECIAL REPORT',
-    summary: 'On a cool evening in March 2021, two individuals entered a dimly lit bar, unaware their lives were about to change forever.',
+    title: 'FBLA Competition Yields Unexpected Long-Term Dividends',
+    subtitle: 'High school networking event results in multi-year strategic partnership',
+    author: 'The Senior Political Correspondent',
+    date: 'Dec. 15, 2024',
+    category: 'INTERNATIONAL AFFAIRS',
+    summary: 'It was a time of high stakes, nervous teenagers, and ill-fitting business attire. The FBLA competition would prove more valuable than any trophy.',
     content: (
       <>
-        <p><strong>SAN FRANCISCO</strong> — On a cool evening in March 2021, two individuals entered a dimly lit North Beach establishment, unaware that their lives were about to change forever. What transpired over the next three hours has been described by witnesses as "magical," "inevitable," and "disgustingly cute."</p>
+        <p><strong>HIGH SCHOOL YEARS</strong> — It was a time of high stakes, nervous teenagers, and ill-fitting business attire. The setting was a Future Business Leaders of America (FBLA) competition, a place where most attendees were focused on networking and competitive spreadsheet analysis.</p>
 
-        <p>Sarah Thompson, then 27, was skeptical. After a series of disappointing dating app encounters, she had nearly given up on finding someone who shared her passion for terrible puns and early-morning hikes. James Anderson, 29, was equally wary, having recently sworn off online dating entirely.</p>
+        <p>But for Ms. Arora and Dr. Sood, the real acquisition was each other.</p>
 
-        <p>But their mutual friend, Rachel Martinez, was convinced they were perfect for each other. "I knew within five minutes of meeting each of them," Ms. Martinez testified. "Same weird sense of humor. Same values. Same inability to resist a good bookstore."</p>
+        <p>"We were ostensibly there to compete," Ms. Arora recalled in a recent interview, noting that her focus was primarily on the business case presentations. "But the data suggests we were actually there to meet our future spouses."</p>
 
-        <p>The setup worked. Over craft cocktails and shared appetizers, the conversation flowed effortlessly. When the bar closed, they continued talking on a bench in Washington Square Park until nearly 2 AM.</p>
+        <p>The initial meeting was, according to multiple sources, both awkward and charming—a combination that would prove to be the foundation of their partnership. While neither party took home the national trophy that day, they initiated a strategic partnership that would outlast any high school curriculum.</p>
 
-        <p>"I remember thinking, 'This is either going to be the best relationship of my life or the most devastating heartbreak,'" Ms. Thompson recalled in a recent interview. "Fortunately, it was the former."</p>
+        <h3>The Long-Term Investment</h3>
+
+        <p>Over the ensuing years, the couple weathered the volatility of college years, medical school examinations, career changes, and geographic separations, proving that their initial valuation was correct.</p>
+
+        <p>The relationship demonstrated consistent growth through various market conditions, including Dr. Sood's medical training and Ms. Arora's rise in the technology sector. Friends and family, many of whom had placed informal bets on the timing of an official announcement, watched as the partnership strengthened year over year.</p>
+
+        <p>"It has been a slow, steady bull market ever since," Dr. Sood noted, employing financial terminology that would have made their FBLA advisors proud.</p>
       </>
     ),
   },
   {
     id: 'accommodations',
-    title: 'Delegates to be Housed at Silverado Resort; Treaty Signed for Group Rate',
-    subtitle: 'Comprehensive accommodation package secured for October celebration',
+    title: 'Delegates to be Housed at Mission Inn; Group Rates Secured',
+    subtitle: 'Infrastructure advisory issued: Personal transportation required for multi-venue celebration',
     author: 'The Logistics Committee',
-    date: 'Jan. 15, 2024',
-    category: 'TRAVEL',
-    summary: 'Following extensive negotiations, favorable rates secured at historic Silverado Resort & Spa.',
+    date: 'Dec. 15, 2024',
+    category: 'TRAVEL & LEISURE',
+    summary: 'Following extensive negotiations, favorable rates secured for attendees. Transit authorities advise rental vehicles necessary.',
     content: (
       <>
-        <p><strong>NAPA, Calif.</strong> — Following extensive negotiations, a comprehensive accommodation package has been secured at the historic Silverado Resort & Spa. The agreement, finalized in late 2023, ensures favorable rates for all attendees of the Thompson-Anderson merger celebration.</p>
+        <p><strong>CHINO HILLS, Calif.</strong> — Following extensive negotiations, accommodation packages have been secured for all attendees of the Arora-Sood merger celebration. The Logistics Committee has finalized arrangements at select Southern California establishments.</p>
 
-        <h3>Accommodation Details</h3>
+        <h3>Primary Accommodation</h3>
         <ul>
-          <li><strong>Venue:</strong> Silverado Resort & Spa</li>
-          <li><strong>Address:</strong> 1600 Atlas Peak Road, Napa, CA 94558</li>
-          <li><strong>Rate:</strong> $285/night (King or Double Queen)</li>
-          <li><strong>Booking Code:</strong> THOMPSON-ANDERSON2024</li>
-          <li><strong>Deadline:</strong> September 12, 2024</li>
-          <li><strong>Phone:</strong> (707) 257-0200</li>
+          <li><strong>Primary Venue:</strong> Mission Inn</li>
+          <li><strong>Location:</strong> Riverside, California</li>
+          <li><strong>Booking Details:</strong> Contact hotel directly for group rate</li>
+          <li><strong>Additional Hotel:</strong> To be announced</li>
         </ul>
 
-        <p>The property features two championship golf courses, multiple pools, and award-winning dining facilities. Complimentary shuttle service to the ceremony venue will be provided.</p>
+        <h3>Transit & Infrastructure</h3>
+        <p><strong>Important Advisory:</strong> The celebration will take place across multiple venues in the Chino Hills area. Delegates are strongly encouraged to secure rental vehicles for the duration of their stay. No centralized shuttle service will be provided.</p>
+
+        <p>Recommended rental agencies operate from Los Angeles International Airport (LAX), Ontario International Airport (ONT), and John Wayne Airport (SNA). Early reservations are advised, particularly for the mid-March timeframe.</p>
 
         <h3>Air Travel</h3>
-        <p>Wedding logistics experts recommend booking flights into one of three major Bay Area airports:</p>
+        <p>Wedding logistics experts recommend booking flights into one of three Southern California airports:</p>
         <ul>
-          <li><strong>San Francisco (SFO)</strong> - Primary gateway. 60 miles from Napa Valley.</li>
-          <li><strong>Oakland (OAK)</strong> - Alternative hub. 55 miles from venue. Often more economical.</li>
-          <li><strong>Sacramento (SMF)</strong> - Regional option. 65 miles from Napa. Smaller crowds.</li>
+          <li><strong>Ontario (ONT)</strong> - Closest to venues. Approximately 30 miles from Chino Hills.</li>
+          <li><strong>Los Angeles (LAX)</strong> - Major international hub. 60 miles from celebration sites.</li>
+          <li><strong>John Wayne/Orange County (SNA)</strong> - Alternative gateway. 45 miles from venues.</li>
         </ul>
+
+        <h3>Weather Advisory</h3>
+        <p>Southern California in mid-March typically features mild temperatures ranging from 60-75°F (15-24°C). However, delegates should consult current forecasts as conditions may vary. Indoor and outdoor events are scheduled.</p>
       </>
     ),
   },
   {
     id: 'schedule',
-    title: 'Complete Timeline of Saturday\'s Events Released',
-    subtitle: 'Ceremony begins 3:30 PM sharp; guests advised to arrive early',
+    title: 'Complete Timeline of Weekend Events Released; Baraat Assembly at 10:30 AM Sharp',
+    subtitle: 'Two-day celebration schedule finalized; select guests invited to Friday festivities',
     author: 'The Events Committee',
-    date: 'Jan. 15, 2024',
-    category: 'SCHEDULE',
-    summary: 'Full timeline for October 12th celebration, from ceremony through final shuttles.',
+    date: 'Dec. 15, 2024',
+    category: 'THE SCHEDULE',
+    summary: 'Full timeline for March 14-15, 2025 celebration. Main events Saturday; Western schedule strictly enforced.',
     content: (
       <>
-        <p><strong>NAPA VALLEY, Calif.</strong> — The complete schedule for Saturday, October 12, 2024 has been released. All times are subject to change based on meteorological conditions and champagne availability.</p>
+        <p><strong>CHINO HILLS, Calif.</strong> — The complete schedule for the weekend of March 14-15, 2025 has been released. All times are subject to change based on meteorological conditions and the whims of extended family.</p>
 
-        <h3>3:30 PM - Ceremony Begins</h3>
-        <p>Garden Terrace, Silverado Resort. Guests should be seated by 3:20 PM. The ceremony will last approximately 30 minutes.</p>
+        <h3>Friday, March 14th (Select Guests Only)</h3>
 
-        <h3>4:15 PM - Cocktail Hour</h3>
-        <p>North Lawn. Wine tasting, hors d'oeuvres, and live jazz ensemble. Guests are encouraged to mingle and explore the grounds.</p>
+        <p><strong>2:00 PM - Haldi Ceremony</strong><br />
+        Traditional pre-wedding ritual. Dress Code: Indian attire recommended. Duration approximately 3 hours.</p>
 
-        <h3>5:30 PM - Reception & Dinner</h3>
-        <p>Grand Ballroom. Plated dinner service begins, followed by toasts and revelry.</p>
+        <p><strong>5:00 PM - Dinner Service</strong><br />
+        Meal service for Haldi attendees.</p>
 
-        <h3>7:00 PM - First Dance</h3>
-        <p>Grand Ballroom. The newlyweds' first dance, followed by an open dance floor for all guests.</p>
+        <p><strong>6:00 PM - Evening Gathering</strong><br />
+        Informal celebrations continue through 9:00 PM.</p>
 
-        <h3>9:30 PM - Cake Cutting</h3>
-        <p>Grand Ballroom. Traditional cake cutting ceremony, followed by dessert service.</p>
+        <h3>Saturday, March 15th (All Guests)</h3>
 
-        <h3>11:00 PM - Last Call</h3>
-        <p>Grand Ballroom. Final drinks served. Shuttles to hotels depart at 11:30 PM.</p>
+        <p><strong>10:30 AM - Baraat Assembly</strong><br />
+        <em>Critical Advisory:</em> The Baraat procession will mobilize at 10:30 AM sharp. While the couple respects cultural traditions regarding "Indian Standard Time," this event operates on a strict Western schedule. Delegates arriving late risk missing the procession entirely. The Events Committee cannot overstate the importance of punctuality.</p>
+
+        <p><strong>11:00 AM - Wedding Ceremony</strong><br />
+        BAPS Mandir, Chino Hills. Traditional Hindu wedding ceremony. Dress Code: Indian attire strongly preferred; formal suits acceptable. Ceremony duration approximately 2-3 hours. <strong>Important:</strong> Modest attire required for temple entry.</p>
+
+        <p><strong>1:30 PM - Lunch Service</strong><br />
+        Following ceremony at BAPS Mandir. Traditional Indian cuisine will be served.</p>
+
+        <p><strong>6:00 PM - Reception Begins</strong><br />
+        Majestic Banquet Hall, Chino Hills. Dress Code: Indo-Western fusion or Western formal attire. The committee encourages creative interpretation while maintaining elegance.</p>
+
+        <p><strong>12:00 AM - Closing</strong><br />
+        Reception concludes. Delegates responsible for their own transportation back to accommodations.</p>
+
+        <h3>Dress Code Clarifications</h3>
+        <ul>
+          <li><strong>Haldi (Friday):</strong> Indian attire recommended</li>
+          <li><strong>Wedding Ceremony:</strong> Indian attire strongly preferred; formal suits acceptable</li>
+          <li><strong>Reception:</strong> Indo-Western or Western formal—both welcomed</li>
+        </ul>
+
+        <p><em>The committee requests guests avoid jeans and athletic wear throughout the weekend. Photos should look timeless, not chaotic.</em></p>
       </>
     ),
   },
@@ -209,25 +240,18 @@ function App() {
       <section className="registry-section border-top">
         <div className="grid-5col">
           <div className="col-span-12">
-            <h3 className="section-title">Registry</h3>
+            <h3 className="section-title">The Business Section: Series A Funding</h3>
+            <div className="registry-notice">
+              <p><strong>Notice to Investors:</strong> Your presence at our celebration is the greatest gift we could ask for. However, for those inquiring about participation in our growth strategy, we have established the following funding mechanism:</p>
+            </div>
             <div className="registry-grid">
               <a href="#" className="registry-card">
-                <h4>Crate & Barrel</h4>
-                <p>For the home we're building together</p>
-              </a>
-              <a href="#" className="registry-card">
-                <h4>Williams Sonoma</h4>
-                <p>Culinary essentials</p>
-              </a>
-              <a href="#" className="registry-card">
-                <h4>Honeymoon Fund</h4>
-                <p>Adventures in Japan, 2025</p>
-              </a>
-              <a href="#" className="registry-card">
-                <h4>Charity: Water</h4>
-                <p>Clean water for communities</p>
+                <h4>Series A Funding Round</h4>
+                <p>Cash contributions to support the couple's next venture</p>
+                <div className="registry-note">Secure receptacle available at reception. Digital transfers preferred for accounting purposes.</div>
               </a>
             </div>
+            <p className="registry-footer"><em>A secure drop-box for cards and envelopes will be available at the Reception. Please direct questions to the couple via the RSVP form.</em></p>
           </div>
         </div>
       </section>
