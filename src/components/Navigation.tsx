@@ -6,29 +6,16 @@ interface NavigationProps {
 }
 
 const Navigation: React.FC<NavigationProps> = ({ onRSVPClick }) => {
-  const sections = [
-    'Our Story',
-    'Logistics',
-    'Accommodations',
-    'Registry',
-    'The Party',
-  ];
-
   return (
     <nav className="navigation border-bottom">
-      <div className="nav-sections">
-        {sections.map((section) => (
-          <a
-            key={section}
-            href={`#${section.toLowerCase().replace(' ', '-')}`}
-            className="nav-link"
-          >
-            {section}
-          </a>
-        ))}
-        <button onClick={onRSVPClick} className="nav-link nav-rsvp">
-          RSVP
-        </button>
+      <div className="nav-container">
+        <div className="nav-sections">
+          <a href="#" className="nav-link">Our Story</a>
+          <a href="#" className="nav-link">Schedule</a>
+          <a href="#" className="nav-link">Travel</a>
+          <a href="#" className="nav-link">Registry</a>
+          <a href="#" className="nav-link">Games</a>
+        </div>
       </div>
     </nav>
   );
