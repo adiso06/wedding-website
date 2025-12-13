@@ -345,6 +345,27 @@
   text-decoration: underline;
 }
 
+/* Tablet Responsive */
+@media (max-width: 900px) {
+  .schedule-row {
+    grid-template-columns: 100px 1fr 1fr 1fr;
+    gap: var(--spacing-sm);
+    font-size: 0.875rem;
+  }
+
+  .schedule-time {
+    font-size: 0.9375rem;
+  }
+
+  .story-main {
+    padding-right: var(--spacing-md);
+  }
+
+  .story-sidebar {
+    padding-left: var(--spacing-md);
+  }
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .grid-section {

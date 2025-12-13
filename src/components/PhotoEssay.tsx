@@ -7,7 +7,7 @@ import './PhotoEssay.css';
 const ARCHIVE_DATA = [
     {
         id: 1,
-        src: "/A&C-113.jpg",
+        src: "/A&C-113-optimized.webp",
         date: "OCTOBER 12, 2015",
         location: "High School, Room 304",
         headline: "THE INITIAL ENCOUNTER",
@@ -15,7 +15,7 @@ const ARCHIVE_DATA = [
     },
     {
         id: 2,
-        src: "/A&C-121.jpg",
+        src: "/A&C-121-optimized.webp",
         date: "MAY 20, 2018",
         location: "University Campus",
         headline: "ACADEMIC ALLIANCE",
@@ -23,7 +23,7 @@ const ARCHIVE_DATA = [
     },
     {
         id: 3,
-        src: "/A&C-125.jpg",
+        src: "/A&C-125-optimized.webp",
         date: "DECEMBER 2024",
         location: "Long Island City, NY",
         headline: "THE RATIFICATION",
@@ -31,7 +31,7 @@ const ARCHIVE_DATA = [
     },
     {
         id: 4,
-        src: "/A&C-133.jpg",
+        src: "/A&C-133-optimized.webp",
         date: "RECENTLY",
         location: "Undisclosed Location",
         headline: "CURRENT STATUS",
@@ -45,6 +45,20 @@ const PhotoEssay: React.FC = () => {
     // Navigation Logic
     const handleNext = () => setCurrentIndex((prev) => (prev + 1) % ARCHIVE_DATA.length);
     const handlePrev = () => setCurrentIndex((prev) => (prev - 1 + ARCHIVE_DATA.length) % ARCHIVE_DATA.length);
+
+    // Keyboard navigation
+    React.useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'ArrowLeft') {
+                handlePrev();
+            } else if (e.key === 'ArrowRight') {
+                handleNext();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, []);
 
     const currentPhoto = ARCHIVE_DATA[currentIndex];
 
@@ -76,8 +90,10 @@ const PhotoEssay: React.FC = () => {
                         <div className="viewer-frame">
                             <img
                                 src={currentPhoto.src}
-                                alt={currentPhoto.headline}
+                                alt={`${currentPhoto.headline} - ${currentPhoto.caption}`}
                                 className="viewer-image"
+                                loading="lazy"
+                                decoding="async"
                             />
                             {/* Watermark/Credit */}
                             <div className="watermark">
@@ -88,12 +104,23 @@ const PhotoEssay: React.FC = () => {
 
                         {/* Pagination Controls */}
                         <div className="pagination-controls">
-                            <button onClick={handlePrev} className="nav-btn">
+                            <button 
+                                onClick={handlePrev} 
+                                className="nav-btn"
+                                aria-label="Previous photo"
+                            >
                                 <ChevronLeft size={20} />
                             </button>
-                            <button onClick={handleNext} className="nav-btn">
+                            <button 
+                                onClick={handleNext} 
+                                className="nav-btn"
+                                aria-label="Next photo"
+                            >
                                 <ChevronRight size={20} />
                             </button>
+                        </div>
+                        <div className="sr-only" aria-live="polite" aria-atomic="true">
+                            Photo {currentIndex + 1} of {ARCHIVE_DATA.length}
                         </div>
                     </div>
                 </div>

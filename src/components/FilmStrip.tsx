@@ -4,13 +4,13 @@ import './FilmStrip.css';
 // Replace with your actual image paths
 // Using placeholders for now
 const MARQUEE_PHOTOS = [
-    "/IMG_9353.jpeg",
-    "/IMG_9363.jpeg",
-    "/IMG_9459.jpeg",
-    "/IMG_9465.jpeg",
-    "/IMG_9475.jpeg",
-    "/IMG_9544.jpeg",
-    "/IMG_9549.jpeg"
+    "/IMG_9353-optimized.webp",
+    "/IMG_9363-optimized.webp",
+    "/IMG_9459-optimized.webp",
+    "/IMG_9465-optimized.webp",
+    "/IMG_9475-optimized.webp",
+    "/IMG_9544-optimized.webp",
+    "/IMG_9549-optimized.webp"
 ];
 
 const FilmStrip: React.FC = () => {
@@ -28,8 +28,10 @@ const FilmStrip: React.FC = () => {
                             <div className="film-image-container">
                                 <img
                                     src={src}
-                                    alt={`Evidence ${idx}`}
+                                    alt={`Photo ${Math.floor(idx / 2) + 1} of Chhaya and Aditya`}
                                     className="film-image"
+                                    loading="lazy"
+                                    decoding="async"
                                 />
                             </div>
 

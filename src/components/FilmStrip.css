@@ -37,6 +37,28 @@
     cursor: pointer;
 }
 
+/* Tablet optimizations */
+@media (max-width: 1024px) {
+    .film-item {
+        width: 200px;
+        height: 150px;
+    }
+}
+
+@media (max-width: 768px) {
+    .film-item {
+        width: 180px;
+        height: 135px;
+    }
+}
+
+@media (max-width: 480px) {
+    .film-item {
+        width: 160px;
+        height: 120px;
+    }
+}
+
 .film-image-container {
     width: 100%;
     height: 100%;

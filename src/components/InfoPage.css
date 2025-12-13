@@ -1,0 +1,339 @@
+/* Info Page Modal Overlay */
+.info-page-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+/* Info Page Container */
+.info-page-container {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border-radius: 16px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Close Button */
+.info-page-close {
+  position: sticky;
+  top: 20px;
+  right: 20px;
+  float: right;
+  background: rgba(255, 255, 255, 0.95);
+  border: 2px solid #ddd;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: #333;
+  transition: all 0.2s ease;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.info-page-close:hover {
+  background: #fff;
+  border-color: #c9a961;
+  color: #c9a961;
+  transform: rotate(90deg);
+}
+
+/* Content Area */
+.info-page-content {
+  padding: 60px 40px 40px;
+  clear: both;
+}
+
+/* Title */
+.info-page-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c2c2c;
+  text-align: center;
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 3px solid #c9a961;
+  position: relative;
+}
+
+.info-page-title::after {
+  content: '❖';
+  position: absolute;
+  bottom: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  padding: 0 15px;
+  color: #c9a961;
+  font-size: 1.2rem;
+}
+
+/* Sections */
+.info-section {
+  margin-bottom: 35px;
+  line-height: 1.8;
+}
+
+.info-section h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.5rem;
+  color: #2c2c2c;
+  margin-bottom: 15px;
+  font-weight: 600;
+  border-left: 4px solid #c9a961;
+  padding-left: 15px;
+}
+
+.info-section h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.2rem;
+  color: #444;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  font-weight: 600;
+}
+
+.info-section p {
+  color: #444;
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+/* Highlighted Text */
+.info-highlight {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #c9a961;
+  margin-bottom: 8px;
+}
+
+.large-text {
+  font-size: 1.8rem;
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+/* Info Notes */
+.info-note {
+  background: #fff8e7;
+  border-left: 4px solid #c9a961;
+  padding: 12px 15px;
+  margin: 15px 0;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* Lists */
+.info-list {
+  list-style: none;
+  padding-left: 0;
+  margin: 15px 0;
+}
+
+.info-list li {
+  padding: 8px 0 8px 30px;
+  position: relative;
+  color: #444;
+}
+
+.info-list li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #c9a961;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Links */
+.info-link {
+  display: inline-block;
+  color: #c9a961;
+  text-decoration: none;
+  font-weight: 600;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+  border-bottom: 2px solid transparent;
+}
+
+.info-link:hover {
+  color: #a88942;
+  border-bottom-color: #a88942;
+}
+
+/* Highlight Box */
+.highlight-box {
+  background: linear-gradient(135deg, #fff8e7 0%, #fffcf2 100%);
+  border: 2px solid #c9a961;
+  border-radius: 8px;
+  padding: 25px;
+  margin: 25px 0;
+  box-shadow: 0 4px 12px rgba(201, 169, 97, 0.1);
+}
+
+.highlight-box h2 {
+  border-left: none;
+  padding-left: 0;
+  margin-bottom: 12px;
+}
+
+/* Hotel/Gift Cards */
+.hotel-card,
+.gift-option,
+.airport-option {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+}
+
+.hotel-card:hover,
+.gift-option:hover,
+.airport-option:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.hotel-card h3,
+.gift-option h3,
+.airport-option h3 {
+  margin-top: 0;
+  color: #c9a961;
+}
+
+/* Center Text */
+.center-text {
+  text-align: center;
+}
+
+.center-text p {
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .info-page-container {
+    max-width: 85vw;
+  }
+
+  .info-page-content {
+    padding: 55px 35px 35px;
+  }
+
+  .info-page-title {
+    font-size: 2.25rem;
+  }
+
+  .info-section h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .info-page-content {
+    padding: 50px 25px 30px;
+  }
+
+  .info-page-title {
+    font-size: 2rem;
+  }
+
+  .info-section h2 {
+    font-size: 1.3rem;
+  }
+
+  .info-highlight {
+    font-size: 1.1rem;
+  }
+
+  .large-text {
+    font-size: 1.5rem;
+  }
+
+  .hotel-card,
+  .gift-option,
+  .airport-option {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-page-overlay {
+    padding: 10px;
+  }
+
+  .info-page-container {
+    border-radius: 12px;
+  }
+
+  .info-page-content {
+    padding: 45px 20px 25px;
+  }
+
+  .info-page-title {
+    font-size: 1.75rem;
+    margin-bottom: 30px;
+  }
+
+  .info-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .info-page-close {
+    width: 36px;
+    height: 36px;
+    font-size: 24px;
+  }
+}
+
+/* Scrollbar Styling */
+.info-page-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.info-page-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0 16px 16px 0;
+}
+
+.info-page-container::-webkit-scrollbar-thumb {
+  background: #c9a961;
+  border-radius: 5px;
+}
+
+.info-page-container::-webkit-scrollbar-thumb:hover {
+  background: #a88942;
+}

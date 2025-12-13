@@ -6,20 +6,66 @@ interface RSVPModalProps {
 }
 
 const RSVPModal: React.FC<RSVPModalProps> = ({ onClose }) => {
+  // Handle escape key
+  React.useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, [onClose]);
+
+  // Trap focus in modal
+  React.useEffect(() => {
+    const modalElement = document.querySelector('.modal-content');
+    if (modalElement) {
+      const focusableElements = modalElement.querySelectorAll(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+
+      const handleTab = (e: KeyboardEvent) => {
+        if (e.key === 'Tab') {
+          if (e.shiftKey && document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          } else if (!e.shiftKey && document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      };
+
+      window.addEventListener('keydown', handleTab);
+      firstElement?.focus();
+
+      return () => window.removeEventListener('keydown', handleTab);
+    }
+  }, []);
+
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div 
+      className="modal-overlay" 
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-title"
+    >
       <div className="modal-content paywall-modal" onClick={(e) => e.stopPropagation()}>
 
         <button
           onClick={onClose}
           className="modal-close"
-          aria-label="Close"
+          aria-label="Close RSVP modal"
         >
           ✕
         </button>
 
         <div className="paywall-header">
-          <h2 className="paywall-title">
+          <h2 id="modal-title" className="paywall-title">
             You Have Reached Your Limit of Free Articles
           </h2>
           <p className="paywall-subtitle">
@@ -45,7 +91,7 @@ const RSVPModal: React.FC<RSVPModalProps> = ({ onClose }) => {
         <div className="paywall-action">
           {/* THIS IS THE CONNECTION TO JOY */}
           <a
-            href="https://withjoy.com/[YOUR-URL-HANDLE]/rsvp"
+            href="https://withjoy.com/chhaya-arora-and-aditya/rsvp?joyHotelDiscountCode=JOY5"
             target="_blank"
             rel="noopener noreferrer"
             className="subscribe-button"

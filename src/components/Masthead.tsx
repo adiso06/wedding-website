@@ -11,7 +11,7 @@ const Masthead: React.FC<MastheadProps> = ({ onRSVPClick }) => {
       <div className="masthead-container">
         <div className="masthead-top">
           <div className="masthead-ear-left">
-            <div className="ear-title">OFFICIAL INVITATION</div>
+            <div className="ear-title ear-title-large">OFFICIAL WEDDING INVITATION</div>
             <div className="ear-subtitle">Keep this issue for your records.<br/>Attendance is mandatory for close allies.</div>
           </div>
 
@@ -24,7 +24,7 @@ const Masthead: React.FC<MastheadProps> = ({ onRSVPClick }) => {
               <span className="masthead-vol">Vol. 1</span>
             </div>
             <div className="masthead-logo">
-              <h1>The Arora-Sood Times</h1>
+              <h1>The Wedding Times</h1>
             </div>
           </div>
 
@@ -38,11 +38,12 @@ const Masthead: React.FC<MastheadProps> = ({ onRSVPClick }) => {
         </div>
       </div>
       
-      <div className="ticker-bar">
+      {/* Ticker bar hidden for now */}
+      {/* <div className="ticker-bar">
         <div className="ticker-content">
           BREAKING: RSVP DEADLINE SET FOR FEBRUARY 1ST ... HOTEL BLOCK FILLING FAST ... GROOM PROMISES TO DANCE ... BRIDE NEGOTIATING HONEYMOON TERMS ...
         </div>
-      </div>
+      </div> */}
     </header>
   );
 };

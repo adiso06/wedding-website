@@ -33,6 +33,21 @@
   font-weight: 700;
 }
 
+@media (max-width: 900px) {
+  .breaking-news {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+
+  .breaking-label {
+    font-size: 0.6875rem;
+    padding: 5px 10px;
+  }
+
+  .breaking-content {
+    font-size: 0.875rem;
+  }
+}
+
 @media (max-width: 768px) {
   .breaking-news {
     flex-direction: column;

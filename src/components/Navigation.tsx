@@ -3,18 +3,95 @@ import './Navigation.css';
 
 interface NavigationProps {
   onRSVPClick: () => void;
+  onNavigate: (sectionId: string) => void;
+  onOpenInfoPage: (page: 'ceremony' | 'reception' | 'accommodations' | 'registry') => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ onRSVPClick }) => {
+const Navigation: React.FC<NavigationProps> = ({ onRSVPClick, onNavigate, onOpenInfoPage }) => {
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
+    e.preventDefault();
+    onNavigate(sectionId);
+  };
+
   return (
-    <nav className="navigation border-bottom">
+    <nav className="navigation border-bottom" role="navigation" aria-label="Main navigation">
       <div className="nav-container">
         <div className="nav-sections">
-          <a href="#" className="nav-link">Our Story</a>
-          <a href="#" className="nav-link">Schedule</a>
-          <a href="#" className="nav-link">Travel</a>
-          <a href="#" className="nav-link">Registry</a>
-          <a href="#" className="nav-link">Games</a>
+          <a 
+            href="#the-couple" 
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, 'the-couple')}
+            aria-label="About the couple"
+          >
+            THE COUPLE
+          </a>
+          <a 
+            href="#ceremony" 
+            className="nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              onOpenInfoPage('ceremony');
+            }}
+            aria-label="Ceremony details"
+          >
+            THE CEREMONY
+          </a>
+          <a 
+            href="#reception" 
+            className="nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              onOpenInfoPage('reception');
+            }}
+            aria-label="Reception information"
+          >
+            RECEPTION
+          </a>
+          <a 
+            href="#accommodations" 
+            className="nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              onOpenInfoPage('accommodations');
+            }}
+            aria-label="View accommodations"
+          >
+            ACCOMMODATIONS
+          </a>
+          <a 
+            href="#registry" 
+            className="nav-link"
+            onClick={(e) => {
+              e.preventDefault();
+              onOpenInfoPage('registry');
+            }}
+            aria-label="View registry"
+          >
+            REGISTRY
+          </a>
+          <a 
+            href="#our-story" 
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, 'our-story')}
+            aria-label="Read our story"
+          >
+            OUR STORY
+          </a>
+          <a 
+            href="#gallery" 
+            className="nav-link"
+            onClick={(e) => handleNavClick(e, 'gallery')}
+            aria-label="View photo gallery"
+          >
+            GALLERY
+          </a>
+          <button 
+            className="nav-link rsvp-button"
+            onClick={onRSVPClick}
+            aria-label="RSVP for the wedding"
+          >
+            RSVP
+          </button>
         </div>
       </div>
     </nav>
