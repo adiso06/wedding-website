@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - claude/deploy-website-github-01YJrdb2iwjRxKs1aFjiR1Fc
   workflow_dispatch:
 
 permissions:

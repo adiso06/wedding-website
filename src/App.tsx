@@ -291,9 +291,9 @@ function App() {
             <h2 className="article-subheadline">{articles[0].subtitle}</h2>
 
             <div className="article-image-container">
-              <img 
-                src="/A&C-105-optimized.webp" 
-                alt="Chhaya Arora and Aditya Sood in Long Island City shortly after their engagement" 
+              <img
+                src={`${import.meta.env.BASE_URL}A&C-105-optimized.webp`}
+                alt="Chhaya Arora and Aditya Sood in Long Island City shortly after their engagement"
                 className="article-image"
                 width="1200"
                 height="800"

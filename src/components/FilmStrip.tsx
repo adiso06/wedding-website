@@ -4,13 +4,13 @@ import './FilmStrip.css';
 // Replace with your actual image paths
 // Using placeholders for now
 const MARQUEE_PHOTOS = [
-    "/IMG_9353-optimized.webp",
-    "/IMG_9363-optimized.webp",
-    "/IMG_9459-optimized.webp",
-    "/IMG_9465-optimized.webp",
-    "/IMG_9475-optimized.webp",
-    "/IMG_9544-optimized.webp",
-    "/IMG_9549-optimized.webp"
+    `${import.meta.env.BASE_URL}IMG_9353-optimized.webp`,
+    `${import.meta.env.BASE_URL}IMG_9363-optimized.webp`,
+    `${import.meta.env.BASE_URL}IMG_9459-optimized.webp`,
+    `${import.meta.env.BASE_URL}IMG_9465-optimized.webp`,
+    `${import.meta.env.BASE_URL}IMG_9475-optimized.webp`,
+    `${import.meta.env.BASE_URL}IMG_9544-optimized.webp`,
+    `${import.meta.env.BASE_URL}IMG_9549-optimized.webp`
 ];
 
 const FilmStrip: React.FC = () => {

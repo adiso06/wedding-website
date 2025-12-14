@@ -7,7 +7,7 @@ import './PhotoEssay.css';
 const ARCHIVE_DATA = [
     {
         id: 1,
-        src: "/A&C-113-optimized.webp",
+        src: `${import.meta.env.BASE_URL}A&C-113-optimized.webp`,
         date: "OCTOBER 12, 2015",
         location: "High School, Room 304",
         headline: "THE INITIAL ENCOUNTER",
@@ -15,7 +15,7 @@ const ARCHIVE_DATA = [
     },
     {
         id: 2,
-        src: "/A&C-121-optimized.webp",
+        src: `${import.meta.env.BASE_URL}A&C-121-optimized.webp`,
         date: "MAY 20, 2018",
         location: "University Campus",
         headline: "ACADEMIC ALLIANCE",
@@ -23,7 +23,7 @@ const ARCHIVE_DATA = [
     },
     {
         id: 3,
-        src: "/A&C-125-optimized.webp",
+        src: `${import.meta.env.BASE_URL}A&C-125-optimized.webp`,
         date: "DECEMBER 2024",
         location: "Long Island City, NY",
         headline: "THE RATIFICATION",
@@ -31,7 +31,7 @@ const ARCHIVE_DATA = [
     },
     {
         id: 4,
-        src: "/A&C-133-optimized.webp",
+        src: `${import.meta.env.BASE_URL}A&C-133-optimized.webp`,
         date: "RECENTLY",
         location: "Undisclosed Location",
         headline: "CURRENT STATUS",
