@@ -1,5 +1,9 @@
 /* NYT-Inspired Wedding Website - Global Styles */
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
   /* Colors - Modern NYT palette with wedding touches */
   --color-black: #000000;

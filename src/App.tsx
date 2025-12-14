@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import EnvelopeIntro from './components/EnvelopeIntro';
 import Masthead from './components/Masthead';
 import Navigation from './components/Navigation';
 import BreakingNews from './components/BreakingNews';
@@ -173,16 +174,17 @@ function App() {
   };
 
   return (
-    <div className="newspaper-container">
-      <a href="#main-content" className="skip-to-content">
-        Skip to main content
-      </a>
-      <Masthead onRSVPClick={handleRSVPOpen} />
-      <Navigation 
-        onRSVPClick={handleRSVPOpen}
-        onNavigate={scrollToSection}
-        onOpenInfoPage={openInfoPage}
-      />
+    <EnvelopeIntro>
+      <div className="newspaper-container">
+        <a href="#main-content" className="skip-to-content">
+          Skip to main content
+        </a>
+        <Masthead onRSVPClick={handleRSVPOpen} />
+        <Navigation
+          onRSVPClick={handleRSVPOpen}
+          onNavigate={scrollToSection}
+          onOpenInfoPage={openInfoPage}
+        />
 
       {/* Breaking News Banner */}
       <BreakingNews />
@@ -446,7 +448,8 @@ function App() {
       {activeInfoPage === 'reception' && <ReceptionPage onClose={() => setActiveInfoPage(null)} />}
       {activeInfoPage === 'accommodations' && <AccommodationsPage onClose={() => setActiveInfoPage(null)} />}
       {activeInfoPage === 'registry' && <RegistryPage onClose={() => setActiveInfoPage(null)} />}
-    </div >
+      </div>
+    </EnvelopeIntro>
   );
 }
 
