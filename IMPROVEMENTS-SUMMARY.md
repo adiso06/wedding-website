@@ -210,3 +210,5 @@ Your wedding website is now:
 - ✅ **Production-ready** - Just optimize images and replace placeholders!
 
 The site maintains its beautiful NYT-style aesthetic while being technically sound. Great job on the design! 🎉
+
+

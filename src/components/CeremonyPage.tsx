@@ -88,3 +88,5 @@ const CeremonyPage: React.FC<CeremonyPageProps> = ({ onClose }) => {
 };
 
 export default CeremonyPage;
+
+

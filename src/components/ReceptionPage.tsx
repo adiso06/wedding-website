@@ -94,3 +94,5 @@ const ReceptionPage: React.FC<ReceptionPageProps> = ({ onClose }) => {
 };
 
 export default ReceptionPage;
+
+

@@ -116,3 +116,5 @@ const AccommodationsPage: React.FC<AccommodationsPageProps> = ({ onClose }) => {
 };
 
 export default AccommodationsPage;
+
+

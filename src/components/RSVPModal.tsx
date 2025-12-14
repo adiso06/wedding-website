@@ -83,7 +83,7 @@ const RSVPModal: React.FC<RSVPModalProps> = ({ onClose }) => {
               <span className="checkmark">✓</span> Exclusive interview with the Groom
             </li>
             <li className="feature-item">
-              <span className="checkmark">✓</span> 3-Course Dining Experience
+              <span className="checkmark">✓</span> 7-Course Dining Experience
             </li>
           </ul>
         </div>
@@ -100,7 +100,7 @@ const RSVPModal: React.FC<RSVPModalProps> = ({ onClose }) => {
           </a>
           <p className="paywall-footer">
             Redirects to our secure partner, WithJoy.com
-            <span className="access-code">Access Code: [YOUR_PASSWORD]</span>
+            <span className="access-code">Access Code: RSVP</span>
           </p>
         </div>
 

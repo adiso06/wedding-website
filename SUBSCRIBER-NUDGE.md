@@ -184,3 +184,5 @@ const resetTracking = () => {
 - All tracking is client-side (localStorage only)
 - No backend/database required
 - Privacy-friendly (no cookies, no external tracking)
+
+

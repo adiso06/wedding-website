@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
+import { Calendar, MapPin, Heart, Gift } from 'lucide-react';
 import EnvelopeIntro from './components/EnvelopeIntro';
+import BundleIntro from './components/BundleIntro';
 import Masthead from './components/Masthead';
 import Navigation from './components/Navigation';
 import BreakingNews from './components/BreakingNews';
@@ -24,6 +26,11 @@ const TIME_THRESHOLD = 45; // Show after 45 seconds on site
 const SCROLL_THRESHOLD = 800; // Show after scrolling 800px down
 
 function App() {
+  // Check URL param for intro preference
+  const searchParams = new URLSearchParams(window.location.search);
+  const useBundleIntro = searchParams.get('intro') === 'bundle';
+  const IntroComponent = useBundleIntro ? BundleIntro : EnvelopeIntro;
+
   const [showRSVP, setShowRSVP] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [activeInfoPage, setActiveInfoPage] = useState<InfoPageType>(null);
@@ -174,7 +181,7 @@ function App() {
   };
 
   return (
-    <EnvelopeIntro>
+    <IntroComponent onRSVPClick={handleRSVPOpen}>
       <div className="newspaper-container">
         <a href="#main-content" className="skip-to-content">
           Skip to main content
@@ -186,11 +193,11 @@ function App() {
           onOpenInfoPage={openInfoPage}
         />
 
-      {/* Breaking News Banner */}
-      <BreakingNews />
+      {/* Breaking News Banner - Hidden */}
+      {false && <BreakingNews />}
 
-      {/* Banner Nudge */}
-      {showBannerNudge && !showRSVP && (
+      {/* Banner Nudge - Hidden permanently */}
+      {false && showBannerNudge && !showRSVP && (
         <div className="subscriber-nudge-banner">
           <div className="subscriber-nudge-content">
             <div className="subscriber-nudge-text">
@@ -292,7 +299,7 @@ function App() {
 
             <div className="article-image-container">
               <img
-                src={`${import.meta.env.BASE_URL}A&C-105-optimized.webp`}
+                src={`${import.meta.env.BASE_URL}hero.jpeg`}
                 alt="Chhaya Arora and Aditya Sood in Long Island City shortly after their engagement"
                 className="article-image"
                 width="1200"
@@ -323,25 +330,47 @@ function App() {
 
             <div className="divider-line"></div>
 
-            <div className="sidebar-header">OPINION</div>
-            <div className="sidebar-subtext">Perspectives on love, marriage, and the merger ahead</div>
+            <div className="save-date-section sidebar-card">
+              <h3 className="save-date-header">SAVE THE DATE</h3>
+              <div className="save-date-item">
+                <Calendar className="save-date-icon" />
+                <div className="save-date-text">
+                  <div className="save-date-title">March 15, 2025</div>
+                  <div className="save-date-subtitle">Add to Calendar</div>
+                </div>
+              </div>
+              <div className="save-date-item">
+                <MapPin className="save-date-icon" />
+                <div className="save-date-text">
+                  <div className="save-date-title">Chino Hills, California</div>
+                  <div className="save-date-subtitle">Map & Directions</div>
+                </div>
+              </div>
+              <div className="save-date-item">
+                <Heart className="save-date-icon" />
+                <div className="save-date-text">
+                  <div className="save-date-title">Formal Invitation</div>
+                  <div className="save-date-subtitle">To follow by mail</div>
+                </div>
+              </div>
+              <button className="view-details-btn" onClick={() => openInfoPage('ceremony')}>
+                VIEW CEREMONY DETAILS
+              </button>
+            </div>
+
+            <div className="registry-box sidebar-card">
+              <div className="registry-header">REGISTRY</div>
+              <Gift className="mx-auto w-8 h-8 my-2" />
+              <h4 className="font-bold text-center mb-2">A Note on Gifts</h4>
+              <p className="text-center text-sm my-4 text-gray-600">Your presence is the only present we desire.</p>
+              <button className="registry-link" onClick={() => openInfoPage('registry')}>
+                Registry Information
+              </button>
+            </div>
+
+            <div className="divider-line double"></div>
+
             <div className="sidebar-articles">
-              <article className="article-card sidebar-card opinion-card" onClick={() => openArticle(articles[5].id)}>
-                <div className="opinion-author-image"></div>
-                <h3 className="sidebar-headline italic">{articles[5].title}</h3>
-                <div className="article-byline">By {articles[5].author}</div>
-                <p className="article-summary-small">{articles[5].summary}</p>
-              </article>
-
-              <div className="divider-line"></div>
-
-              <article className="article-card sidebar-card opinion-card" onClick={() => openArticle(articles[3].id)}> {/* Schedule/Events moved here potentially or referenced */}
-                <h3 className="sidebar-headline italic">The Schedule: A Western Timeframe for an Eastern Event</h3>
-                <div className="article-byline">By The Events Committee</div>
-                <p className="article-summary-small">{articles[3].summary}</p>
-              </article>
-
-              <div className="divider-line double"></div>
 
               <div className="sidebar-header">LIFE & ARTS</div>
               <div className="sidebar-subtext">Culture, style, and celebration in Southern California</div>
@@ -362,10 +391,10 @@ function App() {
 
               <div className="divider-line"></div>
 
-              <article className="article-card sidebar-card" onClick={() => openArticle(articles[11].id)}> {/* Arts */}
-                <div className="article-category">{articles[11].category}</div>
-                <h3 className="sidebar-headline">{articles[11].title}</h3>
-                <p className="article-summary-small">{articles[11].summary}</p>
+              <article className="article-card sidebar-card opinion-card" onClick={() => openArticle(articles[6].id)}> {/* Opinion */}
+                <div className="article-category">{articles[6].category}</div>
+                <h3 className="sidebar-headline italic">{articles[6].title}</h3>
+                <p className="article-summary-small">{articles[6].summary}</p>
               </article>
             </div>
           </div>
@@ -423,7 +452,7 @@ function App() {
         <div className="quote-section border-top-double" role="complementary" aria-label="Quote of the day">
           <div className="quote-container">
             <span className="quote-label">Quote of the Day:</span>
-            <span className="quote-text">"I knew it was a bull market when she agreed to the second date." — Aditya Sood, on the early days of the merger.</span>
+            <span className="quote-text">"From the very first conversation, I knew this was something special." — Aditya Sood, on the early days of the relationship.</span>
           </div>
         </div>
       </section>
@@ -449,7 +478,7 @@ function App() {
       {activeInfoPage === 'accommodations' && <AccommodationsPage onClose={() => setActiveInfoPage(null)} />}
       {activeInfoPage === 'registry' && <RegistryPage onClose={() => setActiveInfoPage(null)} />}
       </div>
-    </EnvelopeIntro>
+    </IntroComponent>
   );
 }
 

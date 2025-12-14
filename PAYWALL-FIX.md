@@ -188,3 +188,5 @@ location.reload();
 ✅ **No Re-blocking:** Once dismissed, you can browse freely
 
 **The paywall should now work perfectly!** 🎉
+
+

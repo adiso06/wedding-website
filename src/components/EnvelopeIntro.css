@@ -1,0 +1,304 @@
+/* Envelope Intro Styles */
+
+.envelope-wrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
+.envelope-content {
+  transition: all 1000ms ease-in-out;
+}
+
+.envelope-content.hidden {
+  opacity: 0;
+  transform: scale(0.95);
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+.envelope-content.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.envelope-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  transition: opacity 700ms ease-in-out;
+  transition-delay: 700ms;
+}
+
+.envelope-overlay.opening {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.envelope-container {
+  position: relative;
+  width: 350px;
+  height: 250px;
+  background-color: #e0dcd3;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  transition: transform 300ms ease-in-out;
+}
+
+.envelope-container:hover {
+  transform: scale(1.05);
+}
+
+/* Envelope Flaps using CSS borders */
+.envelope-flap-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-left: 175px solid transparent;
+  border-right: 175px solid transparent;
+  border-bottom: 150px solid #d6d0c2;
+  z-index: 20;
+}
+
+.envelope-flap-left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-top: 125px solid transparent;
+  border-left: 175px solid #cdc6b5;
+  border-bottom: 125px solid transparent;
+  z-index: 10;
+}
+
+.envelope-flap-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  border-top: 125px solid transparent;
+  border-right: 175px solid #cdc6b5;
+  border-bottom: 125px solid transparent;
+  z-index: 10;
+}
+
+.envelope-flap-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 30;
+  transition: transform 1000ms ease-in-out;
+  transform-origin: top;
+  transform-style: preserve-3d;
+  border-left: 175px solid transparent;
+  border-right: 175px solid transparent;
+  border-top: 140px solid #e6e2d6;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.envelope-flap-top.opening {
+  transform: rotateX(180deg);
+  z-index: -10;
+}
+
+/* Wax Seal */
+.wax-seal-container {
+  position: absolute;
+  top: -140px;
+  left: 50%;
+  transform: translateX(-50%) translateY(110px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: opacity 300ms ease-in-out;
+}
+
+.wax-seal-container.hidden {
+  opacity: 0;
+}
+
+.wax-seal {
+  width: 64px;
+  height: 64px;
+  background-color: #991b1b;
+  border-radius: 50%;
+  border: 4px solid #7f1d1d;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.wax-seal-inner {
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgba(127, 29, 29, 0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wax-seal-text {
+  font-family: Georgia, serif;
+  color: white;
+  font-weight: bold;
+  font-size: 1.25rem;
+  letter-spacing: -0.05em;
+}
+
+.wax-seal-text .ampersand {
+  font-size: 0.75rem;
+}
+
+/* Invitation Text */
+.invitation-text {
+  margin-top: 64px;
+  text-align: center;
+  width: 256px;
+}
+
+.invitation-subtitle {
+  color: #6b7280;
+  font-family: sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 4px;
+}
+
+.invitation-names {
+  color: #1f2937;
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.tap-prompt {
+  margin-top: 16px;
+  font-size: 12px;
+  font-weight: bold;
+  color: #991b1b;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* Newspaper Preview Inside */
+.newspaper-preview {
+  position: absolute;
+  left: 16px;
+  right: 16px;
+  top: 16px;
+  bottom: 0;
+  background-color: white;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  transition: transform 1000ms ease-in-out;
+  transition-delay: 300ms;
+  z-index: 0;
+}
+
+.newspaper-preview.sliding {
+  transform: translateY(-96px);
+}
+
+.newspaper-content {
+  padding: 16px;
+  text-align: center;
+  opacity: 0.5;
+}
+
+.newspaper-title {
+  font-family: Georgia, serif;
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-top: 16px;
+}
+
+.newspaper-divider {
+  height: 4px;
+  background-color: black;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.newspaper-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.newspaper-block {
+  height: 80px;
+  background-color: #e5e7eb;
+}
+
+.newspaper-block.large {
+  grid-column: span 2;
+}
+
+/* Responsive styles for medium screens */
+@media (min-width: 768px) {
+  .envelope-container {
+    width: 500px;
+    height: 350px;
+  }
+
+  .envelope-flap-bottom {
+    border-left: 250px solid transparent;
+    border-right: 250px solid transparent;
+    border-bottom: 200px solid #d6d0c2;
+  }
+
+  .envelope-flap-left {
+    border-top: 175px solid transparent;
+    border-left: 250px solid #cdc6b5;
+    border-bottom: 175px solid transparent;
+  }
+
+  .envelope-flap-right {
+    border-top: 175px solid transparent;
+    border-right: 250px solid #cdc6b5;
+    border-bottom: 175px solid transparent;
+  }
+
+  .envelope-flap-top {
+    border-left: 250px solid transparent;
+    border-right: 250px solid transparent;
+    border-top: 190px solid #e6e2d6;
+  }
+
+  .wax-seal-container {
+    top: -190px;
+    transform: translateX(-50%) translateY(150px);
+  }
+
+  .wax-seal {
+    width: 80px;
+    height: 80px;
+  }
+
+  .newspaper-preview.sliding {
+    transform: translateY(-128px);
+  }
+}
+
+

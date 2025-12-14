@@ -110,3 +110,5 @@ After optimization, test:
 4. Different browsers: Chrome, Safari, Firefox
 
 Target Lighthouse score: **90+/100**
+
+

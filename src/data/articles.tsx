@@ -1,4 +1,5 @@
 import React from 'react';
+import PullQuote from '../components/PullQuote';
 
 // Article data structure
 export interface Article {
@@ -15,15 +16,15 @@ export interface Article {
 export const articles: Article[] = [
   {
     id: 'merger',
-    title: 'Amazon PM and Future GI Fellow Announce Merger in Southern California',
-    subtitle: 'Arora-Sood Union Set to Transform Two Families; Sources Confirm "It Has Been a Slow, Steady Bull Market"',
+    title: 'A Union of Hearts: The Couple to Wed This December in California',
+    subtitle: 'You are cordially invited to the wedding of Aditya Sood and Chhaya Arora. Feel free to click around and read these fun articles, or jump to the RSVP here.',
     author: 'The Editorial Board',
     date: 'Dec. 15, 2024',
     category: 'BREAKING NEWS',
     summary: 'In a move anticipated by close friends and family for years, Chhaya Arora, an Amazon Product Manager, and Aditya Sood, a future Gastroenterology Fellow, announce their merger.',
     content: (
       <>
-        <p><strong>CHINO HILLS, Calif.</strong> — In a move anticipated by close friends and family for years, Chhaya Arora, a Senior Product Manager at Amazon, and Dr. Aditya Sood, a future Gastroenterology Fellow, announced their intention to merge operations effective March 15, 2025.</p>
+        <p><strong>CORONA, Calif.</strong> — In a move anticipated by close friends and family for years, Chhaya Arora, a Senior Product Manager at Amazon, and Dr. Aditya Sood, a future Gastroenterology Fellow, announced their intention to merge operations effective March 15, 2025.</p>
 
         <p>The proposed merger, first discussed during an FBLA competition years ago when both parties were ostensibly focused on competitive business analysis, has been under careful negotiation ever since. Sources close to both parties report that the initial acquisition strategy was "awkward but charming," though it proved successful in the long term.</p>
 
@@ -39,7 +40,7 @@ export const articles: Article[] = [
 
         <p>The proposal was accepted immediately, with no conditions or amendments. Bystanders reported the weather was favorable, and the entire negotiation concluded successfully within minutes.</p>
 
-        <p>"It has been a slow, steady bull market ever since we met," Dr. Sood noted, referencing their years-long partnership.</p>
+        <p>"It has been a steady, beautiful journey ever since we met," Dr. Sood noted, referencing their years-long partnership.</p>
       </>
     ),
   },
@@ -67,7 +68,7 @@ export const articles: Article[] = [
 
         <p>The relationship demonstrated consistent growth through various market conditions, including Dr. Sood's medical training and Ms. Arora's rise in the technology sector. Friends and family, many of whom had placed informal bets on the timing of an official announcement, watched as the partnership strengthened year over year.</p>
 
-        <p>"It has been a slow, steady bull market ever since," Dr. Sood noted, employing financial terminology that would have made their FBLA advisors proud.</p>
+        <p>"It has been a wonderful, steady partnership ever since," Dr. Sood noted, employing relationship terminology that would have made their FBLA advisors proud.</p>
       </>
     ),
   },
@@ -105,7 +106,7 @@ export const articles: Article[] = [
     summary: 'Following extensive negotiations, favorable rates secured for attendees. Transit authorities advise rental vehicles necessary.',
     content: (
       <>
-        <p><strong>CHINO HILLS, Calif.</strong> — Following extensive negotiations, accommodation packages have been secured for all attendees of the Arora-Sood merger celebration. The Logistics Committee has finalized arrangements at select Southern California establishments.</p>
+        <p><strong>CORONA, Calif.</strong> — Following extensive negotiations, accommodation packages have been secured for all attendees of the Arora-Sood merger celebration. The Logistics Committee has finalized arrangements at select Southern California establishments.</p>
 
         <h3>Primary Accommodation</h3>
         <ul>
@@ -116,7 +117,9 @@ export const articles: Article[] = [
         </ul>
 
         <h3>Transit & Infrastructure</h3>
-        <p><strong>Important Advisory:</strong> The celebration will take place across multiple venues in the Chino Hills area. Delegates are strongly encouraged to secure rental vehicles for the duration of their stay. No centralized shuttle service will be provided.</p>
+        <p><strong>Important Advisory:</strong> The celebration will take place across multiple venues in the Chino Hills area.</p>
+
+        <PullQuote quote="Delegates are strongly encouraged to secure rental vehicles for the duration of their stay. No centralized shuttle service will be provided." />
 
         <p>Recommended rental agencies operate from Los Angeles International Airport (LAX), Ontario International Airport (ONT), and John Wayne Airport (SNA). Early reservations are advised, particularly for the mid-March timeframe.</p>
 
@@ -145,7 +148,7 @@ export const articles: Article[] = [
     summary: 'Full timeline for March 14-15, 2025 celebration. Main events Saturday; Western schedule strictly enforced.',
     content: (
       <>
-        <p><strong>CHINO HILLS, Calif.</strong> — The complete schedule for the weekend of March 14-15, 2025 has been released. All times are subject to change based on meteorological conditions and the whims of extended family.</p>
+        <p><strong>CORONA, Calif.</strong> — The complete schedule for the weekend of March 14-15, 2025 has been released. All times are subject to change based on meteorological conditions and the whims of extended family.</p>
 
         <h3>Friday, March 14th (Select Guests Only)</h3>
 
@@ -189,37 +192,45 @@ export const articles: Article[] = [
 
   {
     id: 'market-analysis',
-    title: 'Wedding Registry Market Shows Bullish Trends',
-    subtitle: 'Analysts Predict High Yields on Cuisinart Futures',
+    title: 'Wedding Registry Market Shows Promising Trends',
+    subtitle: 'Cash Contributions Preferred for Future Ventures',
     author: 'The Financial Desk',
     date: 'Dec. 15, 2024',
     category: 'MARKETS',
-    summary: 'Investors are flocking to high-quality domestic assets. "The Le Creuset index is looking particularly strong," notes one analyst.',
+    summary: 'The couple announces a streamlined approach to wedding gifts, opting for cash contributions over traditional registry items.',
     content: (
       <>
-        <p><strong>NEW YORK</strong> — Financial markets opened higher today as news of the registry release sent shockwaves through the domestic goods sector.</p>
+        <p><strong>CORONA, Calif.</strong> — In a move that delights financial planners everywhere, the Arora-Sood merger team has announced they will not be maintaining a traditional wedding registry. Instead, they're embracing the flexibility and practicality of cash contributions.</p>
 
-        <p>"We are seeing unprecedented demand for high-quality cookware," said Jim Cramer on his evening show. "Buy, buy, buy!"</p>
+        <p>"We already have mixing bowls," Ms. Arora explained in a recent statement. "What we need is the freedom to build our future together on our own terms."</p>
 
-        <p>Market analysts report that the wedding gift economy is experiencing robust growth as the Arora-Sood merger approaches. The registry, which has not yet been formally released, is already generating significant buzz among family members and close friends.</p>
+        <p>The decision reflects a growing trend among couples who are establishing their households later in life, often after years of independent living. With two fully-equipped apartments already in operation, the need for duplicate toasters and extra wine glasses is minimal.</p>
 
-        <h3>Sector Analysis</h3>
+        <h3>The Cash Fund Advantage</h3>
 
-        <p>The kitchenware sector is showing particular strength. Le Creuset Dutch ovens—long considered a blue-chip investment in any domestic portfolio—are trading at premium levels. One industry insider noted, "When you see a couple that already knows how to cook, the smart money goes into cookware."</p>
+        <p>Rather than accumulating physical items, the couple has opted for a more flexible approach. Cash contributions will be accepted at the reception in a secure card box, allowing guests to participate in the couple's future plans without the guesswork of gift selection.</p>
 
-        <p>The small appliance sector is also heating up. KitchenAid stand mixers, Instant Pots, and high-end blenders are all showing strong performance. "These are couples who read recipes for fun," explained wedding gift consultant Martha Stewart in a recent interview. "They're not going to settle for bargain bin kitchen tools."</p>
+        <p>"Think of it as a Series A funding round for our married life," Dr. Sood joked, referencing his fiancée's tech industry background. "Investors can contribute to our growth without worrying about whether we already own that particular kitchen gadget."</p>
 
-        <h3>Alternative Investments</h3>
+        <h3>How It Works</h3>
 
-        <p>However, some guests are diversifying their portfolios into non-traditional assets. The "experiences over things" movement has gained traction, with contributions to honeymoon funds showing steady growth. Analysts predict the couple may deploy these funds toward future travel ventures, possibly in international markets.</p>
+        <p>Guests wishing to contribute may bring cards and cash gifts to the reception, where a beautifully decorated secure box will be available. For those who prefer digital transactions (and who doesn't love avoiding ATM fees?), the couple can provide payment app details upon request.</p>
 
-        <p>"Cash gifts remain a safe, liquid asset," noted one wedding economics professor. "They provide the couple with maximum flexibility in their post-merger integration phase."</p>
+        <p>"We understand some people prefer the tangibility of registry shopping," Ms. Arora noted. "But honestly, cash gives us the flexibility to invest in what we truly need—whether that's furnishing our new home together, planning adventures, or saving for future goals."</p>
 
-        <h3>Market Outlook</h3>
+        <h3>A Thoughtful Alternative</h3>
 
-        <p>With March 15th approaching, experts anticipate a surge in gift-giving activity. Early investors who secure their registry contributions now may benefit from better selection, while those who wait risk finding only serving spoons and trivets remaining.</p>
+        <p>Wedding gift experts note that cash funds are increasingly popular among modern couples. "It eliminates the anxiety of 'did they already get this?' and 'is this the right color?'" explained etiquette consultant Emily Post Jr. "Plus, it respects the couple's autonomy in building their life together."</p>
 
-        <p>The registry is expected to officially launch in the coming weeks. Interested parties are advised to monitor family group chats for the formal announcement.</p>
+        <p>The couple emphasized that the greatest gift remains guests' presence at the celebration. "Your attendance means everything," they noted in a joint statement. "Any contribution beyond that is generous icing on an already perfect cake."</p>
+
+        <h3>The Bottom Line</h3>
+
+        <p>For those accustomed to browsing registry websites, this approach may feel unfamiliar. But consider it this way: instead of selecting Item #47 from a predetermined list, you're contributing to a fund that could support anything from their honeymoon to their first home improvement project to a rainy day emergency fund.</p>
+
+        <p>"We're building a life, not just a kitchen," Dr. Sood summarized. "And we're grateful to anyone who wants to support that journey."</p>
+
+        <p><em>A secure card box will be available at the reception. Questions about contributions can be directed to the couple through the RSVP system.</em></p>
       </>
     ),
   },
@@ -259,7 +270,7 @@ export const articles: Article[] = [
 
         <p>Some mergers are driven by short-term gains. Others are built for the long haul. This is clearly the latter. The couple has already weathered the volatility of medical school, cross-country relocations, career transitions, and the general chaos of early adulthood. They've stress-tested this relationship under conditions that would have broken weaker partnerships.</p>
 
-        <p>So yes, critics had their doubts. But the data is in, and it's conclusive: this merger makes perfect sense. The synergy is real. The ROI on happiness is already substantial. And the long-term projections? Exceptionally bullish.</p>
+        <p>So yes, critics had their doubts. But the data is in, and it's conclusive: this merger makes perfect sense. The synergy is real. The ROI on happiness is already substantial. And the long-term projections? Exceptionally promising.</p>
 
         <p><em>The Editorial Board has been following this relationship since the FBLA days and stands by this analysis.</em></p>
       </>
@@ -276,7 +287,7 @@ export const articles: Article[] = [
       <>
         <p>It started as a joke. Now, they are writing a white paper. We explore the implications of "Agile Digestion."</p>
 
-        <p><strong>CHINO HILLS, Calif.</strong> — What happens when you combine Amazon's product management methodologies with the precision of gastroenterology? According to Ms. Arora and Dr. Sood, you get some very interesting dinner conversations—and possibly, the future of healthcare technology.</p>
+        <p><strong>CORONA, Calif.</strong> — What happens when you combine Amazon's product management methodologies with the precision of gastroenterology? According to Ms. Arora and Dr. Sood, you get some very interesting dinner conversations—and possibly, the future of healthcare technology.</p>
 
         <h3>The Great Sprint Planning Incident</h3>
 
@@ -464,7 +475,7 @@ export const articles: Article[] = [
       <>
         <p>The trash talk has already begun in the family WhatsApp group. "They don't have the bowling depth," claims the Groom's cousin.</p>
 
-        <p><strong>CHINO HILLS, Calif.</strong> — While most wedding weekends feature rehearsal dinners and champagne toasts, the Arora-Sood celebration may include something more competitive: a cricket match between Team Bride and Team Groom.</p>
+        <p><strong>CORONA, Calif.</strong> — While most wedding weekends feature rehearsal dinners and champagne toasts, the Arora-Sood celebration may include something more competitive: a cricket match between Team Bride and Team Groom.</p>
 
         <p>The proposed showdown, currently being debated in multiple family WhatsApp groups, has already generated more controversy than the wedding seating chart.</p>
 
@@ -529,7 +540,7 @@ export const articles: Article[] = [
       <>
         <p>Local hosts are rejoicing. "I'm fully booked for March 15th," says one Superhost.</p>
 
-        <p><strong>CHINO HILLS, Calif.</strong> — The local short-term rental market is experiencing unprecedented demand as wedding guests scramble to secure accommodations for the March 15th Arora-Sood celebration. What's typically a quiet weekend in Southern California suburbia has transformed into a seller's market for Airbnb hosts and hotel operators.</p>
+        <p><strong>CORONA, Calif.</strong> — The local short-term rental market is experiencing unprecedented demand as wedding guests scramble to secure accommodations for the March 15th Arora-Sood celebration. What's typically a quiet weekend in Southern California suburbia has transformed into a seller's market for Airbnb hosts and hotel operators.</p>
 
         <h3>The Booking Rush</h3>
 
@@ -586,7 +597,7 @@ export const articles: Article[] = [
       <>
         <p>A blurred video surfaced on Instagram. Is that the Groom attempting a Bhangra step? Experts remain divided.</p>
 
-        <p><strong>CHINO HILLS, Calif.</strong> — As the March 15th celebration approaches, rumors have emerged suggesting that Dr. Aditya Sood may be secretly practicing dance choreography for the wedding reception. The Arts & Culture desk has investigated these claims and can now report: the situation is complicated.</p>
+        <p><strong>CORONA, Calif.</strong> — As the March 15th celebration approaches, rumors have emerged suggesting that Dr. Aditya Sood may be secretly practicing dance choreography for the wedding reception. The Arts & Culture desk has investigated these claims and can now report: the situation is complicated.</p>
 
         <h3>The Evidence</h3>
 
@@ -673,4 +684,6 @@ export const articles: Article[] = [
     ),
   }
 ];
+
+
 

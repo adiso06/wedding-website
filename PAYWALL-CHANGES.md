@@ -98,3 +98,5 @@ const SCROLL_THRESHOLD = 800;            // Scroll paywall after 800px
 - Much better UX while still encouraging RSVPs
 
 **Perfect balance! 🎯**
+
+

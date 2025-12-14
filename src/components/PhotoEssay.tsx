@@ -41,15 +41,22 @@ const ARCHIVE_DATA = [
 
 const PhotoEssay: React.FC = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
     // Navigation Logic
     const handleNext = () => setCurrentIndex((prev) => (prev + 1) % ARCHIVE_DATA.length);
     const handlePrev = () => setCurrentIndex((prev) => (prev - 1 + ARCHIVE_DATA.length) % ARCHIVE_DATA.length);
 
+    // Lightbox handlers
+    const openLightbox = () => setIsLightboxOpen(true);
+    const closeLightbox = () => setIsLightboxOpen(false);
+
     // Keyboard navigation
     React.useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'ArrowLeft') {
+            if (e.key === 'Escape' && isLightboxOpen) {
+                closeLightbox();
+            } else if (e.key === 'ArrowLeft') {
                 handlePrev();
             } else if (e.key === 'ArrowRight') {
                 handleNext();
@@ -58,7 +65,7 @@ const PhotoEssay: React.FC = () => {
 
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, []);
+    }, [isLightboxOpen]);
 
     const currentPhoto = ARCHIVE_DATA[currentIndex];
 
@@ -87,7 +94,7 @@ const PhotoEssay: React.FC = () => {
                     <div className="viewer-container">
 
                         {/* Main Image */}
-                        <div className="viewer-frame">
+                        <div className="viewer-frame" onClick={openLightbox} style={{ cursor: 'zoom-in' }}>
                             <img
                                 src={currentPhoto.src}
                                 alt={`${currentPhoto.headline} - ${currentPhoto.caption}`}
@@ -168,6 +175,46 @@ const PhotoEssay: React.FC = () => {
 
                 </div>
             </div>
+
+            {/* Lightbox Modal */}
+            {isLightboxOpen && (
+                <div
+                    className="photo-lightbox"
+                    onClick={closeLightbox}
+                >
+                    <button
+                        className="lightbox-close"
+                        onClick={closeLightbox}
+                        aria-label="Close lightbox"
+                    >
+                        ✕
+                    </button>
+                    <button
+                        className="lightbox-nav lightbox-prev"
+                        onClick={(e) => { e.stopPropagation(); handlePrev(); }}
+                        aria-label="Previous photo"
+                    >
+                        <ChevronLeft size={32} />
+                    </button>
+                    <button
+                        className="lightbox-nav lightbox-next"
+                        onClick={(e) => { e.stopPropagation(); handleNext(); }}
+                        aria-label="Next photo"
+                    >
+                        <ChevronRight size={32} />
+                    </button>
+                    <div className="lightbox-content" onClick={(e) => e.stopPropagation()}>
+                        <img
+                            src={currentPhoto.src}
+                            alt={`${currentPhoto.headline} - ${currentPhoto.caption}`}
+                            className="lightbox-image"
+                        />
+                        <div className="lightbox-caption">
+                            <strong>{currentPhoto.headline}</strong> — {currentPhoto.caption}
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     );
 };

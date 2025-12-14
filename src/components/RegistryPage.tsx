@@ -83,3 +83,5 @@ const RegistryPage: React.FC<RegistryPageProps> = ({ onClose }) => {
 };
 
 export default RegistryPage;
+
+

@@ -19,7 +19,7 @@ const Masthead: React.FC<MastheadProps> = ({ onRSVPClick }) => {
             <div className="masthead-meta">
               <span className="masthead-date">Saturday, March 15, 2025</span>
               <span className="masthead-separator">•</span>
-              <span className="masthead-location">Chino Hills, CA</span>
+              <span className="masthead-location">Corona, CA</span>
               <span className="masthead-separator">•</span>
               <span className="masthead-vol">Vol. 1</span>
             </div>
