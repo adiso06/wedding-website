@@ -3,10 +3,9 @@ import './BundleIntro.css';
 
 interface BundleIntroProps {
   children: ReactNode;
-  onRSVPClick?: () => void;
 }
 
-const BundleIntro = ({ children, onRSVPClick }: BundleIntroProps) => {
+const BundleIntro = ({ children }: BundleIntroProps) => {
   // Stages: 'locked' (1) -> 'unlocked' (2 - flipped) -> 'hidden' (3 - exit)
   const [stage, setStage] = useState<'locked' | 'unlocked' | 'hidden'>('locked');
   const [isExiting, setIsExiting] = useState(false);

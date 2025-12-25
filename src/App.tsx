@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Calendar, MapPin, Heart, Gift } from 'lucide-react';
+import { Calendar, MapPin, Gift } from 'lucide-react';
 import EnvelopeIntro from './components/EnvelopeIntro';
 import BundleIntro from './components/BundleIntro';
 import Masthead from './components/Masthead';
@@ -110,14 +110,6 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [showScrollPaywall]);
 
-  // Smooth scroll to section
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   // Open specific article with tracking
   const openArticle = (articleId: string) => {
     const article = articles.find(a => a.id === articleId);
@@ -181,15 +173,13 @@ function App() {
   };
 
   return (
-    <IntroComponent onRSVPClick={handleRSVPOpen}>
+    <IntroComponent>
       <div className="newspaper-container">
         <a href="#main-content" className="skip-to-content">
           Skip to main content
         </a>
-        <Masthead onRSVPClick={handleRSVPOpen} />
+        <Masthead />
         <Navigation
-          onRSVPClick={handleRSVPOpen}
-          onNavigate={scrollToSection}
           onOpenInfoPage={openInfoPage}
           onOpenArticle={openArticle}
         />

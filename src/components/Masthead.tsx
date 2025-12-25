@@ -1,11 +1,7 @@
 import React from 'react';
 import './Masthead.css';
 
-interface MastheadProps {
-  onRSVPClick?: () => void;
-}
-
-const Masthead: React.FC<MastheadProps> = ({ onRSVPClick }) => {
+const Masthead: React.FC = () => {
   return (
     <header className="masthead border-bottom">
       <div className="masthead-container">

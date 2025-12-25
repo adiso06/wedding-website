@@ -2,17 +2,11 @@ import React from 'react';
 import './Navigation.css';
 
 interface NavigationProps {
-  onRSVPClick: () => void;
-  onNavigate: (sectionId: string) => void;
   onOpenInfoPage: (page: 'ceremony' | 'reception' | 'accommodations' | 'registry') => void;
   onOpenArticle: (articleId: string) => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ onRSVPClick, onNavigate, onOpenInfoPage, onOpenArticle }) => {
-  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
-    e.preventDefault();
-    onNavigate(sectionId);
-  };
+const Navigation: React.FC<NavigationProps> = ({ onOpenInfoPage, onOpenArticle }) => {
 
   return (
     <nav className="navigation border-bottom" role="navigation" aria-label="Main navigation">
