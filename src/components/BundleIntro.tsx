@@ -87,14 +87,25 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
                 <div className="invitation-header-section">
                   <div className="header-text">With joy in our hearts</div>
                   <div className="join-us-text">You are warmly invited to the wedding of</div>
-                  <div className="names-cursive">Chhaya & Aditya</div>
                 </div>
 
-                {/* Date Section with borders */}
+                {/* Names */}
+                <div className="names-cursive">Chhaya & Aditya</div>
+
+                {/* Line Separator */}
+                <div className="line-separator"></div>
+
+                {/* Date Section */}
                 <div className="date-section">
                   <div className="date-text">Sunday, March 15, 2026</div>
-                  <div className="time-text">Bharat at 8:45 AM • Ceremony at 10:00 AM • Reception at 6:00 PM</div>
+                  <div className="time-text">
+                    Bharat at 8:45 AM • Ceremony at 10:00 AM<br/>
+                    Reception at 6:00 PM
+                  </div>
                 </div>
+
+                {/* Line Separator */}
+                <div className="line-separator"></div>
 
                 {/* Action Section */}
                 <div className="action-section">
@@ -111,9 +122,7 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
                 </div>
 
                 {/* Footer Note */}
-                <div className="footer-note">
-                  <span className="joke-text">(Quick turnaround, we know. It's because we procrastinated.)</span>
-                </div>
+                <span className="joke-text">(Quick turnaround, we know. It's because we procrastinated.)</span>
               </div>
             </div>
 
