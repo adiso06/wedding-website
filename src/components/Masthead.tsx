@@ -13,7 +13,7 @@ const Masthead: React.FC = () => {
 
           <div className="masthead-center">
             <div className="masthead-meta">
-              <span className="masthead-date">Saturday, March 15, 2025</span>
+              <span className="masthead-date">Sunday, March 15, 2026</span>
               <span className="masthead-separator">•</span>
               <span className="masthead-location">Corona, CA</span>
               <span className="masthead-separator">•</span>

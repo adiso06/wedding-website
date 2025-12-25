@@ -18,7 +18,7 @@ const ReceptionPage: React.FC<ReceptionPageProps> = ({ onClose }) => {
           
           <div className="info-section">
             <h2>When</h2>
-            <p className="info-highlight">Saturday, March 15, 2025</p>
+            <p className="info-highlight">Sunday, March 15, 2026</p>
             <p>6:00 PM - 12:00 AM</p>
           </div>
 

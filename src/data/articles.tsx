@@ -24,7 +24,7 @@ export const articles: Article[] = [
     summary: 'In a move anticipated by close friends and family for years, Chhaya Arora, an Amazon Product Manager, and Aditya Sood, a future Gastroenterology Fellow, announce their merger.',
     content: (
       <>
-        <p><strong>CORONA, Calif.</strong> — In a move anticipated by close friends and family for years, Chhaya Arora, a Senior Product Manager at Amazon, and Dr. Aditya Sood, a future Gastroenterology Fellow, announced their intention to merge operations effective March 15, 2025.</p>
+        <p><strong>CORONA, Calif.</strong> — In a move anticipated by close friends and family for years, Chhaya Arora, a Senior Product Manager at Amazon, and Dr. Aditya Sood, a future Gastroenterology Fellow, announced their intention to merge operations effective March 15, 2026.</p>
 
         <p>The proposed merger, first discussed during an FBLA competition years ago when both parties were ostensibly focused on competitive business analysis, has been under careful negotiation ever since. Sources close to both parties report that the initial acquisition strategy was "awkward but charming," though it proved successful in the long term.</p>
 
@@ -140,10 +140,10 @@ export const articles: Article[] = [
     author: 'The Events Committee',
     date: 'Dec. 15, 2024',
     category: 'THE SCHEDULE',
-    summary: 'Full timeline for March 14-15, 2025 celebration. Main events Saturday; Western schedule strictly enforced.',
+    summary: 'Full timeline for March 14-15, 2026 celebration. Main events Sunday; Western schedule strictly enforced.',
     content: (
       <>
-        <p><strong>CORONA, Calif.</strong> — The complete schedule for the weekend of March 14-15, 2025 has been released. All times are subject to change based on meteorological conditions and the whims of extended family.</p>
+        <p><strong>CORONA, Calif.</strong> — The complete schedule for the weekend of March 14-15, 2026 has been released. All times are subject to change based on meteorological conditions and the whims of extended family.</p>
 
         <h3>Friday, March 14th (Select Guests Only)</h3>
 
@@ -156,7 +156,7 @@ export const articles: Article[] = [
         <p><strong>6:00 PM - Evening Gathering</strong><br />
           Informal celebrations continue through 9:00 PM.</p>
 
-        <h3>Saturday, March 15th (All Guests)</h3>
+        <h3>Sunday, March 15th (All Guests)</h3>
 
         <p><strong>9:00 AM–9:45 AM - ADITYA'S BARAAT</strong><br />
           <em>Meet up: 8:45 AM</em><br />
@@ -342,9 +342,9 @@ export const articles: Article[] = [
         <h3>Friday Evening: Cultural Experience</h3>
 
         <p><strong>5:00 PM - BAPS Shri Swaminarayan Mandir</strong><br />
-          Before Saturday's ceremony, consider visiting the stunning BAPS Mandir where the wedding will take place. This architectural marvel features 35,000 pieces of hand-carved Italian Carrara marble and Indian pink sandstone, with five pinnacles, two large domes, and 122 pillars. The mandir is open to visitors daily from 9 AM to 7:30 PM. Remember: modest attire required (shoulders, back, chest, and knees covered), and remove your shoes before entering. Photography is not allowed inside, but the experience is unforgettable.</p>
+          Before Sunday's ceremony, consider visiting the stunning BAPS Mandir where the wedding will take place. This architectural marvel features 35,000 pieces of hand-carved Italian Carrara marble and Indian pink sandstone, with five pinnacles, two large domes, and 122 pillars. The mandir is open to visitors daily from 9 AM to 7:30 PM. Remember: modest attire required (shoulders, back, chest, and knees covered), and remove your shoes before entering. Photography is not allowed inside, but the experience is unforgettable.</p>
 
-        <h3>Saturday Morning: Breakfast and Shopping</h3>
+        <h3>Sunday Morning: Breakfast and Shopping</h3>
 
         <p><strong>8:00 AM - Breakfast Options</strong><br />
           Grab breakfast at one of Chino Hills' many cafes before the Baraat. Local favorites serve everything from classic American breakfast to Korean-fusion options.</p>
@@ -352,7 +352,7 @@ export const articles: Article[] = [
         <p><strong>9:00 AM - The Shoppes at Chino Hills</strong><br />
           If you need any last-minute items for the wedding, this shopping center has over 70 stores including H&M, Banana Republic, and Victoria's Secret. There's also a Trader Joe's if you need snacks for your hotel room.</p>
 
-        <h3>Saturday Evening: Post-Reception Wind Down</h3>
+        <h3>Sunday Evening: Post-Reception Wind Down</h3>
 
         <p><strong>Late Night - Yoshiharu Ramen</strong><br />
           After hours of dancing, you might be craving comfort food. Yoshiharu Ramen serves some of the best ramen in the area and is perfect for a late-night meal with fellow wedding guests.</p>
@@ -440,7 +440,7 @@ export const articles: Article[] = [
 
         <h3>Styling Tips for the Arora-Sood Wedding</h3>
 
-        <p>For the Saturday reception, which specifies "Indo-Western or Western formal," consider:</p>
+        <p>For the Sunday reception, which specifies "Indo-Western or Western formal," consider:</p>
 
         <ul>
           <li><strong>Keep it balanced:</strong> If your top is heavily embellished, keep the bottom simple, and vice versa</li>

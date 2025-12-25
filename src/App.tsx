@@ -331,7 +331,7 @@ function App() {
               <div className="save-date-item">
                 <Calendar className="save-date-icon" />
                 <div className="save-date-text">
-                  <div className="save-date-title">March 15, 2025</div>
+                  <div className="save-date-title">March 15, 2026</div>
                   <div className="save-date-subtitle">Add to Calendar</div>
                 </div>
               </div>

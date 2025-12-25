@@ -18,7 +18,7 @@ const CeremonyPage: React.FC<CeremonyPageProps> = ({ onClose }) => {
           
           <div className="info-section">
             <h2>When</h2>
-            <p className="info-highlight">Saturday, March 15, 2025</p>
+            <p className="info-highlight">Sunday, March 15, 2026</p>
             <p>9:00 AM - 2:00 PM</p>
           </div>
 

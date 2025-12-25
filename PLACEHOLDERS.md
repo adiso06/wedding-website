@@ -40,7 +40,7 @@ All article content appears correct in `App.tsx` with Arora-Sood information. Th
 - [ ] Add apple-touch-icon
 - [ ] Decide if Footer.tsx should be used (currently not imported)
 - [ ] Decide if Hero.tsx should be used (currently not imported)
-- [ ] Verify all dates are March 15, 2025
+- [ ] Verify all dates are March 15, 2026
 - [ ] Verify Mission Inn hotel details
 - [ ] Test RSVP flow end-to-end
 
