@@ -5,9 +5,10 @@ interface NavigationProps {
   onRSVPClick: () => void;
   onNavigate: (sectionId: string) => void;
   onOpenInfoPage: (page: 'ceremony' | 'reception' | 'accommodations' | 'registry') => void;
+  onOpenArticle: (articleId: string) => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ onRSVPClick, onNavigate, onOpenInfoPage }) => {
+const Navigation: React.FC<NavigationProps> = ({ onRSVPClick, onNavigate, onOpenInfoPage, onOpenArticle }) => {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, sectionId: string) => {
     e.preventDefault();
     onNavigate(sectionId);
@@ -17,10 +18,13 @@ const Navigation: React.FC<NavigationProps> = ({ onRSVPClick, onNavigate, onOpen
     <nav className="navigation border-bottom" role="navigation" aria-label="Main navigation">
       <div className="nav-container">
         <div className="nav-sections">
-          <a 
-            href="#the-couple" 
+          <a
+            href="#the-couple"
             className="nav-link"
-            onClick={(e) => handleNavClick(e, 'the-couple')}
+            onClick={(e) => {
+              e.preventDefault();
+              onOpenArticle('investigation');
+            }}
             aria-label="About the couple"
           >
             THE COUPLE
@@ -69,29 +73,26 @@ const Navigation: React.FC<NavigationProps> = ({ onRSVPClick, onNavigate, onOpen
           >
             REGISTRY
           </a>
-          <a 
-            href="#our-story" 
+          <a
+            href="#our-story"
             className="nav-link"
-            onClick={(e) => handleNavClick(e, 'our-story')}
+            onClick={(e) => {
+              e.preventDefault();
+              onOpenArticle('merger');
+            }}
             aria-label="Read our story"
           >
             OUR STORY
           </a>
-          <a 
-            href="#gallery" 
-            className="nav-link"
-            onClick={(e) => handleNavClick(e, 'gallery')}
-            aria-label="View photo gallery"
-          >
-            GALLERY
-          </a>
-          <button 
+          <a
+            href="https://www.theknot.com/us/chhaya-arora-and-aditya-sood-mar-2026/rsvp"
+            target="_blank"
+            rel="noopener noreferrer"
             className="nav-link rsvp-button"
-            onClick={onRSVPClick}
             aria-label="RSVP for the wedding"
           >
             RSVP
-          </button>
+          </a>
         </div>
       </div>
     </nav>

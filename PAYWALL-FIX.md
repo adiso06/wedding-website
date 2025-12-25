@@ -190,3 +190,4 @@ location.reload();
 **The paywall should now work perfectly!** 🎉
 
 
+

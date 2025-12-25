@@ -89,9 +89,8 @@ const RSVPModal: React.FC<RSVPModalProps> = ({ onClose }) => {
         </div>
 
         <div className="paywall-action">
-          {/* THIS IS THE CONNECTION TO JOY */}
           <a
-            href="https://withjoy.com/chhaya-arora-and-aditya/rsvp?joyHotelDiscountCode=JOY5"
+            href="https://www.theknot.com/us/chhaya-arora-and-aditya-sood-mar-2026/rsvp"
             target="_blank"
             rel="noopener noreferrer"
             className="subscribe-button"
@@ -99,7 +98,7 @@ const RSVPModal: React.FC<RSVPModalProps> = ({ onClose }) => {
             Subscribe (RSVP)
           </a>
           <p className="paywall-footer">
-            Redirects to our secure partner, WithJoy.com
+            Redirects to our secure partner, TheKnot.com
             <span className="access-code">Access Code: RSVP</span>
           </p>
         </div>

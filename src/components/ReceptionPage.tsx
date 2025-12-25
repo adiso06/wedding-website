@@ -20,7 +20,6 @@ const ReceptionPage: React.FC<ReceptionPageProps> = ({ onClose }) => {
             <h2>When</h2>
             <p className="info-highlight">Saturday, March 15, 2025</p>
             <p>6:00 PM - 12:00 AM</p>
-            <p className="info-note">Doors open at 6:00 PM. Dinner service begins at 7:00 PM.</p>
           </div>
 
           <div className="info-section">
@@ -39,14 +38,10 @@ const ReceptionPage: React.FC<ReceptionPageProps> = ({ onClose }) => {
           </div>
 
           <div className="info-section">
-            <h2>Evening Schedule</h2>
+            <h2>What to Expect</h2>
             <ul className="info-list">
-              <li><strong>6:00 PM:</strong> Doors open, cocktail hour</li>
-              <li><strong>7:00 PM:</strong> Grand entrance and introductions</li>
-              <li><strong>7:30 PM:</strong> Dinner service begins</li>
-              <li><strong>8:30 PM:</strong> First dance and special performances</li>
-              <li><strong>9:00 PM:</strong> Dancing and celebration</li>
-              <li><strong>12:00 AM:</strong> Reception concludes</li>
+              <li><strong>6:00 PM–7:00 PM - COCKTAIL HOUR</strong><br/>Hors d'oeuvres and cocktails to kick off the night.</li>
+              <li><strong>7:00 PM–12:00 AM - RECEPTION</strong><br/>Please join us for a night of partying to celebrate us as newlyweds!</li>
             </ul>
           </div>
 
@@ -60,7 +55,6 @@ const ReceptionPage: React.FC<ReceptionPageProps> = ({ onClose }) => {
           <div className="info-section">
             <h2>Dinner</h2>
             <p>A delicious multi-course Indian and fusion dinner will be served. Vegetarian and non-vegetarian options available.</p>
-            <p className="info-note">Please let us know about any dietary restrictions in your RSVP.</p>
           </div>
 
           <div className="info-section">
@@ -68,15 +62,8 @@ const ReceptionPage: React.FC<ReceptionPageProps> = ({ onClose }) => {
             <ul className="info-list">
               <li>DJ and dancing throughout the evening</li>
               <li>Special performances by friends and family</li>
-              <li>Photo opportunities and photo booth</li>
               <li>Open bar with beer, wine, and cocktails</li>
             </ul>
-          </div>
-
-          <div className="info-section">
-            <h2>Parking & Transportation</h2>
-            <p>Free parking is available at the venue. Since the reception venue is different from the ceremony location, please plan your transportation accordingly.</p>
-            <p className="info-note">⚠️ If you plan to drink, please arrange for a designated driver or rideshare service.</p>
           </div>
 
           <div className="info-section">
@@ -94,5 +81,6 @@ const ReceptionPage: React.FC<ReceptionPageProps> = ({ onClose }) => {
 };
 
 export default ReceptionPage;
+
 
 

@@ -291,3 +291,4 @@ You now have a **production-ready scroll paywall** that:
 **The perfect balance of visibility and user experience!** 🎉
 
 
+

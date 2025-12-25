@@ -26,10 +26,10 @@ const TIME_THRESHOLD = 45; // Show after 45 seconds on site
 const SCROLL_THRESHOLD = 800; // Show after scrolling 800px down
 
 function App() {
-  // Check URL param for intro preference
+  // Check URL param for intro preference - default to bundle, allow envelope with ?intro=envelope
   const searchParams = new URLSearchParams(window.location.search);
-  const useBundleIntro = searchParams.get('intro') === 'bundle';
-  const IntroComponent = useBundleIntro ? BundleIntro : EnvelopeIntro;
+  const useEnvelopeIntro = searchParams.get('intro') === 'envelope';
+  const IntroComponent = useEnvelopeIntro ? EnvelopeIntro : BundleIntro;
 
   const [showRSVP, setShowRSVP] = useState(false);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
@@ -191,6 +191,7 @@ function App() {
           onRSVPClick={handleRSVPOpen}
           onNavigate={scrollToSection}
           onOpenInfoPage={openInfoPage}
+          onOpenArticle={openArticle}
         />
 
       {/* Breaking News Banner - Hidden */}
@@ -233,9 +234,14 @@ function App() {
               You're reading about our special day — why not be part of it? 
               RSVP now to confirm your attendance and get full access to all event details.
             </p>
-            <button className="scroll-paywall-cta" onClick={handleRSVPOpen}>
+            <a
+              href="https://www.theknot.com/us/chhaya-arora-and-aditya-sood-mar-2026/rsvp"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="scroll-paywall-cta"
+            >
               RSVP to the Wedding
-            </button>
+            </a>
             <p className="scroll-paywall-note">Free • Takes 2 minutes • Unlock full access</p>
           </div>
         </div>
@@ -346,13 +352,6 @@ function App() {
                   <div className="save-date-subtitle">Map & Directions</div>
                 </div>
               </div>
-              <div className="save-date-item">
-                <Heart className="save-date-icon" />
-                <div className="save-date-text">
-                  <div className="save-date-title">Formal Invitation</div>
-                  <div className="save-date-subtitle">To follow by mail</div>
-                </div>
-              </div>
               <button className="view-details-btn" onClick={() => openInfoPage('ceremony')}>
                 VIEW CEREMONY DETAILS
               </button>
@@ -363,9 +362,15 @@ function App() {
               <Gift className="mx-auto w-8 h-8 my-2" />
               <h4 className="font-bold text-center mb-2">A Note on Gifts</h4>
               <p className="text-center text-sm my-4 text-gray-600">Your presence is the only present we desire.</p>
-              <button className="registry-link" onClick={() => openInfoPage('registry')}>
+              <a
+                href="https://www.theknot.com/us/chhaya-arora-and-aditya-sood-mar-2026/registry"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="registry-link"
+                style={{ display: 'block', textAlign: 'center', textDecoration: 'none' }}
+              >
                 Registry Information
-              </button>
+              </a>
             </div>
 
             <div className="divider-line double"></div>
@@ -439,7 +444,7 @@ function App() {
               <p><strong>Notice to Investors:</strong> Your presence at our celebration is the greatest gift we could ask for. However, for those inquiring about participation in our growth strategy, we have established the following funding mechanism:</p>
             </div>
             <div className="registry-grid">
-              <a href="#" className="registry-card">
+              <a href="https://www.theknot.com/us/chhaya-arora-and-aditya-sood-mar-2026/registry" target="_blank" rel="noopener noreferrer" className="registry-card">
                 <h4>Series A Funding Round</h4>
                 <p>Cash contributions to support the couple's next venture</p>
                 <div className="registry-note">Secure receptacle available at reception. Digital transfers preferred for accounting purposes.</div>

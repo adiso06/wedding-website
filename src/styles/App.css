@@ -254,12 +254,17 @@
 
 /* Tablet Large (iPad Pro landscape, small laptops) */
 @media (max-width: 1024px) {
+  /* Switch to single column layout */
+  .grid-5col {
+    grid-template-columns: 1fr;
+  }
+
   /* Force all columns to full width */
   .col-span-3,
   .col-span-4,
   .col-span-6,
   .col-span-8 {
-    grid-column: span 12;
+    grid-column: span 1;
   }
 
   /* Remove column borders on tablet */

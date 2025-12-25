@@ -14,96 +14,60 @@ const AccommodationsPage: React.FC<AccommodationsPageProps> = ({ onClose }) => {
         </button>
         
         <div className="info-page-content">
-          <h1 className="info-page-title">Accommodations</h1>
+          <h1 className="info-page-title">Travel</h1>
           
           <div className="info-section">
-            <h2>Recommended Hotels</h2>
-            
-            <div className="hotel-card">
-              <h3>The Mission Inn Hotel & Spa</h3>
-              <p className="info-highlight">Primary Hotel with Group Rate</p>
-              <p>3649 Mission Inn Avenue</p>
-              <p>Riverside, CA 92501</p>
-              <p className="info-note">📞 Call the hotel directly and mention the Arora-Sood wedding for group rate</p>
-              <a 
-                href="https://www.missioninn.com/" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="info-link"
-              >
-                Visit Website →
-              </a>
-            </div>
-
-            <div className="hotel-card">
-              <h3>Additional Hotel Options</h3>
-              <p>More hotel recommendations coming soon. Check back for updates!</p>
-              <p className="info-note">In the meantime, look for hotels in Chino Hills, Ontario, or Riverside.</p>
-            </div>
-          </div>
-
-          <div className="info-section highlight-box">
-            <h2>Important: Car Rental Required</h2>
-            <p>⚠️ <strong>You will need a car during your stay.</strong></p>
-            <p>The ceremony and reception are at different venues in the Chino Hills area. There is no shuttle service, so a rental car is essential.</p>
-            <p className="info-note">Book your rental car early, especially for the mid-March timeframe!</p>
-          </div>
-
-          <div className="info-section">
             <h2>Flying In</h2>
-            <p>Three airports serve the Chino Hills area:</p>
-            
-            <div className="airport-option">
-              <h3>Ontario International Airport (ONT)</h3>
-              <p className="info-highlight">⭐ Recommended - Closest Option</p>
-              <p>Distance: ~30 miles to Chino Hills (~30-40 minutes)</p>
-              <p>Rental car agencies available on-site</p>
-            </div>
 
             <div className="airport-option">
-              <h3>Los Angeles International (LAX)</h3>
-              <p>Distance: ~60 miles to Chino Hills (~60-90 minutes depending on traffic)</p>
-              <p>Major international hub with more flight options</p>
-              <p>All major rental car agencies available</p>
+              <h3>Ontario International Airport (ONT) ⭐ Best Option</h3>
+              <p className="info-highlight">Adjacent to venue</p>
+              <p><strong>Distance:</strong> ~2 miles to venue</p>
+              <p><strong>Travel Time:</strong> ~5–10 minutes</p>
+              <p className="info-note">Note: The venue is practically next door to this airport. Rental cars and rideshares are readily available.</p>
             </div>
 
             <div className="airport-option">
               <h3>John Wayne Airport (SNA)</h3>
-              <p>Distance: ~45 miles to Chino Hills (~45-60 minutes)</p>
-              <p>Orange County airport, good alternative</p>
+              <p><strong>Distance:</strong> ~35 miles to venue</p>
+              <p><strong>Travel Time:</strong> ~40–60 minutes</p>
+              <p className="info-note">Note: A good alternative if ONT flights are unavailable; significantly closer than LAX.</p>
+            </div>
+
+            <div className="airport-option">
+              <h3>Los Angeles International (LAX)</h3>
+              <p><strong>Distance:</strong> ~55 miles to venue</p>
+              <p><strong>Travel Time:</strong> ~60–90+ minutes (highly dependent on traffic)</p>
+              <p className="info-note">Note: Major international hub with the most flight options, but requires a longer drive through heavy traffic.</p>
             </div>
           </div>
 
           <div className="info-section">
-            <h2>Alternative Lodging</h2>
-            <p>If you prefer alternative accommodations, consider:</p>
-            <ul className="info-list">
-              <li><strong>Airbnb/VRBO:</strong> Search in Chino Hills, Diamond Bar, or surrounding areas</li>
-              <li><strong>Hotels near Ontario Airport:</strong> Convenient and often more affordable</li>
-              <li><strong>Riverside Hotels:</strong> Near the Mission Inn, about 20-30 minutes from venues</li>
-            </ul>
-            <p className="info-note">💡 Tip: Book early as availability decreases closer to the wedding date!</p>
+            <h2>Staying</h2>
+
+            <div className="hotel-card">
+              <h3>The Mission Inn Hotel & Spa (Riverside, CA)</h3>
+              <p><strong>Vibe:</strong> Historic, scenic, and unique. A destination in itself. Highly recommended.</p>
+              <p><strong>Distance:</strong> ~15 minutes from venue.</p>
+            </div>
+
+            <div className="hotel-card">
+              <h3>Ayres Hotel Chino Hills (Chino Hills, CA)</h3>
+              <p><strong>Vibe:</strong> Boutique-style and scenic. Located in a nice area near The Shoppes at Chino Hills.</p>
+              <p><strong>Distance:</strong> ~15 minutes from venue.</p>
+            </div>
+
+            <div className="hotel-card">
+              <h3>DoubleTree by Hilton Ontario Airport (Ontario, CA)</h3>
+              <p><strong>Vibe:</strong> Modern and convenient. Located very close to the airport and wedding venue.</p>
+              <p><strong>Distance:</strong> ~5 minutes from venue.</p>
+            </div>
           </div>
 
           <div className="info-section">
-            <h2>Weather & What to Pack</h2>
-            <p>Southern California in mid-March is beautiful!</p>
-            <ul className="info-list">
-              <li><strong>Temperature:</strong> Daytime 68-72°F (20-22°C), Evening 48-50°F (9-10°C)</li>
-              <li><strong>Weather:</strong> Typically sunny and dry (minimal rain in March)</li>
-              <li><strong>What to Bring:</strong> Light layers for daytime, jacket or shawl for evenings, sunscreen</li>
-            </ul>
-          </div>
-
-          <div className="info-section">
-            <h2>Local Area</h2>
-            <p>While you're in Southern California, consider extending your trip to visit:</p>
-            <ul className="info-list">
-              <li><strong>Disneyland Resort:</strong> 30 minutes away</li>
-              <li><strong>Downtown Los Angeles:</strong> 45 minutes</li>
-              <li><strong>Orange County Beaches:</strong> 40 minutes</li>
-              <li><strong>Wine Country (Temecula):</strong> 45 minutes south</li>
-            </ul>
+            <h2>Transportation</h2>
+            <p className="info-highlight">Car Rentals are recommended over Ubers</p>
+            <p>The ceremony and reception are at different venues in the Chino Hills area. A rental car will give you the most flexibility during your stay.</p>
           </div>
 
           <div className="info-section">
@@ -116,5 +80,6 @@ const AccommodationsPage: React.FC<AccommodationsPageProps> = ({ onClose }) => {
 };
 
 export default AccommodationsPage;
+
 
 

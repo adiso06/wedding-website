@@ -529,4 +529,156 @@
   .corner-flourish.bottom-right { bottom: 10px; right: 10px; }
 }
 
+/* ===== SIMPLIFIED CARD BACK STYLING ===== */
+/* Inner border frame */
+.inner-border-frame {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border: 1px solid #D6CFC7;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Header Section */
+.invitation-header-section {
+  text-align: center;
+  z-index: 1;
+  margin-bottom: 10px;
+}
+
+.header-text {
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 10px;
+  color: #7A7A7A;
+  margin-bottom: 15px;
+}
+
+.join-us-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.names-cursive {
+  font-family: 'Great Vibes', cursive;
+  font-size: 68px;
+  line-height: 1.2;
+  font-weight: 400;
+  color: #3B302B;
+  margin-bottom: 0;
+}
+
+/* Date Section */
+.date-section {
+  border-top: 1px solid #D6CFC7;
+  border-bottom: 1px solid #D6CFC7;
+  padding: 20px 0;
+  width: 85%;
+  margin: 10px 0;
+  z-index: 1;
+}
+
+.date-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 600;
+  color: #3B302B;
+}
+
+.time-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  margin-top: 8px;
+  color: #666;
+}
+
+/* Action Section */
+.action-section {
+  margin-top: 10px;
+  text-align: center;
+  z-index: 1;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.invitation-btn {
+  display: inline-block;
+  background-color: transparent;
+  color: #3B302B;
+  border: 1px solid #3B302B;
+  padding: 12px 25px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  min-width: 130px;
+}
+
+.invitation-btn:hover {
+  background-color: #3B302B;
+  color: #FDFBF7;
+}
+
+/* Footer Note */
+.footer-note {
+  margin-top: 20px;
+  font-size: 14px;
+  z-index: 1;
+}
+
+.joke-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: #888;
+}
+
+/* Mobile responsive for simplified card */
+@media (max-width: 600px) {
+  .names-cursive {
+    font-size: 48px;
+  }
+
+  .date-text {
+    font-size: 18px;
+  }
+
+  .time-text {
+    font-size: 14px;
+  }
+
+  .button-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .invitation-btn {
+    min-width: 100%;
+    padding: 10px 20px;
+    font-size: 9px;
+  }
+
+  .joke-text {
+    font-size: 11px;
+  }
+}
+
+
 

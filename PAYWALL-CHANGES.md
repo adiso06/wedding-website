@@ -100,3 +100,4 @@ const SCROLL_THRESHOLD = 800;            // Scroll paywall after 800px
 **Perfect balance! 🎯**
 
 
+

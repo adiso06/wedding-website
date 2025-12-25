@@ -252,3 +252,4 @@ gap: 6px var(--spacing-sm); /* Compact but readable */
 Generated: December 13, 2025
 
 
+

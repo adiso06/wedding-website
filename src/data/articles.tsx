@@ -98,49 +98,44 @@ export const articles: Article[] = [
   },
   {
     id: 'accommodations',
-    title: 'Delegates to be Housed at Mission Inn; Group Rates Secured',
+    title: 'Travel Guide Released for Wedding Guests',
     subtitle: 'Infrastructure advisory issued: Personal transportation required for multi-venue celebration',
     author: 'The Logistics Committee',
     date: 'Dec. 15, 2024',
     category: 'TRAVEL & LEISURE',
-    summary: 'Following extensive negotiations, favorable rates secured for attendees. Transit authorities advise rental vehicles necessary.',
+    summary: 'Complete travel information for attendees. Ontario Airport recommended; car rentals strongly advised.',
     content: (
       <>
-        <p><strong>CORONA, Calif.</strong> — Following extensive negotiations, accommodation packages have been secured for all attendees of the Arora-Sood merger celebration. The Logistics Committee has finalized arrangements at select Southern California establishments.</p>
+        <p><strong>CORONA, Calif.</strong> — The Logistics Committee has released comprehensive travel information for all attendees of the Arora-Sood celebration. Here's everything you need to know for your trip to Southern California.</p>
 
-        <h3>Primary Accommodation</h3>
+        <h3>Flying In</h3>
+        <p>Wedding logistics experts recommend booking flights into one of three Southern California airports:</p>
         <ul>
-          <li><strong>Primary Venue:</strong> Mission Inn</li>
-          <li><strong>Location:</strong> Riverside, California</li>
-          <li><strong>Booking Details:</strong> Contact hotel directly for group rate</li>
-          <li><strong>Additional Hotel:</strong> To be announced</li>
+          <li><strong>Ontario International Airport (ONT) ⭐ Best Option</strong> - Adjacent to venue. Distance: ~2 miles (~5-10 minutes). The venue is practically next door to this airport. Rental cars and rideshares readily available.</li>
+          <li><strong>John Wayne Airport (SNA)</strong> - Distance: ~35 miles (~40-60 minutes). A good alternative if ONT flights are unavailable; significantly closer than LAX.</li>
+          <li><strong>Los Angeles International (LAX)</strong> - Distance: ~55 miles (~60-90+ minutes, highly traffic-dependent). Major international hub with the most flight options, but requires a longer drive through heavy traffic.</li>
         </ul>
 
-        <h3>Transit & Infrastructure</h3>
-        <p><strong>Important Advisory:</strong> The celebration will take place across multiple venues in the Chino Hills area.</p>
+        <h3>Staying</h3>
+        <p>Recommended accommodations for wedding guests:</p>
+        <ul>
+          <li><strong>The Mission Inn Hotel & Spa (Riverside, CA)</strong> - Historic, scenic, and unique. A destination in itself. Highly recommended. Distance: ~15 minutes from venue.</li>
+          <li><strong>Ayres Hotel Chino Hills (Chino Hills, CA)</strong> - Boutique-style and scenic. Located near The Shoppes at Chino Hills. Distance: ~15 minutes from venue.</li>
+          <li><strong>DoubleTree by Hilton Ontario Airport (Ontario, CA)</strong> - Modern and convenient. Very close to airport and wedding venue. Distance: ~5 minutes from venue.</li>
+        </ul>
+
+        <h3>Transportation</h3>
+        <p><strong>Important Advisory:</strong> Car rentals are recommended over Ubers. The celebration will take place across multiple venues in the Chino Hills area.</p>
 
         <PullQuote quote="Delegates are strongly encouraged to secure rental vehicles for the duration of their stay. No centralized shuttle service will be provided." />
 
-        <p>Recommended rental agencies operate from Los Angeles International Airport (LAX), Ontario International Airport (ONT), and John Wayne Airport (SNA). Early reservations are advised, particularly for the mid-March timeframe.</p>
-
-        <h3>Air Travel</h3>
-        <p>Wedding logistics experts recommend booking flights into one of three Southern California airports:</p>
-        <ul>
-          <li><strong>Ontario (ONT)</strong> - Closest to venues. Approximately 30 miles from Chino Hills.</li>
-          <li><strong>Los Angeles (LAX)</strong> - Major international hub. 60 miles from celebration sites.</li>
-          <li><strong>John Wayne/Orange County (SNA)</strong> - Alternative gateway. 45 miles from venues.</li>
-        </ul>
-
-        <h3>Weather Advisory</h3>
-        <p>Southern California in mid-March typically features mild, pleasant spring weather. Delegates should expect daytime high temperatures around 68-72°F (20-22°C) and evening lows around 48-50°F (9-10°C). Rainfall is minimal during this period, with March averaging only 7 days of rain and 0.4 inches of precipitation for the month.</p>
-
-        <p>Recommended attire: Light layers for daytime outdoor events, with a jacket or shawl for evening temperatures. Both indoor and outdoor events are scheduled. Sunscreen is advised for outdoor portions of the celebration.</p>
+        <p>Recommended rental agencies operate from all three airports. A rental car will give you the most flexibility during your stay.</p>
       </>
     ),
   },
   {
     id: 'schedule',
-    title: 'Complete Timeline of Weekend Events Released; Baraat Assembly at 10:30 AM Sharp',
+    title: 'Complete Timeline of Weekend Events Released; Baraat Assembly at 9:00 AM Sharp',
     subtitle: 'Two-day celebration schedule finalized; select guests invited to Friday festivities',
     author: 'The Events Committee',
     date: 'Dec. 15, 2024',
@@ -163,20 +158,21 @@ export const articles: Article[] = [
 
         <h3>Saturday, March 15th (All Guests)</h3>
 
-        <p><strong>10:30 AM - Baraat Assembly</strong><br />
-          <em>Critical Advisory:</em> The Baraat procession will mobilize at 10:30 AM sharp. While the couple respects cultural traditions regarding "Indian Standard Time," this event operates on a strict Western schedule. Delegates arriving late risk missing the procession entirely. The Events Committee cannot overstate the importance of punctuality.</p>
+        <p><strong>9:00 AM–9:45 AM - ADITYA'S BARAAT</strong><br />
+          <em>Meet up: 8:45 AM</em><br />
+          The wedding procession for the groom involving live music and dancing. Please note that the time here is prompt.</p>
 
-        <p><strong>11:00 AM - Wedding Ceremony</strong><br />
-          BAPS Mandir, Chino Hills. Traditional Hindu wedding ceremony. Dress Code: Indian attire strongly preferred; formal suits acceptable. Ceremony duration approximately 2-3 hours. <strong>Important:</strong> Modest attire required for temple entry.</p>
+        <p><strong>10:00 AM–12:30 PM - WEDDING CEREMONY</strong><br />
+          BAPS Mandir, Chino Hills. The bride and groom take seven steps and vows around the fire to represent the beginning of their journey together. Dress Code: Indian attire strongly preferred; formal suits acceptable.</p>
 
-        <p><strong>1:30 PM - Lunch Service</strong><br />
-          Following ceremony at BAPS Mandir. Traditional Indian cuisine will be served.</p>
+        <p><strong>12:30 PM–2:00 PM - LUNCH</strong><br />
+          Traditional Indian vegetarian meal after ceremony at BAPS Mandir.</p>
 
-        <p><strong>6:00 PM - Reception Begins</strong><br />
-          Majestic Banquet Hall, Chino Hills. Dress Code: Indo-Western fusion or Western formal attire. The committee encourages creative interpretation while maintaining elegance.</p>
+        <p><strong>6:00 PM–7:00 PM - COCKTAIL HOUR</strong><br />
+          Majestic Banquet Hall, Chino Hills. Hors d'oeuvres and cocktails to kick off the night.</p>
 
-        <p><strong>12:00 AM - Closing</strong><br />
-          Reception concludes. Delegates responsible for their own transportation back to accommodations.</p>
+        <p><strong>7:00 PM–12:00 AM - RECEPTION</strong><br />
+          Please join us for a night of partying to celebrate us as newlyweds! Dress Code: Indo-Western fusion or Western formal attire.</p>
 
         <h3>Dress Code Clarifications</h3>
         <ul>
@@ -197,40 +193,40 @@ export const articles: Article[] = [
     author: 'The Financial Desk',
     date: 'Dec. 15, 2024',
     category: 'MARKETS',
-    summary: 'The couple announces a streamlined approach to wedding gifts, opting for cash contributions over traditional registry items.',
+    summary: 'The couple announces a streamlined approach to wedding gifts, opting for cash contributions only.',
     content: (
       <>
-        <p><strong>CORONA, Calif.</strong> — In a move that delights financial planners everywhere, the Arora-Sood merger team has announced they will not be maintaining a traditional wedding registry. Instead, they're embracing the flexibility and practicality of cash contributions.</p>
+        <p><strong>CORONA, Calif.</strong> — In a move that delights financial planners everywhere, the Arora-Sood merger team has announced they will not be maintaining a traditional wedding registry. Instead, they're embracing the flexibility and practicality of cash contributions only.</p>
 
-        <p>"We already have mixing bowls," Ms. Arora explained in a recent statement. "What we need is the freedom to build our future together on our own terms."</p>
+        <p>"As we live in New York but are celebrating in California, we kindly ask for no boxed gifts to avoid the logistics of shipping them cross-country," Ms. Arora explained in a recent statement. "What we need is the freedom to build our future together on our own terms."</p>
 
-        <p>The decision reflects a growing trend among couples who are establishing their households later in life, often after years of independent living. With two fully-equipped apartments already in operation, the need for duplicate toasters and extra wine glasses is minimal.</p>
+        <p>The decision reflects both practical considerations and a growing trend among couples who are establishing their households later in life. With two fully-equipped apartments already in operation and a cross-country move to consider, the need for physical gifts is minimal.</p>
 
-        <h3>The Cash Fund Advantage</h3>
+        <h3>The Cash Gift Advantage</h3>
 
-        <p>Rather than accumulating physical items, the couple has opted for a more flexible approach. Cash contributions will be accepted at the reception in a secure card box, allowing guests to participate in the couple's future plans without the guesswork of gift selection.</p>
+        <p>Rather than accumulating physical items that would need to be shipped from California to New York, the couple has opted for a streamlined approach. Cash contributions will be accepted at the reception in a secure card box, allowing guests to participate in the couple's future plans without the complications of cross-country logistics.</p>
 
-        <p>"Think of it as a Series A funding round for our married life," Dr. Sood joked, referencing his fiancée's tech industry background. "Investors can contribute to our growth without worrying about whether we already own that particular kitchen gadget."</p>
+        <p>"Think of it as a Series A funding round for our married life," Dr. Sood joked, referencing his fiancée's tech industry background. "Investors can contribute to our growth without worrying about shipping costs or whether we already own that particular kitchen gadget."</p>
 
         <h3>How It Works</h3>
 
-        <p>Guests wishing to contribute may bring cards and cash gifts to the reception, where a beautifully decorated secure box will be available. For those who prefer digital transactions (and who doesn't love avoiding ATM fees?), the couple can provide payment app details upon request.</p>
+        <p>Guests wishing to contribute may bring cards and cash gifts to the reception, where a beautifully decorated secure box will be available. For those who prefer digital transactions, the couple can provide payment app details upon request.</p>
 
-        <p>"We understand some people prefer the tangibility of registry shopping," Ms. Arora noted. "But honestly, cash gives us the flexibility to invest in what we truly need—whether that's furnishing our new home together, planning adventures, or saving for future goals."</p>
+        <p>"We understand that some people prefer the tangibility of registry shopping," Ms. Arora noted. "But honestly, with the logistics of living in New York and celebrating in California, cash gives us the flexibility to invest in what we truly need—whether that's furnishing our new home together, planning adventures, or saving for future goals."</p>
 
-        <h3>A Thoughtful Alternative</h3>
+        <h3>A Practical Alternative</h3>
 
-        <p>Wedding gift experts note that cash funds are increasingly popular among modern couples. "It eliminates the anxiety of 'did they already get this?' and 'is this the right color?'" explained etiquette consultant Emily Post Jr. "Plus, it respects the couple's autonomy in building their life together."</p>
+        <p>Wedding gift experts note that cash funds are increasingly popular among modern couples, especially those navigating cross-country logistics. "It eliminates the anxiety of 'did they already get this?' and 'how do we ship this across the country?'" explained etiquette consultant Emily Post Jr. "Plus, it respects the couple's practical needs."</p>
 
         <p>The couple emphasized that the greatest gift remains guests' presence at the celebration. "Your attendance means everything," they noted in a joint statement. "Any contribution beyond that is generous icing on an already perfect cake."</p>
 
         <h3>The Bottom Line</h3>
 
-        <p>For those accustomed to browsing registry websites, this approach may feel unfamiliar. But consider it this way: instead of selecting Item #47 from a predetermined list, you're contributing to a fund that could support anything from their honeymoon to their first home improvement project to a rainy day emergency fund.</p>
+        <p>For those accustomed to browsing registry websites, this approach may feel unfamiliar. But consider the logistics: instead of selecting a toaster that needs to be shipped from California to New York, you're contributing to a fund that supports the couple's future without the cross-country shipping headaches.</p>
 
-        <p>"We're building a life, not just a kitchen," Dr. Sood summarized. "And we're grateful to anyone who wants to support that journey."</p>
+        <p>"We're building a life, not just accumulating items that need to be moved across the country," Dr. Sood summarized. "And we're grateful to anyone who wants to support that journey."</p>
 
-        <p><em>A secure card box will be available at the reception. Questions about contributions can be directed to the couple through the RSVP system.</em></p>
+        <p><em>A secure card box will be available at the reception. For more information, visit <a href="https://www.theknot.com/us/chhaya-arora-and-aditya-sood-mar-2026/registry" target="_blank" rel="noopener noreferrer">our registry page on The Knot</a>.</em></p>
       </>
     ),
   },
@@ -684,6 +680,7 @@ export const articles: Article[] = [
     ),
   }
 ];
+
 
 
 

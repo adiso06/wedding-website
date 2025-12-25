@@ -112,3 +112,4 @@ After optimization, test:
 Target Lighthouse score: **90+/100**
 
 
+

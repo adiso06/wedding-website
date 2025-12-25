@@ -33,7 +33,14 @@ const Masthead: React.FC<MastheadProps> = ({ onRSVPClick }) => {
               <span className="weather-icon">🌤</span>
               <span className="weather-text">Forecast: 72°/55°<br/>Conditions favorable for outdoor procession.</span>
             </div>
-            <button className="subscribe-btn" onClick={onRSVPClick}>RSVP</button>
+            <a
+              href="https://www.theknot.com/us/chhaya-arora-and-aditya-sood-mar-2026/rsvp"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="subscribe-btn"
+            >
+              RSVP
+            </a>
           </div>
         </div>
       </div>

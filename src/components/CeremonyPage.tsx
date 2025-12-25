@@ -19,8 +19,7 @@ const CeremonyPage: React.FC<CeremonyPageProps> = ({ onClose }) => {
           <div className="info-section">
             <h2>When</h2>
             <p className="info-highlight">Saturday, March 15, 2025</p>
-            <p>11:00 AM - 1:30 PM</p>
-            <p className="info-note">⏰ Important: Baraat procession begins at 10:30 AM sharp. Please arrive by 10:15 AM to participate.</p>
+            <p>9:00 AM - 2:00 PM</p>
           </div>
 
           <div className="info-section">
@@ -46,36 +45,20 @@ const CeremonyPage: React.FC<CeremonyPageProps> = ({ onClose }) => {
           <div className="info-section">
             <h2>What to Expect</h2>
             <ul className="info-list">
-              <li><strong>Baraat (10:30 AM):</strong> A joyous processional celebration with music and dancing as the groom arrives</li>
-              <li><strong>Hindu Ceremony (11:00 AM):</strong> Traditional wedding rituals including the exchange of garlands, sacred fire ceremony, and seven vows</li>
-              <li><strong>Lunch (1:30 PM):</strong> Traditional Indian meal served at the temple</li>
+              <li><strong>9:00 AM–9:45 AM - ADITYA'S BARAAT</strong><br/>Meet up: 8:45 AM<br/>The wedding procession for the groom involving live music and dancing. Please note that the time here is prompt.</li>
+              <li><strong>10:00 AM–12:30 PM - WEDDING CEREMONY</strong><br/>The bride and groom take seven steps and vows around the fire to represent the beginning of their journey together.</li>
+              <li><strong>12:30 PM–2:00 PM - LUNCH</strong><br/>Traditional Indian vegetarian meal after ceremony</li>
             </ul>
           </div>
 
           <div className="info-section highlight-box">
             <h2>Dress Code</h2>
-            <p><strong>Indian attire is strongly preferred; formal suits are acceptable.</strong></p>
-            <p className="info-note">Temple Requirements:</p>
-            <ul className="info-list">
-              <li>Modest clothing required (shoulders, back, chest, and knees must be covered)</li>
-              <li>Remove shoes before entering the temple</li>
-              <li>Shoes can be left at the designated area</li>
-            </ul>
+            <p><strong>Indian attire or formal western attire will be great.</strong></p>
           </div>
 
           <div className="info-section">
             <h2>Parking & Arrival</h2>
-            <p>Ample parking is available at the temple. Please arrive early to allow time for parking and removing shoes before the Baraat begins at 10:30 AM.</p>
-          </div>
-
-          <div className="info-section">
-            <h2>Additional Information</h2>
-            <ul className="info-list">
-              <li>Photography inside the temple is not permitted during the ceremony</li>
-              <li>The ceremony will be approximately 2-3 hours</li>
-              <li>Seating is available inside the temple</li>
-              <li>Vegetarian lunch will be provided after the ceremony</li>
-            </ul>
+            <p>Ample parking is available at the temple. Please arrive early to allow time for parking before the Baraat begins at 9:00 AM.</p>
           </div>
 
           <div className="info-section">
@@ -88,5 +71,6 @@ const CeremonyPage: React.FC<CeremonyPageProps> = ({ onClose }) => {
 };
 
 export default CeremonyPage;
+
 
 

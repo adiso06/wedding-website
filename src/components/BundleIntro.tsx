@@ -29,12 +29,8 @@ const BundleIntro = ({ children, onRSVPClick }: BundleIntroProps) => {
 
   const handleRSVP = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setIsExiting(true);
-    // Wait for roll-up animation then trigger RSVP
-    setTimeout(() => {
-      setStage('hidden');
-      if (onRSVPClick) onRSVPClick();
-    }, 1200);
+    // Open RSVP link directly
+    window.open('https://www.theknot.com/us/chhaya-arora-and-aditya-sood-mar-2026/rsvp', '_blank');
   };
 
   if (stage === 'hidden') {
@@ -82,70 +78,42 @@ const BundleIntro = ({ children, onRSVPClick }: BundleIntroProps) => {
               </div>
             </div>
 
-            {/* BACK FACE (Detailed Invitation) */}
-            <div className="band-face band-back" style={{ backgroundImage: `url(${import.meta.env.BASE_URL}card-without-mandaap.jpg)` }}>
-              {/* Decorative corner flourishes */}
-              <div className="corner-flourish top-left"></div>
-              <div className="corner-flourish top-right"></div>
-              <div className="corner-flourish bottom-left"></div>
-              <div className="corner-flourish bottom-right"></div>
-              
+            {/* BACK FACE (Simplified Invitation) */}
+            <div className="band-face band-back">
               <div className="band-content-back">
-                {/* Formal header with arc styling */}
-                <div className="invitation-formal-header">You are cordially invited to celebrate</div>
+                {/* Inner border frame */}
+                <div className="inner-border-frame"></div>
                 
-                {/* Monogram */}
-                <div className="monogram-shield">
-                  <span className="monogram-letter">A</span>
-                  <span className="monogram-divider"></span>
-                  <span className="monogram-letter">C</span>
+                {/* Header */}
+                <div className="invitation-header-section">
+                  <div className="header-text">With joy in our hearts</div>
+                  <div className="join-us-text">You are warmly invited to the wedding of</div>
+                  <div className="names-cursive">Chhaya & Aditya</div>
                 </div>
-                
-                {/* Names in elegant script - matching front */}
-                <div className="band-names-back">Aditya & Chhaya</div>
-                
-                {/* Decorative divider */}
-                <div className="elegant-divider">
-                  <span className="divider-ornament">✦</span>
+
+                {/* Date Section with borders */}
+                <div className="date-section">
+                  <div className="date-text">Saturday, March 15, 2026</div>
+                  <div className="time-text">Ceremony at 4:00 PM • Reception to Follow</div>
                 </div>
-                
-                {/* Mandap Illustration */}
-                <div className="mandap-illustration-container">
-                  <img src={`${import.meta.env.BASE_URL}mandaap-only.png`} alt="Wedding Mandap" className="mandap-image" />
-                </div>
-                
-                {/* Date with elegant framing */}
-                <div className="invitation-date-frame">
-                  <div className="date-ornament-line"></div>
-                  <div className="invitation-date-large">Saturday, March 15, 2025</div>
-                  <div className="date-ornament-line"></div>
-                </div>
-                
-                {/* Venue details */}
-                <div className="invitation-details-grid">
-                  <div className="event-block">
-                    <div className="event-label">Ceremony</div>
-                    <div className="event-location">BAPS Shri Swaminarayan Mandir</div>
-                    <div className="event-address">Chino Hills, California</div>
-                  </div>
+
+                {/* Action Section */}
+                <div className="action-section">
+                  <div className="header-text">Kindly reply by January 1st, 2026</div>
                   
-                  <div className="venue-divider"></div>
-                  
-                  <div className="event-block">
-                    <div className="event-label">Reception</div>
-                    <div className="event-location">Majestic Banquet Hall</div>
-                    <div className="event-address">Chino, California</div>
+                  <div className="button-container">
+                    <button className="invitation-btn" onClick={handleEnterSite}>
+                      View Invitation
+                    </button>
+                    <button className="invitation-btn" onClick={handleRSVP}>
+                      RSVP
+                    </button>
                   </div>
                 </div>
-                
-                {/* Elegant action buttons */}
-                <div className="invitation-actions">
-                  <button className="action-btn primary" onClick={handleEnterSite}>
-                    <span className="btn-bracket">[</span> Continue to The Times <span className="btn-bracket">]</span>
-                  </button>
-                  <button className="action-btn secondary" onClick={handleRSVP}>
-                    <span className="btn-bracket">[</span> RSVP Now <span className="btn-bracket">]</span>
-                  </button>
+
+                {/* Footer Note */}
+                <div className="footer-note">
+                  <span className="joke-text">(Quick turnaround, we know. It's because we procrastinated.)</span>
                 </div>
               </div>
             </div>
@@ -164,5 +132,6 @@ const BundleIntro = ({ children, onRSVPClick }: BundleIntroProps) => {
 };
 
 export default BundleIntro;
+
 
 

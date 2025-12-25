@@ -70,12 +70,6 @@
     }
 }
 
-@media (min-width: 1024px) and (max-width: 1199px) {
-    .essay-grid {
-        grid-template-columns: 1fr 1fr;
-        /* Equal columns on tablets */
-    }
-}
 
 /* Image Viewer */
 .viewer-container {
