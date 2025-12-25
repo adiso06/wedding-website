@@ -83,7 +83,7 @@ const BundleIntro = ({ children, onRSVPClick }: BundleIntroProps) => {
             </div>
 
             {/* BACK FACE (Detailed Invitation) */}
-            <div className="band-face band-back" style={{ backgroundImage: `url(${import.meta.env.BASE_URL}card.png)` }}>
+            <div className="band-face band-back" style={{ backgroundImage: `url(${import.meta.env.BASE_URL}card-without-mandaap.jpg)` }}>
               {/* Decorative corner flourishes */}
               <div className="corner-flourish top-left"></div>
               <div className="corner-flourish top-right"></div>
@@ -109,8 +109,10 @@ const BundleIntro = ({ children, onRSVPClick }: BundleIntroProps) => {
                   <span className="divider-ornament">✦</span>
                 </div>
                 
-                {/* Mandap Text replaced image */}
-                <div className="mandap-text">Wedding Mandap</div>
+                {/* Mandap Illustration */}
+                <div className="mandap-illustration-container">
+                  <img src={`${import.meta.env.BASE_URL}mandaap-only.png`} alt="Wedding Mandap" className="mandap-image" />
+                </div>
                 
                 {/* Date with elegant framing */}
                 <div className="invitation-date-frame">
