@@ -254,17 +254,30 @@
 
 /* Tablet Large (iPad Pro landscape, small laptops) */
 @media (max-width: 1024px) {
-  /* Switch to single column layout */
+  /* Switch to 2-column layout for tablets */
   .grid-5col {
-    grid-template-columns: 1fr;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Two equal columns */
+    gap: var(--spacing-md);
   }
 
-  /* Force all columns to full width */
-  .col-span-3,
-  .col-span-4,
-  .col-span-6,
-  .col-span-8 {
+  /* Main story spans full width */
+  .main-story {
+    grid-column: 1 / -1; /* Span all columns */
+    order: -1; /* Show main story first */
+    padding: var(--spacing-lg) !important;
+    margin-bottom: var(--spacing-md);
+  }
+
+  /* Left and right columns each take one column (50/50) */
+  .col-span-3.left-column,
+  .col-span-3.right-column {
     grid-column: span 1;
+  }
+
+  /* Other spans go full width */
+  .col-span-6:not(.left-column):not(.right-column) {
+    grid-column: 1 / -1;
   }
 
   /* Remove column borders on tablet */
@@ -276,12 +289,6 @@
     background-color: transparent;
   }
 
-  .main-story {
-    padding: var(--spacing-lg) !important;
-    order: -1; /* Show main story first on smaller screens */
-    margin-bottom: var(--spacing-lg);
-  }
-
   .left-column {
     order: 1;
   }
@@ -291,15 +298,13 @@
   }
 
   .sidebar-articles {
-    flex-direction: row;
-    flex-wrap: wrap;
-    gap: var(--spacing-sm);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
   }
 
   .sidebar-card {
-    flex: 1 1 calc(50% - var(--spacing-sm));
-    min-width: 250px;
-    padding: var(--spacing-sm) !important;
+    padding: var(--spacing-sm) 0 !important;
   }
 
   .article-image-placeholder {
@@ -370,14 +375,16 @@
   }
 }
 
-/* Tablet Small / Mobile Large (iPad portrait) */
+/* Tablet Small / Mobile Large (iPad portrait) - Stack to single column */
 @media (max-width: 768px) {
   .grid-5col {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
     padding: 0 var(--spacing-md);
     gap: var(--spacing-md);
   }
 
+  /* All columns become full width block elements */
   .col-span-1,
   .col-span-2,
   .col-span-3,
@@ -389,8 +396,10 @@
   .col-span-9,
   .col-span-10,
   .col-span-11,
-  .col-span-12 {
-    grid-column: span 1;
+  .col-span-12,
+  .left-column,
+  .right-column {
+    width: 100%;
   }
 
   /* Maintain proper order on mobile */
@@ -402,6 +411,9 @@
   .left-column,
   .right-column {
     margin-bottom: var(--spacing-md);
+    border: none;
+    padding: 0;
+    background-color: transparent;
   }
 
   .left-column {
@@ -413,6 +425,7 @@
   }
 
   .sidebar-articles {
+    display: flex;
     flex-direction: column;
     gap: 0;
   }
