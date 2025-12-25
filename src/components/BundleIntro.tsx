@@ -109,7 +109,7 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
 
                 {/* Action Section */}
                 <div className="action-section">
-                  <div className="header-text">Kindly reply by January 1st, 2026</div>
+                  <div className="header-text">Kindly reply by January 5th, 2026</div>
                   
                   <div className="button-container">
                     <button className="invitation-btn" onClick={handleEnterSite}>
@@ -120,9 +120,6 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
                     </button>
                   </div>
                 </div>
-
-                {/* Footer Note */}
-                <span className="joke-text">(Quick turnaround, we know. It's because we procrastinated.)</span>
               </div>
             </div>
 

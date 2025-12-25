@@ -200,13 +200,15 @@
 .band-content-back {
   width: 100%;
   height: 100%;
-  padding: 5cqb 5cqi; /* Padding scales with container */
+  /* Padding must be > 15px (inner frame offset) + breathing room */
+  /* Using 5% of container ensures content stays inside the frame */
+  padding: 6cqb 6cqi;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 2.5cqb; /* Gap scales with container height */
+  gap: 2cqb;
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -650,13 +652,6 @@
   color: #FDFBF7;
 }
 
-/* Footer Note */
-.joke-text {
-  font-family: 'Cormorant Garamond', serif;
-  font-style: italic;
-  font-size: 2.5cqi;
-  color: #999;
-}
 
 /* Mobile responsive - stack buttons vertically on narrow containers */
 @container card-back (max-width: 350px) {
