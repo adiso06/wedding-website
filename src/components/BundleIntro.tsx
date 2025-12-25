@@ -70,7 +70,7 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
               <div className="band-content">
                 <div className="band-header">OFFICIAL WEDDING INVITATION</div>
                 <div className="band-names">Aditya & Chhaya</div>
-                <div className="band-date">SATURDAY, MARCH 15, 2025</div>
+                <div className="band-date">SUNDAY, MARCH 15, 2026</div>
                 <div className="band-cta">
                   <span className="cta-bracket">[</span> CLICK TO UNTIE <span className="cta-bracket">]</span>
                 </div>
@@ -92,8 +92,8 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
 
                 {/* Date Section with borders */}
                 <div className="date-section">
-                  <div className="date-text">Saturday, March 15, 2026</div>
-                  <div className="time-text">Ceremony at 4:00 PM • Reception to Follow</div>
+                  <div className="date-text">Sunday, March 15, 2026</div>
+                  <div className="time-text">Bharat at 8:45 AM • Ceremony at 10:00 AM • Reception at 6:00 PM</div>
                 </div>
 
                 {/* Action Section */}

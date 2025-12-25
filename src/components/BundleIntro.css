@@ -116,6 +116,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
+  min-height: 100%;
   backface-visibility: hidden;
   background-color: #fffbf0;
   border-top: 1px solid #e0ddd5;
@@ -124,6 +125,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: auto;
 }
 
 .band-front {
@@ -194,16 +196,18 @@
 
 /* Back Face Content (Detailed Invitation) */
 .band-content-back {
-  padding: 1rem 2rem;
+  padding: 60px 30px;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
+  height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 0.4rem;
-  overflow: hidden;
+  gap: 30px;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
 .invitation-formal-header {
@@ -569,19 +573,18 @@
 .names-cursive {
   font-family: 'Great Vibes', cursive;
   font-size: 68px;
-  line-height: 1.2;
+  line-height: 1.1;
   font-weight: 400;
   color: #3B302B;
-  margin-bottom: 0;
+  margin: 5px 0;
 }
 
 /* Date Section */
 .date-section {
   border-top: 1px solid #D6CFC7;
   border-bottom: 1px solid #D6CFC7;
-  padding: 20px 0;
-  width: 85%;
-  margin: 10px 0;
+  padding: 25px 0;
+  width: 90%;
   z-index: 1;
 }
 
@@ -592,6 +595,7 @@
   letter-spacing: 2px;
   font-weight: 600;
   color: #3B302B;
+  line-height: 1.3;
 }
 
 .time-text {
@@ -599,20 +603,25 @@
   font-size: 16px;
   margin-top: 8px;
   color: #666;
+  line-height: 1.4;
 }
 
 /* Action Section */
 .action-section {
-  margin-top: 10px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
   z-index: 1;
 }
 
 .button-container {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
   margin-top: 15px;
+  width: 100%;
 }
 
 .invitation-btn {
@@ -620,15 +629,17 @@
   background-color: transparent;
   color: #3B302B;
   border: 1px solid #3B302B;
-  padding: 12px 25px;
+  padding: 14px 20px;
   font-family: 'Montserrat', sans-serif;
-  font-size: 10px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 2px;
   text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
-  min-width: 130px;
+  min-width: 140px;
+  text-align: center;
+  white-space: nowrap;
 }
 
 .invitation-btn:hover {
@@ -638,8 +649,10 @@
 
 /* Footer Note */
 .footer-note {
-  margin-top: 20px;
+  margin-top: 10px;
   font-size: 14px;
+  line-height: 1.4;
+  max-width: 90%;
   z-index: 1;
 }
 
@@ -652,6 +665,11 @@
 
 /* Mobile responsive for simplified card */
 @media (max-width: 600px) {
+  .band-content-back {
+    padding: 40px 20px;
+    gap: 20px;
+  }
+
   .names-cursive {
     font-size: 48px;
   }
@@ -677,6 +695,12 @@
 
   .joke-text {
     font-size: 11px;
+  }
+}
+
+@media (max-width: 400px) {
+  .names-cursive {
+    font-size: 42px;
   }
 }
 
