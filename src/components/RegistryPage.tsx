@@ -33,7 +33,7 @@ const RegistryPage: React.FC<RegistryPageProps> = ({ onClose }) => {
               <h3>💳 Digital Transfer</h3>
               <p>For your convenience, you can send digital contributions via:</p>
               <ul className="info-list">
-                <li><strong>Venmo:</strong> @ChhaySood</li>
+                <li><strong>Venmo:</strong> @TheAdityaSood</li>
                 <li><strong>Zelle:</strong> Contact us for details</li>
                 <li><strong>Other payment apps:</strong> Reach out to us directly</li>
               </ul>
