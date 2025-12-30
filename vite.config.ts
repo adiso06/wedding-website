@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/wedding-website/',
+  base: process.env.VITE_BASE_PATH || '/',
   plugins: [react()],
   build: {
     // Code splitting for better caching
