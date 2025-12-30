@@ -11,7 +11,7 @@ import CeremonyPage from './components/CeremonyPage';
 import ReceptionPage from './components/ReceptionPage';
 import AccommodationsPage from './components/AccommodationsPage';
 import RegistryPage from './components/RegistryPage';
-import MiniCrossword from './components/MiniCrossword';
+// import MiniCrossword from './components/MiniCrossword';
 import FilmStrip from './components/FilmStrip';
 import PhotoEssay from './components/PhotoEssay';
 import { articles, type Article } from './data/articles';
@@ -412,10 +412,10 @@ function App() {
             <div className="article-byline">By {articles[3].author}</div>
           </article>
 
-          {/* Games Section */}
-          <div id="games" className="col-span-6">
+          {/* Games Section - Commented out */}
+          {/* <div id="games" className="col-span-6">
             <MiniCrossword />
-          </div>
+          </div> */}
         </div>
       </section>
 
