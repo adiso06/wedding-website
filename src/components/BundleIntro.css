@@ -139,6 +139,11 @@
   cursor: pointer;
 }
 
+/* When flipped, disable front face interaction so back face buttons work */
+.belly-band-container.flipped .band-front {
+  pointer-events: none;
+}
+
 .band-back {
   transform: rotateY(180deg);
   background-position: center center;
@@ -150,6 +155,8 @@
   /* Enable container queries so children can size relative to this container */
   container-type: size;
   container-name: card-back;
+  /* Ensure touch/click events work on mobile */
+  pointer-events: auto;
 }
 
 /* Front Face Content */
@@ -636,6 +643,8 @@
   flex-wrap: wrap;
   justify-content: center;
   gap: 2cqi;
+  position: relative;
+  z-index: 5;
 }
 
 .invitation-btn {
@@ -652,6 +661,12 @@
   transition: all 0.3s ease;
   cursor: pointer;
   text-align: center;
+  /* Ensure buttons are clickable/tappable on all browsers */
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .invitation-btn:hover {
