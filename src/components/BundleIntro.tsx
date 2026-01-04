@@ -21,7 +21,10 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
   };
 
   const handleFlipTransitionEnd = (e: React.TransitionEvent) => {
-    // Only respond to the transform transition on the belly-band-container
+    // CRITICAL: Ignore bubbled events from child elements (e.g., button hover transitions)
+    if (e.target !== e.currentTarget) return;
+
+    // Only respond to the transform transition on the belly-band-container itself
     if (e.propertyName === 'transform' && stage === 'unlocked') {
       setIsFlipComplete(true);
     }
