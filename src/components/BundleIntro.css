@@ -139,9 +139,9 @@
   cursor: pointer;
 }
 
-/* When flipped, disable front face interaction so back face buttons work */
-.belly-band-container.flipped .band-front {
-  pointer-events: none;
+/* When flip animation completes, completely hide front face from hit-testing */
+.band-front.flip-complete {
+  visibility: hidden;
 }
 
 .band-back {
@@ -686,104 +686,5 @@
     width: 80%;
   }
 }
-
-/* ===== BROWSER-SPECIFIC FIXES ===== */
-
-/*
- * Core issue: On Chrome/Safari mobile, transformed elements with pointer-events
- * can block interactions. We need to ensure buttons are accessible without
- * hiding the card or breaking the 3D transform.
- */
-
-/* Chrome Desktop - Minimal intervention */
-.browser-chrome-desktop .belly-band-container.flipped .band-front {
-  pointer-events: none !important;
-}
-
-.browser-chrome-desktop .button-container,
-.browser-chrome-desktop .invitation-btn {
-  pointer-events: auto;
-}
-
-/* Chrome Mobile - Key fix: ensure buttons capture touch events */
-.browser-chrome-mobile .belly-band-container.flipped .band-front {
-  pointer-events: none !important;
-}
-
-.browser-chrome-mobile .band-back {
-  pointer-events: auto;
-}
-
-.browser-chrome-mobile .button-container {
-  /* Create explicit touch target layer */
-  position: relative;
-  z-index: 10;
-}
-
-.browser-chrome-mobile .invitation-btn {
-  /* Mobile Chrome needs explicit positioning for touch */
-  position: relative;
-  z-index: 20;
-  pointer-events: auto;
-  /* Improve touch responsiveness */
-  -webkit-tap-highlight-color: rgba(59, 48, 43, 0.1);
-  touch-action: manipulation;
-}
-
-/* Safari Desktop */
-.browser-safari-desktop .belly-band-container.flipped .band-front {
-  pointer-events: none !important;
-}
-
-.browser-safari-desktop .button-container,
-.browser-safari-desktop .invitation-btn {
-  pointer-events: auto;
-}
-
-/* Safari Mobile (iOS) - Most critical for wedding guests */
-.browser-safari-mobile .belly-band-container.flipped .band-front {
-  pointer-events: none !important;
-}
-
-.browser-safari-mobile .band-back {
-  pointer-events: auto;
-}
-
-.browser-safari-mobile .button-container {
-  position: relative;
-  z-index: 10;
-}
-
-.browser-safari-mobile .invitation-btn {
-  /* iOS Safari touch fixes */
-  position: relative;
-  z-index: 20;
-  pointer-events: auto;
-  -webkit-tap-highlight-color: rgba(59, 48, 43, 0.1);
-  -webkit-touch-callout: none;
-  touch-action: manipulation;
-  /* Critical for iOS: create explicit tap target */
-  min-height: 44px;
-}
-
-/* Firefox Desktop - Already works well */
-.browser-firefox-desktop .belly-band-container.flipped .band-front {
-  pointer-events: none !important;
-}
-
-/* Firefox Mobile */
-.browser-firefox-mobile .belly-band-container.flipped .band-front {
-  pointer-events: none !important;
-}
-
-.browser-firefox-mobile .button-container {
-  position: relative;
-}
-
-.browser-firefox-mobile .invitation-btn {
-  position: relative;
-  pointer-events: auto;
-}
-
 
 
