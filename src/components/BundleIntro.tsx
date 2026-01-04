@@ -1,6 +1,5 @@
-import { useState, ReactNode, useEffect } from 'react';
+import { useState, ReactNode } from 'react';
 import './BundleIntro.css';
-import { getBrowserClass } from '../utils/browserDetect';
 
 interface BundleIntroProps {
   children: ReactNode;
@@ -10,24 +9,29 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
   // Stages: 'locked' (1) -> 'unlocked' (2 - flipped) -> 'hidden' (3 - exit)
   const [stage, setStage] = useState<'locked' | 'unlocked' | 'hidden'>('locked');
   const [isExiting, setIsExiting] = useState(false);
-  const [browserClass, setBrowserClass] = useState('');
+  const [isFlipComplete, setIsFlipComplete] = useState(false);
 
-  useEffect(() => {
-    // Set browser class on mount
-    setBrowserClass(getBrowserClass());
-  }, []);
-
-  const handleUntie = (e: React.MouseEvent | React.TouchEvent) => {
+  const handleUntie = (e: React.MouseEvent) => {
     e.stopPropagation();
-    e.preventDefault();
     if (stage === 'locked') {
       setStage('unlocked');
+      // Reset flip completion state when starting a flip
+      setIsFlipComplete(false);
     }
   };
 
-  const handleEnterSite = (e: React.MouseEvent | React.TouchEvent) => {
+  const handleFlipTransitionEnd = (e: React.TransitionEvent) => {
+    // CRITICAL: Ignore bubbled events from child elements (e.g., button hover transitions)
+    if (e.target !== e.currentTarget) return;
+
+    // Only respond to the transform transition on the belly-band-container itself
+    if (e.propertyName === 'transform' && stage === 'unlocked') {
+      setIsFlipComplete(true);
+    }
+  };
+
+  const handleEnterSite = (e: React.MouseEvent) => {
     e.stopPropagation();
-    e.preventDefault();
     setIsExiting(true);
     // Wait for roll-up animation
     setTimeout(() => {
@@ -35,9 +39,8 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
     }, 1200);
   };
 
-  const handleRSVP = (e: React.MouseEvent | React.TouchEvent) => {
+  const handleRSVP = (e: React.MouseEvent) => {
     e.stopPropagation();
-    e.preventDefault();
     // Open RSVP link directly
     window.open('https://www.theknot.com/us/chhaya-arora-and-aditya-sood-mar-2026/rsvp', '_blank');
   };
@@ -54,10 +57,10 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
       </div>
 
       {/* OVERLAY */}
-      <div className={`bundle-overlay ${isExiting ? 'exiting' : ''} ${browserClass}`}>
+      <div className={`bundle-overlay ${isExiting ? 'exiting' : ''}`}>
 
         {/* The Bundle Container */}
-        <div className={`bundle-container ${isExiting ? 'rolling-up' : ''} ${browserClass}`}>
+        <div className={`bundle-container ${isExiting ? 'rolling-up' : ''}`}>
 
           {/* Stack Layers */}
           <div className="bundle-layer layer-3"></div>
@@ -73,10 +76,16 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
           </div>
 
           {/* FLIPPING BELLY BAND CARD */}
-          <div className={`belly-band-container ${stage === 'unlocked' ? 'flipped' : ''}`}>
-            
+          <div
+            className={`belly-band-container ${stage === 'unlocked' ? 'flipped' : ''}`}
+            onTransitionEnd={handleFlipTransitionEnd}
+          >
+
             {/* FRONT FACE (The "Cover") */}
-            <div className="band-face band-front" onClick={handleUntie} onTouchEnd={handleUntie}>
+            <div
+              className={`band-face band-front ${isFlipComplete ? 'flip-complete' : ''}`}
+              onClick={handleUntie}
+            >
               <div className="band-content">
                 <div className="band-header">OFFICIAL WEDDING INVITATION</div>
                 <div className="band-names">Aditya & Chhaya</div>
@@ -122,18 +131,10 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
                   <div className="header-text">Kindly reply by January 5th, 2026</div>
                   
                   <div className="button-container">
-                    <button
-                      className="invitation-btn"
-                      onClick={handleEnterSite}
-                      onTouchEnd={handleEnterSite}
-                    >
+                    <button className="invitation-btn" onClick={handleEnterSite}>
                       View Invitation
                     </button>
-                    <button
-                      className="invitation-btn"
-                      onClick={handleRSVP}
-                      onTouchEnd={handleRSVP}
-                    >
+                    <button className="invitation-btn" onClick={handleRSVP}>
                       RSVP
                     </button>
                   </div>
@@ -146,7 +147,7 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
           {/* TWINE (Only visible in locked stage, animates out) */}
           <div className={`twine-vertical-top ${stage !== 'locked' ? 'uncoiling' : ''}`}></div>
           <div className={`twine-vertical-bottom ${stage !== 'locked' ? 'uncoiling' : ''}`}></div>
-          <div className={`twine-knot ${stage !== 'locked' ? 'untying' : ''}`} onClick={handleUntie} onTouchEnd={handleUntie}></div>
+          <div className={`twine-knot ${stage !== 'locked' ? 'untying' : ''}`} onClick={handleUntie}></div>
 
         </div>
       </div>
