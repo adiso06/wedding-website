@@ -1,5 +1,6 @@
-import { useState, ReactNode } from 'react';
+import { useState, ReactNode, useEffect } from 'react';
 import './BundleIntro.css';
+import { getBrowserClass } from '../utils/browserDetect';
 
 interface BundleIntroProps {
   children: ReactNode;
@@ -9,16 +10,24 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
   // Stages: 'locked' (1) -> 'unlocked' (2 - flipped) -> 'hidden' (3 - exit)
   const [stage, setStage] = useState<'locked' | 'unlocked' | 'hidden'>('locked');
   const [isExiting, setIsExiting] = useState(false);
+  const [browserClass, setBrowserClass] = useState('');
 
-  const handleUntie = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent double clicks
+  useEffect(() => {
+    // Set browser class on mount
+    setBrowserClass(getBrowserClass());
+  }, []);
+
+  const handleUntie = (e: React.MouseEvent | React.TouchEvent) => {
+    e.stopPropagation();
+    e.preventDefault();
     if (stage === 'locked') {
       setStage('unlocked');
     }
   };
 
-  const handleEnterSite = (e: React.MouseEvent) => {
+  const handleEnterSite = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     setIsExiting(true);
     // Wait for roll-up animation
     setTimeout(() => {
@@ -26,8 +35,9 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
     }, 1200);
   };
 
-  const handleRSVP = (e: React.MouseEvent) => {
+  const handleRSVP = (e: React.MouseEvent | React.TouchEvent) => {
     e.stopPropagation();
+    e.preventDefault();
     // Open RSVP link directly
     window.open('https://www.theknot.com/us/chhaya-arora-and-aditya-sood-mar-2026/rsvp', '_blank');
   };
@@ -44,10 +54,10 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
       </div>
 
       {/* OVERLAY */}
-      <div className={`bundle-overlay ${isExiting ? 'exiting' : ''}`}>
-        
+      <div className={`bundle-overlay ${isExiting ? 'exiting' : ''} ${browserClass}`}>
+
         {/* The Bundle Container */}
-        <div className={`bundle-container ${isExiting ? 'rolling-up' : ''}`}>
+        <div className={`bundle-container ${isExiting ? 'rolling-up' : ''} ${browserClass}`}>
 
           {/* Stack Layers */}
           <div className="bundle-layer layer-3"></div>
@@ -66,7 +76,7 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
           <div className={`belly-band-container ${stage === 'unlocked' ? 'flipped' : ''}`}>
             
             {/* FRONT FACE (The "Cover") */}
-            <div className="band-face band-front" onClick={handleUntie}>
+            <div className="band-face band-front" onClick={handleUntie} onTouchEnd={handleUntie}>
               <div className="band-content">
                 <div className="band-header">OFFICIAL WEDDING INVITATION</div>
                 <div className="band-names">Aditya & Chhaya</div>
@@ -112,10 +122,18 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
                   <div className="header-text">Kindly reply by January 5th, 2026</div>
                   
                   <div className="button-container">
-                    <button className="invitation-btn" onClick={handleEnterSite}>
+                    <button
+                      className="invitation-btn"
+                      onClick={handleEnterSite}
+                      onTouchEnd={handleEnterSite}
+                    >
                       View Invitation
                     </button>
-                    <button className="invitation-btn" onClick={handleRSVP}>
+                    <button
+                      className="invitation-btn"
+                      onClick={handleRSVP}
+                      onTouchEnd={handleRSVP}
+                    >
                       RSVP
                     </button>
                   </div>
@@ -128,7 +146,7 @@ const BundleIntro = ({ children }: BundleIntroProps) => {
           {/* TWINE (Only visible in locked stage, animates out) */}
           <div className={`twine-vertical-top ${stage !== 'locked' ? 'uncoiling' : ''}`}></div>
           <div className={`twine-vertical-bottom ${stage !== 'locked' ? 'uncoiling' : ''}`}></div>
-          <div className={`twine-knot ${stage !== 'locked' ? 'untying' : ''}`} onClick={handleUntie}></div>
+          <div className={`twine-knot ${stage !== 'locked' ? 'untying' : ''}`} onClick={handleUntie} onTouchEnd={handleUntie}></div>
 
         </div>
       </div>

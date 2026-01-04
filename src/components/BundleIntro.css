@@ -687,5 +687,145 @@
   }
 }
 
+/* ===== BROWSER-SPECIFIC FIXES ===== */
+
+/* Chrome Desktop - Ensure proper layering and pointer events */
+.browser-chrome-desktop .belly-band-container.flipped .band-back {
+  z-index: 200;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+.browser-chrome-desktop .belly-band-container.flipped .band-front {
+  z-index: -1;
+}
+
+/* Chrome Mobile - Critical fixes for touch interaction */
+.browser-chrome-mobile .belly-band-container.flipped {
+  /* Ensure back face is fully interactive */
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+.browser-chrome-mobile .belly-band-container.flipped .band-back {
+  z-index: 300;
+  /* Force hardware acceleration for better touch response */
+  -webkit-transform: translateZ(1px);
+  transform: translateZ(1px);
+}
+
+.browser-chrome-mobile .belly-band-container.flipped .band-front {
+  z-index: -1;
+  pointer-events: none !important;
+}
+
+.browser-chrome-mobile .button-container {
+  /* Ensure button container is on top */
+  z-index: 400;
+  isolation: isolate;
+}
+
+.browser-chrome-mobile .invitation-btn {
+  /* Critical for mobile Chrome touch events */
+  z-index: 500;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  /* Ensure button is clickable area */
+  position: relative;
+  /* Force new stacking context */
+  isolation: isolate;
+}
+
+/* Safari Desktop */
+.browser-safari-desktop .belly-band-container.flipped .band-back {
+  z-index: 200;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+
+.browser-safari-desktop .belly-band-container.flipped .band-front {
+  z-index: -1;
+}
+
+/* Safari Mobile (iOS) - Most critical browser for mobile wedding sites */
+.browser-safari-mobile .belly-band-container.flipped {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  /* iOS Safari needs explicit positioning */
+  position: relative;
+}
+
+.browser-safari-mobile .belly-band-container.flipped .band-back {
+  z-index: 300;
+  /* Force layering for iOS Safari */
+  -webkit-transform: translateZ(2px);
+  transform: translateZ(2px);
+  /* Ensure touch events work */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.browser-safari-mobile .belly-band-container.flipped .band-front {
+  z-index: -1;
+  pointer-events: none !important;
+  /* Push back in 3D space */
+  -webkit-transform: translateZ(-10px);
+  transform: translateZ(-10px);
+}
+
+.browser-safari-mobile .button-container {
+  z-index: 400;
+  /* iOS Safari specific - create new stacking context */
+  isolation: isolate;
+  position: relative;
+}
+
+.browser-safari-mobile .invitation-btn {
+  z-index: 500;
+  /* iOS Safari touch optimizations */
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  /* Ensure clickable on iOS */
+  position: relative;
+  isolation: isolate;
+  /* Force button to be a touch target */
+  -webkit-transform: translateZ(3px);
+  transform: translateZ(3px);
+}
+
+/* Firefox Desktop - Already working, but ensure consistency */
+.browser-firefox-desktop .belly-band-container.flipped .band-back {
+  z-index: 200;
+}
+
+.browser-firefox-desktop .belly-band-container.flipped .band-front {
+  z-index: -1;
+}
+
+/* Firefox Mobile */
+.browser-firefox-mobile .belly-band-container.flipped .band-back {
+  z-index: 200;
+  position: relative;
+}
+
+.browser-firefox-mobile .belly-band-container.flipped .band-front {
+  z-index: -1;
+  pointer-events: none !important;
+}
+
+.browser-firefox-mobile .button-container {
+  z-index: 300;
+  position: relative;
+}
+
+.browser-firefox-mobile .invitation-btn {
+  z-index: 400;
+  position: relative;
+}
+
 
 
