@@ -104,11 +104,11 @@
   height: 75%;
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1); /* Slower, elegant flip */
+  /* backface-visibility removed - only belongs on individual faces, not container */
+  transition: transform 1.2s cubic-bezier(0.4, 0.0, 0.2, 1);
   z-index: 10;
   transform: translateY(-50%);
+  will-change: transform; /* Hardware acceleration hint */
 }
 
 .belly-band-container.flipped {
@@ -131,12 +131,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  /* overflow: hidden removed - breaks 3D transform context */
 }
 
 .band-front {
   z-index: 2;
   cursor: pointer;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0); /* Force GPU compositing */
 }
 
 /* When flip animation completes, completely hide front face from hit-testing */
@@ -145,13 +147,14 @@
 }
 
 .band-back {
-  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg) translateZ(0);
+  transform: rotateY(180deg) translateZ(0); /* translateZ(0) forces GPU compositing */
   background-position: center center;
   background-repeat: no-repeat;
   background-size: cover;
   z-index: 1;
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden removed - breaks 3D transform context */
   /* Enable container queries so children can size relative to this container */
   container-type: size;
   container-name: card-back;
@@ -224,7 +227,7 @@
   text-align: center;
   gap: 2cqb;
   box-sizing: border-box;
-  overflow: hidden;
+  /* overflow: hidden removed - can interfere with 3D transforms */
 }
 
 .invitation-formal-header {
