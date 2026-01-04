@@ -689,142 +689,100 @@
 
 /* ===== BROWSER-SPECIFIC FIXES ===== */
 
-/* Chrome Desktop - Ensure proper layering and pointer events */
-.browser-chrome-desktop .belly-band-container.flipped .band-back {
-  z-index: 200;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-}
+/*
+ * Core issue: On Chrome/Safari mobile, transformed elements with pointer-events
+ * can block interactions. We need to ensure buttons are accessible without
+ * hiding the card or breaking the 3D transform.
+ */
 
+/* Chrome Desktop - Minimal intervention */
 .browser-chrome-desktop .belly-band-container.flipped .band-front {
-  z-index: -1;
-}
-
-/* Chrome Mobile - Critical fixes for touch interaction */
-.browser-chrome-mobile .belly-band-container.flipped {
-  /* Ensure back face is fully interactive */
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-}
-
-.browser-chrome-mobile .belly-band-container.flipped .band-back {
-  z-index: 300;
-  /* Force hardware acceleration for better touch response */
-  -webkit-transform: translateZ(1px);
-  transform: translateZ(1px);
-}
-
-.browser-chrome-mobile .belly-band-container.flipped .band-front {
-  z-index: -1;
   pointer-events: none !important;
+}
+
+.browser-chrome-desktop .button-container,
+.browser-chrome-desktop .invitation-btn {
+  pointer-events: auto;
+}
+
+/* Chrome Mobile - Key fix: ensure buttons capture touch events */
+.browser-chrome-mobile .belly-band-container.flipped .band-front {
+  pointer-events: none !important;
+}
+
+.browser-chrome-mobile .band-back {
+  pointer-events: auto;
 }
 
 .browser-chrome-mobile .button-container {
-  /* Ensure button container is on top */
-  z-index: 400;
-  isolation: isolate;
+  /* Create explicit touch target layer */
+  position: relative;
+  z-index: 10;
 }
 
 .browser-chrome-mobile .invitation-btn {
-  /* Critical for mobile Chrome touch events */
-  z-index: 500;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-  /* Ensure button is clickable area */
+  /* Mobile Chrome needs explicit positioning for touch */
   position: relative;
-  /* Force new stacking context */
-  isolation: isolate;
+  z-index: 20;
+  pointer-events: auto;
+  /* Improve touch responsiveness */
+  -webkit-tap-highlight-color: rgba(59, 48, 43, 0.1);
+  touch-action: manipulation;
 }
 
 /* Safari Desktop */
-.browser-safari-desktop .belly-band-container.flipped .band-back {
-  z-index: 200;
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-}
-
 .browser-safari-desktop .belly-band-container.flipped .band-front {
-  z-index: -1;
-}
-
-/* Safari Mobile (iOS) - Most critical browser for mobile wedding sites */
-.browser-safari-mobile .belly-band-container.flipped {
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  /* iOS Safari needs explicit positioning */
-  position: relative;
-}
-
-.browser-safari-mobile .belly-band-container.flipped .band-back {
-  z-index: 300;
-  /* Force layering for iOS Safari */
-  -webkit-transform: translateZ(2px);
-  transform: translateZ(2px);
-  /* Ensure touch events work */
-  -webkit-tap-highlight-color: transparent;
-}
-
-.browser-safari-mobile .belly-band-container.flipped .band-front {
-  z-index: -1;
   pointer-events: none !important;
-  /* Push back in 3D space */
-  -webkit-transform: translateZ(-10px);
-  transform: translateZ(-10px);
+}
+
+.browser-safari-desktop .button-container,
+.browser-safari-desktop .invitation-btn {
+  pointer-events: auto;
+}
+
+/* Safari Mobile (iOS) - Most critical for wedding guests */
+.browser-safari-mobile .belly-band-container.flipped .band-front {
+  pointer-events: none !important;
+}
+
+.browser-safari-mobile .band-back {
+  pointer-events: auto;
 }
 
 .browser-safari-mobile .button-container {
-  z-index: 400;
-  /* iOS Safari specific - create new stacking context */
-  isolation: isolate;
   position: relative;
+  z-index: 10;
 }
 
 .browser-safari-mobile .invitation-btn {
-  z-index: 500;
-  /* iOS Safari touch optimizations */
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-  cursor: pointer;
-  /* Ensure clickable on iOS */
+  /* iOS Safari touch fixes */
   position: relative;
-  isolation: isolate;
-  /* Force button to be a touch target */
-  -webkit-transform: translateZ(3px);
-  transform: translateZ(3px);
+  z-index: 20;
+  pointer-events: auto;
+  -webkit-tap-highlight-color: rgba(59, 48, 43, 0.1);
+  -webkit-touch-callout: none;
+  touch-action: manipulation;
+  /* Critical for iOS: create explicit tap target */
+  min-height: 44px;
 }
 
-/* Firefox Desktop - Already working, but ensure consistency */
-.browser-firefox-desktop .belly-band-container.flipped .band-back {
-  z-index: 200;
-}
-
+/* Firefox Desktop - Already works well */
 .browser-firefox-desktop .belly-band-container.flipped .band-front {
-  z-index: -1;
+  pointer-events: none !important;
 }
 
 /* Firefox Mobile */
-.browser-firefox-mobile .belly-band-container.flipped .band-back {
-  z-index: 200;
-  position: relative;
-}
-
 .browser-firefox-mobile .belly-band-container.flipped .band-front {
-  z-index: -1;
   pointer-events: none !important;
 }
 
 .browser-firefox-mobile .button-container {
-  z-index: 300;
   position: relative;
 }
 
 .browser-firefox-mobile .invitation-btn {
-  z-index: 400;
   position: relative;
+  pointer-events: auto;
 }
 
 
