@@ -21,10 +21,10 @@ export const articles: Article[] = [
     author: 'The Editorial Board',
     date: 'Dec. 15, 2024',
     category: 'BREAKING NEWS',
-    summary: 'In a move anticipated by close friends and family for years, Chhaya Arora, an Amazon Product Manager, and Aditya Sood, a future Gastroenterology Fellow, announce their merger.',
+    summary: 'In a move anticipated by close friends and family for years, Chhaya Arora, a tech Product Manager, and Aditya Sood, a future Gastroenterology Fellow, announce their merger.',
     content: (
       <>
-        <p><strong>CORONA, Calif.</strong> — In a move anticipated by close friends and family for years, Chhaya Arora, a Senior Product Manager at Amazon, and Dr. Aditya Sood, a future Gastroenterology Fellow, announced their intention to merge operations effective March 15, 2026.</p>
+        <p><strong>CORONA, Calif.</strong> — In a move anticipated by close friends and family for years, Chhaya Arora, a Senior Tech Product Manager, and Dr. Aditya Sood, a future Gastroenterology Fellow, announced their intention to merge operations effective March 15, 2026.</p>
 
         <p>The proposed merger, first discussed during an FBLA competition years ago when both parties were ostensibly focused on competitive business analysis, has been under careful negotiation ever since. Sources close to both parties report that the initial acquisition strategy was "awkward but charming," though it proved successful in the long term.</p>
 
@@ -283,7 +283,7 @@ export const articles: Article[] = [
       <>
         <p>It started as a joke. Now, they are writing a white paper. We explore the implications of "Agile Digestion."</p>
 
-        <p><strong>CORONA, Calif.</strong> — What happens when you combine Amazon's product management methodologies with the precision of gastroenterology? According to Ms. Arora and Dr. Sood, you get some very interesting dinner conversations—and possibly, the future of healthcare technology.</p>
+        <p><strong>CORONA, Calif.</strong> — What happens when you combine tech product management methodologies with the precision of gastroenterology? According to Ms. Arora and Dr. Sood, you get some very interesting dinner conversations—and possibly, the future of healthcare technology.</p>
 
         <h3>The Great Sprint Planning Incident</h3>
 
