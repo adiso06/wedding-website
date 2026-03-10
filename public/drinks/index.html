@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Drunk in Love | Bar Menu</title>
+    <style>
+        /* Imported artsy fonts: Playfair for bold headers, Cormorant for printed body text, Alex Brush for script */
+        @import url('https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+        :root {
+            --bg-light: #Fcfbf8;
+            --bg-warm: #f5eee1;
+            --bg-blush: #efe0d7;
+            --surface: #FFFFFF;
+            --text-dark: #222222; /* Slightly softer than pure black */
+            --text-muted: #555555;
+            --accent: #b29456; 
+            --accent-deep: #7d5e2e;
+            --border: #E5E5E5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(239, 224, 215, 0.9), transparent 28%),
+                radial-gradient(circle at top right, rgba(237, 223, 186, 0.85), transparent 24%),
+                linear-gradient(180deg, #fffdf9 0%, #f6efe2 52%, #fcfbf8 100%);
+            color: var(--text-dark);
+            /* Switched to a classic serif for the body to match the physical menu */
+            font-family: 'Cormorant Garamond', serif; 
+            line-height: 1.4;
+            padding-bottom: 40px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image:
+                radial-gradient(circle at 20% 18%, rgba(178, 148, 86, 0.12) 0, rgba(178, 148, 86, 0.12) 2px, transparent 2px),
+                radial-gradient(circle at 80% 28%, rgba(178, 148, 86, 0.08) 0, rgba(178, 148, 86, 0.08) 1.5px, transparent 1.5px);
+            background-size: 140px 140px, 180px 180px;
+            opacity: 0.45;
+            z-index: -1;
+        }
+
+        /* Header */
+        header {
+            padding: 28px 15px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 18px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: rgba(255, 250, 243, 0.82);
+            border: 1px solid rgba(178, 148, 86, 0.22);
+            color: var(--accent-deep);
+            font-family: 'Playfair Display', serif;
+            font-size: 12px;
+            letter-spacing: 2.4px;
+            text-transform: uppercase;
+            box-shadow: 0 10px 24px rgba(125, 94, 46, 0.08);
+        }
+
+        .hero-kicker::before,
+        .hero-kicker::after {
+            content: '✦';
+            font-size: 10px;
+        }
+
+        .title-top {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            font-weight: 400;
+            letter-spacing: 12px;
+            margin-right: -12px;
+            text-transform: uppercase;
+        }
+
+        /* The artsy cursive 'in' with the swoosh */
+        .title-mid {
+            font-family: 'Alex Brush', cursive;
+            font-size: 38px;
+            color: var(--accent); /* Kept gold from your slider image, or change to var(--text-dark) for black */
+            margin: -5px 0 -10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Recreating the drawn line next to 'in' */
+        .title-mid::before {
+            content: '~';
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            font-weight: 300;
+            margin-top: -8px;
+        }
+
+        .title-bottom {
+            font-family: 'Playfair Display', serif;
+            font-size: 34px;
+            font-weight: 400;
+            letter-spacing: 12px;
+            margin-right: -12px;
+            text-transform: uppercase;
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .title-bottom::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 40px;
+            height: 1px;
+            background-color: var(--accent);
+        }
+
+        .hero-subtitle {
+            max-width: 340px;
+            margin: 18px auto 0;
+            color: var(--text-muted);
+            font-size: 18px;
+            font-style: italic;
+        }
+
+        /* Tab Slider Navigation */
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            background: rgba(255, 250, 243, 0.76);
+            padding: 20px 0;
+            border-top: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(14px);
+            box-shadow: 0 10px 26px rgba(110, 88, 46, 0.06);
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            color: var(--text-muted);
+            padding-bottom: 8px;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--accent);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+
+        /* Container & Content Switching */
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 24px 16px 0;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-note {
+            text-align: center;
+            font-size: 17px;
+            color: var(--text-dark);
+            font-style: italic;
+            margin-bottom: 24px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(178, 148, 86, 0.14);
+            border-radius: 18px;
+            box-shadow: 0 10px 24px rgba(125, 94, 46, 0.05);
+        }
+
+        /* Signature Drink Cards */
+        .drink-card {
+            background: linear-gradient(180deg, #fffdf8 0%, #ffffff 100%);
+            border-radius: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(178, 148, 86, 0.16);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .drink-card::before {
+            content: '';
+            position: absolute;
+            inset: 0 0 auto;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.9), transparent);
+            z-index: 4;
+        }
+
+        .drink-media {
+            position: relative;
+            min-height: 320px;
+            background:
+                radial-gradient(circle at top, rgba(255, 247, 232, 0.55), transparent 40%),
+                #f2ead9;
+            isolation: isolate;
+        }
+
+        .drink-media::after {
+            content: '';
+            position: absolute;
+            inset: auto 0 0;
+            height: 44%;
+            background: linear-gradient(180deg, rgba(36, 28, 18, 0) 0%, rgba(36, 28, 18, 0.82) 100%);
+            z-index: 2;
+        }
+
+        .drink-photo {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+            display: block;
+            object-fit: cover;
+            object-position: center center;
+        }
+
+        .drink-overlay {
+            position: absolute;
+            inset: auto 0 0;
+            padding: 58px 20px 18px;
+            text-align: left;
+            z-index: 3;
+        }
+
+        .drink-badge {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            z-index: 4;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(255, 250, 243, 0.9);
+            border: 1px solid rgba(178, 148, 86, 0.24);
+            color: var(--accent-deep);
+            font-family: 'Playfair Display', serif;
+            font-size: 11px;
+            letter-spacing: 1.8px;
+            text-transform: uppercase;
+            box-shadow: 0 8px 18px rgba(80, 54, 17, 0.14);
+            backdrop-filter: blur(10px);
+        }
+
+        .drink-badge::before {
+            content: '✦';
+            font-size: 9px;
+        }
+
+        .drink-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #fffdf8;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.22);
+        }
+
+        .drink-desc {
+            font-size: 17px;
+            font-style: italic;
+            color: rgba(255, 250, 242, 0.96);
+            max-width: 94%;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.18);
+        }
+
+        .drink-meta {
+            padding: 18px 20px 22px;
+            text-align: center;
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.98) 100%);
+        }
+
+        .drink-ingredients {
+            font-size: 16px;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        /* Bar Menu Grid */
+        .bar-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .bar-category {
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.92) 0%, rgba(255,250,243,0.92) 100%);
+            padding: 24px 20px;
+            border-radius: 18px;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(178,148,86,0.12);
+            text-align: center;
+        }
+
+        .bar-category h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 18px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            color: var(--text-dark);
+        }
+
+        .bar-category ul {
+            list-style: none;
+        }
+
+        .bar-category li {
+            font-size: 17px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+        
+        .bar-category li:last-child {
+            margin-bottom: 0;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 420px) {
+            .title-top,
+            .title-bottom {
+                font-size: 30px;
+                letter-spacing: 10px;
+                margin-right: -10px;
+            }
+
+            .drink-name {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="hero-kicker">Sangeet Night Pour List</div>
+        <div class="title-top">DRUNK</div>
+        <div class="title-mid">in</div>
+        <div class="title-bottom">LOVE</div>
+        <p class="hero-subtitle">Scan, sip, and find your signature drink before the dance floor steals you away.</p>
+    </header>
+
+    <div class="tab-nav">
+        <button class="tab-btn active" onclick="switchTab('signatures')">Signatures</button>
+        <button class="tab-btn" onclick="switchTab('barmenu')">Bar Menu</button>
+    </div>
+
+    <div class="container">
+        
+        <div id="signatures" class="tab-content active">
+            <p class="section-note">All of our signature cocktails can be crafted as refreshing mocktails on request.</p>
+
+            <div class="drink-card">
+                <div class="drink-media">
+                    <div class="drink-badge">Bride's Choice</div>
+                    <img class="drink-photo" src="assets/drinks/wideblend/dhoop.jpg" alt="Dhoop Aur Chhaya cocktail" loading="lazy">
+                    <div class="drink-overlay">
+                        <div class="drink-name">Dhoop Aur Chhaya</div>
+                        <div class="drink-desc">A refreshing, sweet & sour indian highball with a salty twist!</div>
+                    </div>
+                </div>
+                <div class="drink-meta">
+                    <div class="drink-ingredients">Tequila Blanco, Fresh Lime Juice, Agave Syrup, Pinch Kala Namak (Black Salt), Club Soda, Mint</div>
+                </div>
+            </div>
+
+            <div class="drink-card">
+                <div class="drink-media">
+                    <img class="drink-photo" src="assets/drinks/wideblend/lavender.jpg" alt="Lavender Limelight cocktail" loading="lazy">
+                    <div class="drink-overlay">
+                        <div class="drink-name">Lavender Limelight</div>
+                        <div class="drink-desc">A light, floral option. Perfect for dancing the night away.</div>
+                    </div>
+                </div>
+                <div class="drink-meta">
+                    <div class="drink-ingredients">Vodka, Fresh Lemon Juice, Lavender Syrup, Club Soda</div>
+                </div>
+            </div>
+
+            <div class="drink-card">
+                <div class="drink-media">
+                    <img class="drink-photo" src="assets/drinks/wideblend/groom.jpg" alt="The Groom's Tradition cocktail" loading="lazy">
+                    <div class="drink-overlay">
+                        <div class="drink-name">The Groom's Tradition</div>
+                        <div class="drink-desc">A sophisticated whiskey classic with New York charm.</div>
+                    </div>
+                </div>
+                <div class="drink-meta">
+                    <div class="drink-ingredients">Bourbon Whiskey, Fresh Lemon Juice, Maple Syrup, Orange Slice</div>
+                </div>
+            </div>
+
+            <div class="drink-card">
+                <div class="drink-media">
+                    <div class="drink-badge">Groom's Choice</div>
+                    <img class="drink-photo" src="assets/drinks/wideblend/lychee.jpg" alt="Lychee Dream cocktail" loading="lazy">
+                    <div class="drink-overlay">
+                        <div class="drink-name">Lychee Dream</div>
+                        <div class="drink-desc">Elegant, sweet, and the ultimate crowd-pleaser!</div>
+                    </div>
+                </div>
+                <div class="drink-meta">
+                    <div class="drink-ingredients">Vodka, Lychee Liqueur, Fresh Lime Juice, Lychee Fruit Garnish</div>
+                </div>
+            </div>
+
+            <div class="drink-card">
+                <div class="drink-media">
+                    <img class="drink-photo" src="assets/drinks/wideblend/sangeet.jpg" alt="Sangeet Spice cocktail" loading="lazy">
+                    <div class="drink-overlay">
+                        <div class="drink-name">Sangeet Spice</div>
+                        <div class="drink-desc">Vibrantly fruity with a spice kick!</div>
+                    </div>
+                </div>
+                <div class="drink-meta">
+                    <div class="drink-ingredients">Tequila, Pineapple Juice, Agave Syrup, Jalapeño, Chili-Salt Rim</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="barmenu" class="tab-content">
+            <div class="bar-grid">
+                <div class="bar-category full-width">
+                    <h3>Wine</h3>
+                    <ul>
+                        <li>White</li>
+                        <li>Red</li>
+                        <li>Rosé</li>
+                    </ul>
+                </div>
+
+                <div class="bar-category full-width">
+                    <h3>Spirits</h3>
+                    <ul>
+                        <li>Vodka</li>
+                        <li>Tequila</li>
+                        <li>Whiskey</li>
+                        <li>Rum</li>
+                    </ul>
+                </div>
+
+                <div class="bar-category full-width">
+                    <h3>Non-Alcoholic</h3>
+                    <ul>
+                        <li>Coke & Diet Coke</li>
+                        <li>Lemonade</li>
+                        <li>Tonic Water</li>
+                        <li>Ginger Ale</li>
+                        <li>Soda Water</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function switchTab(tabId) {
+            // Remove active class from all buttons and contents
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            // Add active class to clicked button
+            event.currentTarget.classList.add('active');
+            
+            // Show corresponding content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Scroll back to top of tabs if user is scrolled far down
+            const tabNav = document.querySelector('.tab-nav');
+            if (window.scrollY > tabNav.offsetTop) {
+                window.scrollTo({
+                    top: tabNav.offsetTop,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    </script>
+</body>
+</html>
