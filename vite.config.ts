@@ -1,13 +1,18 @@
+import { resolve } from 'node:path'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.VITE_BASE_PATH || '/',
+  base: '/',
   plugins: [react()],
   build: {
     // Code splitting for better caching
     rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        wedding: resolve(__dirname, 'wedding/index.html'),
+      },
       output: {
         manualChunks: {
           'vendor': ['react', 'react-dom'],
