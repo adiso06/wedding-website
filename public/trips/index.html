@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trips | Aditya & Chhaya</title>
+    <meta
+      name="description"
+      content="Trip plans, itineraries, and travel pages from Aditya and Chhaya."
+    />
+    <link rel="canonical" href="https://adityaandchhaya.us/trips/" />
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #261b14;
+        --muted: #6f5d50;
+        --paper: rgba(255, 251, 246, 0.9);
+        --line: rgba(38, 27, 20, 0.12);
+        --accent: #8e5f34;
+        --shadow: 0 24px 60px rgba(55, 37, 23, 0.08);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        padding: 28px 20px 40px;
+        font-family: Georgia, serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(224, 199, 166, 0.55), transparent 30%),
+          linear-gradient(180deg, #fffaf4 0%, #f6ede2 55%, #fcf7f1 100%);
+      }
+
+      main {
+        width: min(980px, 100%);
+        margin: 0 auto;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .top {
+        display: flex;
+        justify-content: space-between;
+        gap: 16px;
+        align-items: center;
+        margin-bottom: 28px;
+      }
+
+      .top a {
+        text-decoration: none;
+        color: var(--muted);
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--accent);
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(3rem, 10vw, 5.8rem);
+        line-height: 0.95;
+        letter-spacing: -0.05em;
+      }
+
+      .intro {
+        max-width: 44rem;
+        margin: 18px 0 0;
+        color: var(--muted);
+        line-height: 1.75;
+        font-size: 1.08rem;
+      }
+
+      .feature,
+      .card,
+      .note {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+
+      .feature {
+        display: grid;
+        grid-template-columns: minmax(0, 1.2fr) minmax(220px, 0.8fr);
+        margin-top: 32px;
+        overflow: hidden;
+      }
+
+      .feature-main,
+      .feature-side,
+      .card,
+      .note {
+        padding: 22px;
+      }
+
+      .feature-side {
+        border-left: 1px solid var(--line);
+        background: rgba(142, 95, 52, 0.05);
+      }
+
+      .kicker {
+        margin: 0 0 8px;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 2rem;
+      }
+
+      p {
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.7);
+      }
+
+      .button.primary {
+        background: var(--ink);
+        color: #f9f4ed;
+        border-color: var(--ink);
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 24px;
+      }
+
+      .card {
+        text-decoration: none;
+        display: block;
+      }
+
+      .card-title {
+        margin: 0 0 10px;
+        font-size: 1.6rem;
+        color: var(--ink);
+      }
+
+      code {
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 0.95em;
+        color: var(--ink);
+      }
+
+      .note {
+        margin-top: 24px;
+      }
+
+      @media (max-width: 800px) {
+        .feature,
+        .grid {
+          grid-template-columns: 1fr;
+        }
+
+        .feature-side {
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 22px 14px 28px;
+        }
+
+        .top {
+          display: block;
+        }
+
+        .top nav {
+          margin-top: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="top">
+        <a href="/">Aditya &amp; Chhaya</a>
+        <nav>
+          <a href="/wedding/">Wedding</a>
+        </nav>
+      </div>
+
+      <p class="eyebrow">Trips</p>
+      <h1>A shelf for journeys worth keeping.</h1>
+      <p class="intro">
+        This is the index for shared trip pages. Each destination can stay as its own standalone HTML page, while this shelf makes the collection feel coherent as it grows.
+      </p>
+
+      <section class="feature">
+        <div class="feature-main">
+          <p class="kicker">Featured Trip</p>
+          <h2>Turkey honeymoon</h2>
+          <p>
+            A deep-dive planning page covering Istanbul, Cappadocia, the road-trip stretch, and the booking logistics behind the trip.
+          </p>
+          <div class="buttons">
+            <a class="button primary" href="/trips/turkey.html">Open Trip Page</a>
+            <a class="button" href="/">Back Home</a>
+          </div>
+        </div>
+        <div class="feature-side">
+          <p class="kicker">Pattern</p>
+          <p>
+            Add future pages using the same URL style: <code>/trips/japan.html</code>, <code>/trips/italy.html</code>, or anything else that belongs in the archive.
+          </p>
+        </div>
+      </section>
+
+      <section class="grid">
+        <a class="card" href="/trips/turkey.html">
+          <p class="kicker">March 2026</p>
+          <h3 class="card-title">Turkey</h3>
+          <p>
+            Full itinerary, visual planning, hotel ideas, logistics, and budget notes.
+          </p>
+        </a>
+
+        <div class="card">
+          <p class="kicker">Coming Soon</p>
+          <h3 class="card-title">Next destination</h3>
+          <p>
+            This slot is ready for the next page whenever you add one. No redesign needed, just another file and one more card here.
+          </p>
+        </div>
+      </section>
+
+      <div class="note">
+        Trips can stay lightweight and independent. That’s a good fit for this site: easy to add, easy to preserve, and easy to revisit later.
+      </div>
+    </main>
+  </body>
+</html>

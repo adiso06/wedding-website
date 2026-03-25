@@ -6,43 +6,96 @@
     <title>Aditya & Chhaya</title>
     <meta
       name="description"
-      content="A home for wedding plans, trip pages, and future projects from Aditya and Chhaya."
+      content="Shared home base for Aditya and Chhaya: trips, wedding archive, and links to personal sites."
     />
     <link rel="canonical" href="https://adityaandchhaya.us/" />
     <style>
       :root {
         color-scheme: light;
-        --ink: #261b14;
-        --muted: #6f5d50;
-        --paper: rgba(255, 250, 243, 0.88);
-        --line: rgba(38, 27, 20, 0.12);
-        --accent: #8e5f34;
-        --accent-soft: #efe1d1;
+        --ink: #251912;
+        --muted: #6d5a4e;
+        --paper: rgba(255, 251, 246, 0.9);
+        --paper-strong: rgba(255, 250, 243, 0.98);
+        --line: rgba(37, 25, 18, 0.12);
+        --accent: #8c5a31;
+        --accent-soft: #efe0cf;
+        --shadow: 0 24px 60px rgba(55, 37, 23, 0.08);
       }
 
       * {
         box-sizing: border-box;
       }
 
+      html {
+        scroll-behavior: smooth;
+      }
+
       body {
         margin: 0;
         min-height: 100vh;
-        padding: 32px 20px;
+        padding: 28px 20px 40px;
         font-family: Georgia, serif;
         color: var(--ink);
         background:
-          radial-gradient(circle at top left, rgba(222, 198, 168, 0.55), transparent 28%),
-          radial-gradient(circle at top right, rgba(243, 230, 212, 0.85), transparent 24%),
-          linear-gradient(180deg, #fefaf5 0%, #f5ede3 55%, #fcf7f0 100%);
+          radial-gradient(circle at top left, rgba(224, 199, 166, 0.55), transparent 30%),
+          radial-gradient(circle at 85% 0%, rgba(244, 229, 205, 0.95), transparent 24%),
+          linear-gradient(180deg, #fffaf4 0%, #f6ede2 55%, #fcf7f1 100%);
+      }
+
+      a {
+        color: inherit;
       }
 
       main {
-        width: min(960px, 100%);
+        width: min(1100px, 100%);
         margin: 0 auto;
       }
 
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding-bottom: 20px;
+      }
+
+      .wordmark {
+        margin: 0;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: var(--accent);
+      }
+
+      .toplinks {
+        display: flex;
+        gap: 16px;
+        flex-wrap: wrap;
+      }
+
+      .toplinks a {
+        text-decoration: none;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
       .hero {
-        padding: 48px 0 24px;
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.9fr);
+        gap: 22px;
+        align-items: stretch;
+        padding: 12px 0 24px;
+      }
+
+      .hero-copy,
+      .hero-aside {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+
+      .hero-copy {
+        padding: 34px;
       }
 
       .eyebrow {
@@ -55,90 +108,263 @@
 
       h1 {
         margin: 0;
-        font-size: clamp(3rem, 10vw, 6.25rem);
+        font-size: clamp(3.1rem, 9vw, 6.5rem);
         line-height: 0.92;
-        letter-spacing: -0.04em;
+        letter-spacing: -0.05em;
         max-width: 10ch;
       }
 
       .intro {
         max-width: 42rem;
-        margin: 22px 0 0;
+        margin: 20px 0 0;
         color: var(--muted);
-        font-size: 1.15rem;
+        font-size: 1.12rem;
+        line-height: 1.75;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 26px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 12px 16px;
+        border: 1px solid var(--line);
+        text-decoration: none;
+        background: var(--paper-strong);
+      }
+
+      .button.primary {
+        background: var(--ink);
+        color: #f9f4ed;
+        border-color: var(--ink);
+      }
+
+      .hero-aside {
+        padding: 26px;
+        background:
+          linear-gradient(180deg, rgba(255, 249, 241, 0.98), rgba(247, 237, 223, 0.95));
+      }
+
+      .aside-kicker {
+        margin: 0 0 10px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+        color: var(--accent);
+      }
+
+      .aside-title {
+        margin: 0;
+        font-size: 2rem;
+        line-height: 1;
+      }
+
+      .aside-copy {
+        margin: 14px 0 0;
+        color: var(--muted);
         line-height: 1.7;
+      }
+
+      .section {
+        margin-top: 28px;
+      }
+
+      .section-head {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
+
+      .section-kicker {
+        margin: 0 0 6px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.22em;
+        color: var(--accent);
+      }
+
+      h2 {
+        margin: 0;
+        font-size: 2.2rem;
+        line-height: 1;
+      }
+
+      .section-copy {
+        margin: 0;
+        color: var(--muted);
+        max-width: 44rem;
+        line-height: 1.7;
+      }
+
+      .feature {
+        display: grid;
+        grid-template-columns: minmax(0, 1.3fr) minmax(220px, 0.7fr);
+        gap: 0;
+        overflow: hidden;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        box-shadow: var(--shadow);
+      }
+
+      .feature-main,
+      .feature-side {
+        padding: 26px;
+      }
+
+      .feature-side {
+        background: rgba(140, 90, 49, 0.06);
+        border-left: 1px solid var(--line);
+      }
+
+      .feature-label {
+        margin: 0 0 10px;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .feature-title {
+        margin: 0;
+        font-size: 2.2rem;
+        line-height: 1.02;
+      }
+
+      .feature-copy {
+        margin: 14px 0 0;
+        color: var(--muted);
+        line-height: 1.75;
+      }
+
+      .feature-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .mini-stat {
+        margin: 0 0 18px;
+      }
+
+      .mini-stat:last-child {
+        margin-bottom: 0;
+      }
+
+      .mini-label {
+        display: block;
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 6px;
+      }
+
+      .mini-value {
+        display: block;
+        font-size: 1.2rem;
       }
 
       .grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 18px;
-        margin-top: 40px;
       }
 
       .card {
         display: block;
         padding: 22px;
         text-decoration: none;
-        color: inherit;
         background: var(--paper);
         border: 1px solid var(--line);
-        box-shadow: 0 24px 60px rgba(50, 34, 22, 0.06);
+        box-shadow: var(--shadow);
         transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
       }
 
       .card:hover {
         transform: translateY(-2px);
-        border-color: rgba(142, 95, 52, 0.25);
-        box-shadow: 0 28px 68px rgba(50, 34, 22, 0.1);
+        border-color: rgba(140, 90, 49, 0.25);
+        box-shadow: 0 28px 68px rgba(55, 37, 23, 0.12);
       }
 
       .card-label {
-        margin: 0 0 8px;
+        margin: 0 0 10px;
         font-size: 12px;
-        letter-spacing: 0.24em;
+        letter-spacing: 0.22em;
         text-transform: uppercase;
         color: var(--accent);
       }
 
       .card-title {
         margin: 0 0 10px;
-        font-size: 1.8rem;
+        font-size: 1.7rem;
       }
 
       .card-copy {
         margin: 0;
         color: var(--muted);
-        line-height: 1.6;
+        line-height: 1.7;
       }
 
-      .note {
-        margin-top: 36px;
-        padding: 18px 20px;
-        background: var(--accent-soft);
+      .duo {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .footer {
+        margin-top: 28px;
+        padding: 18px 0 0;
         color: var(--muted);
-        border: 1px solid rgba(142, 95, 52, 0.12);
+        border-top: 1px solid var(--line);
+        font-size: 0.96rem;
       }
 
       code {
         font-family: "SFMono-Regular", Consolas, monospace;
         font-size: 0.95em;
-        color: var(--ink);
       }
 
-      a {
-        color: var(--accent);
+      @media (max-width: 900px) {
+        .hero,
+        .feature,
+        .grid,
+        .duo {
+          grid-template-columns: 1fr;
+        }
+
+        .feature-side {
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
       }
 
       @media (max-width: 640px) {
         body {
-          padding: 24px 16px;
+          padding: 22px 14px 28px;
         }
 
-        .hero {
-          padding-top: 24px;
+        .topbar,
+        .section-head {
+          display: block;
         }
 
+        .toplinks {
+          margin-top: 10px;
+        }
+
+        .hero-copy,
+        .hero-aside,
+        .feature-main,
+        .feature-side,
         .card {
           padding: 18px;
         }
@@ -147,42 +373,147 @@
   </head>
   <body>
     <main>
+      <div class="topbar">
+        <p class="wordmark">Aditya &amp; Chhaya</p>
+        <div class="toplinks">
+          <a href="/trips/">Trips</a>
+          <a href="/wedding/">Wedding</a>
+          <a href="/drinks/">Drinks</a>
+        </div>
+      </div>
+
       <section class="hero">
-        <p class="eyebrow">Aditya &amp; Chhaya</p>
-        <h1>A home base for the things we’re building.</h1>
-        <p class="intro">
-          This root page can become the main site over time. For now, it acts as a clean front door to the wedding experience, trip pages, and any other sections we want to add next.
-        </p>
+        <div class="hero-copy">
+          <p class="eyebrow">Shared Home Base</p>
+          <h1>Stories, plans, and places we want to remember.</h1>
+          <p class="intro">
+            This site can be the shared archive: wedding weekend pages, trip plans over the years, and a simple front door that points outward to your individual sites when it makes sense.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="/trips/">Browse Trips</a>
+            <a class="button" href="/wedding/">Visit Wedding Archive</a>
+          </div>
+        </div>
+
+        <aside class="hero-aside">
+          <p class="aside-kicker">How To Think About It</p>
+          <h2 class="aside-title">A shared archive, not a personal homepage.</h2>
+          <p class="aside-copy">
+            Keep this domain centered on the overlap: trips, milestones, and projects you build together. Then use <code>adityasood.me</code> and <code>chhayaarora.com</code> for the individual, career, and personal-story parts.
+          </p>
+        </aside>
       </section>
 
-      <section class="grid" aria-label="Site sections">
-        <a class="card" href="/wedding/">
-          <p class="card-label">Wedding</p>
-          <h2 class="card-title">The Wedding Times</h2>
-          <p class="card-copy">
-            The full wedding site stays live at <code>/wedding/</code>.
+      <section class="section" aria-labelledby="latest">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Latest Addition</p>
+            <h2 id="latest">Featured Right Now</h2>
+          </div>
+          <p class="section-copy">
+            A single featured item gives the homepage a heartbeat without forcing you to redesign it every time you add something new.
           </p>
-        </a>
+        </div>
 
-        <a class="card" href="/trips/turkey.html">
-          <p class="card-label">Trips</p>
-          <h2 class="card-title">Turkey</h2>
-          <p class="card-copy">
-            A standalone trip page living at <code>/trips/turkey.html</code>.
-          </p>
-        </a>
-
-        <a class="card" href="/drinks/">
-          <p class="card-label">Extras</p>
-          <h2 class="card-title">Drinks Menu</h2>
-          <p class="card-copy">
-            The bar menu remains available as its own page at <code>/drinks/</code>.
-          </p>
-        </a>
+        <article class="feature">
+          <div class="feature-main">
+            <p class="feature-label">Trips</p>
+            <h3 class="feature-title">Turkey honeymoon planning</h3>
+            <p class="feature-copy">
+              The first trip in the archive is a full Turkey itinerary, combining Istanbul, Cappadocia, a road trip stretch, and the practical booking notes that make it useful later.
+            </p>
+            <div class="feature-links">
+              <a class="button primary" href="/trips/turkey.html">Open Turkey Page</a>
+              <a class="button" href="/trips/">See All Trips</a>
+            </div>
+          </div>
+          <div class="feature-side">
+            <p class="mini-stat">
+              <span class="mini-label">Lives At</span>
+              <span class="mini-value"><code>/trips/turkey.html</code></span>
+            </p>
+            <p class="mini-stat">
+              <span class="mini-label">Trips Shelf</span>
+              <span class="mini-value"><code>/trips/</code></span>
+            </p>
+            <p class="mini-stat">
+              <span class="mini-label">Useful Pattern</span>
+              <span class="mini-value">One shared index, many standalone pages.</span>
+            </p>
+          </div>
+        </article>
       </section>
 
-      <div class="note">
-        Next we can decide what <code>adityaandchhaya.us/</code> should become: a lightweight link hub, a designed personal homepage, or something more editorial.
+      <section class="section" aria-labelledby="collections">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Collections</p>
+            <h2 id="collections">Main Sections</h2>
+          </div>
+          <p class="section-copy">
+            These are the three buckets that already feel natural for this domain: trips, wedding archive, and outward links to your individual homes on the internet.
+          </p>
+        </div>
+
+        <div class="grid">
+          <a class="card" href="/trips/">
+            <p class="card-label">Trips</p>
+            <h3 class="card-title">A growing travel shelf</h3>
+            <p class="card-copy">
+              Keep destination pages, itineraries, budgets, and post-trip notes together under <code>/trips/</code>.
+            </p>
+          </a>
+
+          <a class="card" href="/wedding/">
+            <p class="card-label">Wedding</p>
+            <h3 class="card-title">A finished chapter</h3>
+            <p class="card-copy">
+              Treat the wedding site as an archive: still accessible, still polished, but no longer the center of the domain.
+            </p>
+          </a>
+
+          <a class="card" href="/drinks/">
+            <p class="card-label">Extras</p>
+            <h3 class="card-title">Useful standalone pages</h3>
+            <p class="card-copy">
+              The drinks menu shows the pattern nicely: one-off pages can still live here without needing their own app.
+            </p>
+          </a>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="elsewhere">
+        <div class="section-head">
+          <div>
+            <p class="section-kicker">Elsewhere</p>
+            <h2 id="elsewhere">Personal Sites</h2>
+          </div>
+          <p class="section-copy">
+            Link out clearly rather than trying to cram everything into one place. That keeps this domain focused on the shared layer of your lives.
+          </p>
+        </div>
+
+        <div class="duo">
+          <a class="card" href="https://adityasood.me" target="_blank" rel="noopener noreferrer">
+            <p class="card-label">Aditya</p>
+            <h3 class="card-title">adityasood.me</h3>
+            <p class="card-copy">
+              The best destination for your individual work, writing, bio, projects, and anything more personal to you.
+            </p>
+          </a>
+
+          <a class="card" href="https://chhayaarora.com" target="_blank" rel="noopener noreferrer">
+            <p class="card-label">Chhaya</p>
+            <h3 class="card-title">chhayaarora.com</h3>
+            <p class="card-copy">
+              A clean outward link for Chhaya’s own presence, independent of the shared archive living here.
+            </p>
+          </a>
+        </div>
+      </section>
+
+      <div class="footer">
+        Built as a simple shared archive. Over time, you can add pages without changing the structure: <code>/trips/japan.html</code>, <code>/trips/italy.html</code>, or any other standalone page that belongs in the collection.
       </div>
     </main>
   </body>
