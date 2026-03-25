@@ -4,38 +4,186 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aditya & Chhaya</title>
-    <meta http-equiv="refresh" content="0; url=/wedding/" />
-    <link rel="canonical" href="https://adityaandchhaya.me/wedding/" />
+    <meta
+      name="description"
+      content="A home for wedding plans, trip pages, and future projects from Aditya and Chhaya."
+    />
+    <link rel="canonical" href="https://adityaandchhaya.us/" />
     <style>
+      :root {
+        color-scheme: light;
+        --ink: #261b14;
+        --muted: #6f5d50;
+        --paper: rgba(255, 250, 243, 0.88);
+        --line: rgba(38, 27, 20, 0.12);
+        --accent: #8e5f34;
+        --accent-soft: #efe1d1;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
       body {
         margin: 0;
         min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 24px;
+        padding: 32px 20px;
         font-family: Georgia, serif;
-        background: #faf7f2;
-        color: #2d241d;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(222, 198, 168, 0.55), transparent 28%),
+          radial-gradient(circle at top right, rgba(243, 230, 212, 0.85), transparent 24%),
+          linear-gradient(180deg, #fefaf5 0%, #f5ede3 55%, #fcf7f0 100%);
       }
 
       main {
-        max-width: 36rem;
-        text-align: center;
+        width: min(960px, 100%);
+        margin: 0 auto;
+      }
+
+      .hero {
+        padding: 48px 0 24px;
+      }
+
+      .eyebrow {
+        margin: 0 0 14px;
+        color: var(--accent);
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        font-size: 12px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(3rem, 10vw, 6.25rem);
+        line-height: 0.92;
+        letter-spacing: -0.04em;
+        max-width: 10ch;
+      }
+
+      .intro {
+        max-width: 42rem;
+        margin: 22px 0 0;
+        color: var(--muted);
+        font-size: 1.15rem;
+        line-height: 1.7;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+        margin-top: 40px;
+      }
+
+      .card {
+        display: block;
+        padding: 22px;
+        text-decoration: none;
+        color: inherit;
+        background: var(--paper);
+        border: 1px solid var(--line);
+        box-shadow: 0 24px 60px rgba(50, 34, 22, 0.06);
+        transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+      }
+
+      .card:hover {
+        transform: translateY(-2px);
+        border-color: rgba(142, 95, 52, 0.25);
+        box-shadow: 0 28px 68px rgba(50, 34, 22, 0.1);
+      }
+
+      .card-label {
+        margin: 0 0 8px;
+        font-size: 12px;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .card-title {
+        margin: 0 0 10px;
+        font-size: 1.8rem;
+      }
+
+      .card-copy {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .note {
+        margin-top: 36px;
+        padding: 18px 20px;
+        background: var(--accent-soft);
+        color: var(--muted);
+        border: 1px solid rgba(142, 95, 52, 0.12);
+      }
+
+      code {
+        font-family: "SFMono-Regular", Consolas, monospace;
+        font-size: 0.95em;
+        color: var(--ink);
       }
 
       a {
-        color: #7a5730;
+        color: var(--accent);
+      }
+
+      @media (max-width: 640px) {
+        body {
+          padding: 24px 16px;
+        }
+
+        .hero {
+          padding-top: 24px;
+        }
+
+        .card {
+          padding: 18px;
+        }
       }
     </style>
   </head>
   <body>
     <main>
-      <p>
-        Opening the wedding site at <a href="/wedding/">/wedding/</a>.
-      </p>
-      <p>
-        Future standalone pages can live at paths like <a href="/trips/turkey.html">/trips/turkey.html</a>.
-      </p>
+      <section class="hero">
+        <p class="eyebrow">Aditya &amp; Chhaya</p>
+        <h1>A home base for the things we’re building.</h1>
+        <p class="intro">
+          This root page can become the main site over time. For now, it acts as a clean front door to the wedding experience, trip pages, and any other sections we want to add next.
+        </p>
+      </section>
+
+      <section class="grid" aria-label="Site sections">
+        <a class="card" href="/wedding/">
+          <p class="card-label">Wedding</p>
+          <h2 class="card-title">The Wedding Times</h2>
+          <p class="card-copy">
+            The full wedding site stays live at <code>/wedding/</code>.
+          </p>
+        </a>
+
+        <a class="card" href="/trips/turkey.html">
+          <p class="card-label">Trips</p>
+          <h2 class="card-title">Turkey</h2>
+          <p class="card-copy">
+            A standalone trip page living at <code>/trips/turkey.html</code>.
+          </p>
+        </a>
+
+        <a class="card" href="/drinks/">
+          <p class="card-label">Extras</p>
+          <h2 class="card-title">Drinks Menu</h2>
+          <p class="card-copy">
+            The bar menu remains available as its own page at <code>/drinks/</code>.
+          </p>
+        </a>
+      </section>
+
+      <div class="note">
+        Next we can decide what <code>adityaandchhaya.us/</code> should become: a lightweight link hub, a designed personal homepage, or something more editorial.
+      </div>
     </main>
   </body>
 </html>
