@@ -283,6 +283,24 @@ img { display: block; max-width: 100%; }
   font-size: .85rem;
   font-weight: 500;
 }
+.event-row-map {
+  display: inline-flex;
+  align-items: center;
+  gap: .15rem;
+  padding: .15rem .4rem;
+  border-radius: 999px;
+  border: 1px solid rgba(181, 108, 78, .15);
+  background: rgba(255, 249, 243, .9);
+  font-size: .65rem;
+  color: var(--terracotta);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color .15s ease, border-color .15s ease;
+}
+.event-row-map:hover {
+  background: rgba(255, 240, 225, 1);
+  border-color: rgba(181, 108, 78, .3);
+}
 
 /* ===== Place Chip (tappable address) ===== */
 .place-chip {
@@ -351,25 +369,6 @@ img { display: block; max-width: 100%; }
 @keyframes toastIn {
   from { opacity: 0; transform: translateX(-50%) translateY(4px); }
   to { opacity: 1; transform: translateX(-50%) translateY(0); }
-}
-
-/* Brief locations strip */
-.day-brief-locations {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .35rem;
-  align-items: center;
-  padding: .5rem 0;
-  border-top: 1px solid rgba(133, 84, 61, .06);
-}
-.locations-label {
-  font-size: .68rem;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  color: var(--soft);
-  margin-right: .15rem;
-  flex-basis: 100%;
-  margin-bottom: .1rem;
 }
 
 /* Expand / Collapse buttons */
@@ -738,8 +737,6 @@ img { display: block; max-width: 100%; }
   .event-row-title { font-size: .92rem; }
 
   .place-chip { font-size: .72rem; }
-
-  .locations-label { flex-basis: auto; margin-bottom: 0; }
 
   /* Expanded */
   .day-expanded { padding: 0 1.2rem 1.2rem; }

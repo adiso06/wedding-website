@@ -178,6 +178,17 @@ function EventRow({ event }: { event: Event }) {
       <div className="event-row-body">
         <span className="event-row-title">{event.title}</span>
         {event.reservationStatus && <StatusBadge status={event.reservationStatus} />}
+        {event.mapUrl && (
+          <a
+            href={event.mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="event-row-map"
+            onClick={(e) => e.stopPropagation()}
+          >
+            📍 Map
+          </a>
+        )}
       </div>
     </div>
   );
@@ -244,8 +255,6 @@ type DayView = 'collapsed' | 'brief' | 'expanded';
 
 function DaySection({ day, view, onCycleView, weather }: { day: Day; view: DayView; onCycleView: () => void; weather?: DayWeather }) {
   const contentRef = useRef<HTMLDivElement>(null);
-
-  const keyLocations = day.events.filter(e => e.address);
   const dayNum = parseInt(day.id.replace('day-', ''));
   const isPast = view === 'collapsed';
 
@@ -267,7 +276,7 @@ function DaySection({ day, view, onCycleView, weather }: { day: Day; view: DayVi
         </div>
       </button>
 
-      {/* Brief: practical schedule with locations */}
+      {/* Brief: practical schedule */}
       {view === 'brief' && (
         <div className="day-brief">
           <div className="day-brief-events">
@@ -275,14 +284,6 @@ function DaySection({ day, view, onCycleView, weather }: { day: Day; view: DayVi
               <EventRow key={event.id} event={event} />
             ))}
           </div>
-          {keyLocations.length > 0 && (
-            <div className="day-brief-locations">
-              <span className="locations-label">Key locations:</span>
-              {keyLocations.map(event => (
-                <PlaceTag key={event.id} event={event} />
-              ))}
-            </div>
-          )}
           <button className="expand-btn" onClick={onCycleView}>
             See full details for this day →
           </button>
