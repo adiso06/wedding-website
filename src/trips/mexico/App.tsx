@@ -40,15 +40,6 @@ type PlaceGuide = {
   imageAlt: string;
 };
 
-type Reservation = {
-  dateLabel: string;
-  venue: string;
-  time: string;
-  status: string;
-  confirmationCode?: string;
-  note?: string;
-};
-
 type DayWeather = {
   date: string;
   weatherCode: number;
@@ -59,11 +50,10 @@ type DayWeather = {
   isRainLikely: boolean;
 };
 
-const { meta, placeGuides, days, reservations, practicalNotes, closing } = data as {
+const { meta, placeGuides, days, practicalNotes, closing } = data as {
   meta: { dateRange: string; couple: { primary: string; secondary: string }; accommodation: { latitude: number; longitude: number }; closingImageUrl: string };
   placeGuides: Record<string, PlaceGuide>;
   days: Day[];
-  reservations: Reservation[];
   practicalNotes: { label: string; value: string }[];
   closing: { title: string; body: string; teaser: string };
 };
@@ -178,7 +168,17 @@ function EventRow({ event }: { event: Event }) {
       <div className="event-row-body">
         <span className="event-row-title">{event.title}</span>
         {event.reservationStatus && <StatusBadge status={event.reservationStatus} />}
-        {event.address && <PlaceTag event={event} />}
+        {event.mapUrl && (
+          <a
+            href={event.mapUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="event-row-map"
+            onClick={(e) => e.stopPropagation()}
+          >
+            📍 Map
+          </a>
+        )}
       </div>
     </div>
   );
@@ -241,54 +241,47 @@ function WeatherChip({ weather }: { weather: DayWeather }) {
   );
 }
 
-function DaySection({ day, isExpanded, onToggle, weather }: { day: Day; isExpanded: boolean; onToggle: () => void; weather?: DayWeather }) {
-  const contentRef = useRef<HTMLDivElement>(null);
+type DayView = 'collapsed' | 'brief' | 'expanded';
 
-  const keyLocations = day.events.filter(e => e.address);
+function DaySection({ day, view, onCycleView, weather }: { day: Day; view: DayView; onCycleView: () => void; weather?: DayWeather }) {
+  const contentRef = useRef<HTMLDivElement>(null);
   const dayNum = parseInt(day.id.replace('day-', ''));
+  const isPast = view === 'collapsed';
 
   return (
-    <section className={`day-section ${isExpanded ? 'expanded' : ''}`}>
-      <button className="day-header" onClick={onToggle} aria-expanded={isExpanded}>
+    <section className={`day-section ${view === 'expanded' ? 'expanded' : ''} ${isPast ? 'past' : ''}`}>
+      <button className="day-header" onClick={onCycleView} aria-expanded={view !== 'collapsed'}>
         <div className="day-header-left">
           <span className="day-number">Day {dayNum}</span>
           <span className="day-date">{day.shortLabel}</span>
         </div>
         <div className="day-header-center">
           <h2 className="day-title">{day.title}</h2>
-          <p className="day-subtitle">{day.subtitle}</p>
+          {view !== 'collapsed' && <p className="day-subtitle">{day.subtitle}</p>}
         </div>
         <div className="day-header-right">
           {weather && <span className="day-weather-mini">{weather.description} {toF(weather.highC)}°</span>}
           <span className="day-event-count">{day.events.length} stops</span>
-          <span className={`chevron ${isExpanded ? 'open' : ''}`}>▾</span>
+          <span className={`chevron ${view !== 'collapsed' ? 'open' : ''}`}>▾</span>
         </div>
       </button>
 
-      {/* Collapsed: brief practical schedule */}
-      {!isExpanded && (
+      {/* Brief: practical schedule */}
+      {view === 'brief' && (
         <div className="day-brief">
           <div className="day-brief-events">
             {day.events.map(event => (
               <EventRow key={event.id} event={event} />
             ))}
           </div>
-          {keyLocations.length > 0 && (
-            <div className="day-brief-locations">
-              <span className="locations-label">Key locations:</span>
-              {keyLocations.map(event => (
-                <PlaceTag key={event.id} event={event} />
-              ))}
-            </div>
-          )}
-          <button className="expand-btn" onClick={onToggle}>
+          <button className="expand-btn" onClick={onCycleView}>
             See full details for this day →
           </button>
         </div>
       )}
 
       {/* Expanded: full cinematic view */}
-      {isExpanded && (
+      {view === 'expanded' && (
         <div className="day-expanded" ref={contentRef}>
           <div className="day-expanded-intro">
             <p className="day-summary">{day.summary}</p>
@@ -307,7 +300,7 @@ function DaySection({ day, isExpanded, onToggle, weather }: { day: Day; isExpand
             ))}
           </div>
 
-          <button className="collapse-btn" onClick={onToggle}>
+          <button className="collapse-btn" onClick={onCycleView}>
             ↑ Collapse day {dayNum}
           </button>
         </div>
@@ -316,32 +309,9 @@ function DaySection({ day, isExpanded, onToggle, weather }: { day: Day; isExpand
   );
 }
 
-function ReservationsSection() {
-  return (
-    <section className="reservations-section section-pad">
-      <div className="section-heading">
-        <span className="eyebrow">Practical</span>
-        <h2>Reservations</h2>
-        <p className="section-desc">The practical layer.</p>
-      </div>
-      <div className="reservation-table">
-        {reservations.map((r, i) => (
-          <div key={i} className="reservation-row">
-            <div className="res-date">{r.dateLabel}</div>
-            <div className="res-venue">{r.venue}</div>
-            <div className="res-time">{r.time}</div>
-            <StatusBadge status={r.status} />
-            <div className="res-note">{r.confirmationCode || r.note || ''}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function NotesSection() {
   return (
-    <section className="notes-section section-pad">
+    <section id="notes" className="notes-section section-pad">
       <div className="section-heading">
         <span className="eyebrow">Reference</span>
         <h2>Practical Notes</h2>
@@ -370,20 +340,55 @@ function ClosingSection() {
   );
 }
 
+function getToday(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function isDesktop(): boolean {
+  return typeof window !== 'undefined' && window.matchMedia('(min-width: 1040px)').matches;
+}
+
+function getInitialViews(): Record<string, DayView> {
+  const today = getToday();
+  const desktop = isDesktop();
+  const views: Record<string, DayView> = {};
+  for (const day of days as Day[]) {
+    if (day.date < today) {
+      views[day.id] = 'collapsed';
+    } else {
+      views[day.id] = desktop ? 'expanded' : 'brief';
+    }
+  }
+  return views;
+}
+
 export default function App() {
-  const [expandedDay, setExpandedDay] = useState<string | null>(null);
+  const [dayViews, setDayViews] = useState<Record<string, DayView>>(getInitialViews);
   const dayRefs = useRef<Record<string, HTMLElement | null>>({});
   const weather = useWeather();
 
-  const toggleDay = (dayId: string) => {
-    setExpandedDay(prev => prev === dayId ? null : dayId);
+  const cycleView = (dayId: string) => {
+    setDayViews(prev => {
+      const current = prev[dayId] || 'brief';
+      let next: DayView;
+      if (current === 'collapsed') next = 'brief';
+      else if (current === 'brief') next = 'expanded';
+      else next = 'brief';
+      return { ...prev, [dayId]: next };
+    });
   };
 
+  // Scroll to day when it expands
+  const prevViews = useRef(dayViews);
   useEffect(() => {
-    if (expandedDay && dayRefs.current[expandedDay]) {
-      dayRefs.current[expandedDay]!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    for (const id of Object.keys(dayViews)) {
+      if (dayViews[id] === 'expanded' && prevViews.current[id] !== 'expanded' && dayRefs.current[id]) {
+        dayRefs.current[id]!.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
-  }, [expandedDay]);
+    prevViews.current = dayViews;
+  }, [dayViews]);
 
   return (
     <div className="app-shell">
@@ -400,9 +405,18 @@ export default function App() {
         </h1>
         <p className="hero-whisper">{meta.dateRange} · 6 days · {(days as Day[]).reduce((sum, d) => sum + d.events.length, 0)} moments planned</p>
 
+        {/* Decorative hero art — visible on desktop only */}
+        <div className="hero-art" aria-hidden="true">
+          <div className="hero-art-ring" />
+          <div className="hero-art-dot hero-art-dot-1" />
+          <div className="hero-art-dot hero-art-dot-2" />
+          <div className="hero-art-dot hero-art-dot-3" />
+          <div className="hero-art-line" />
+        </div>
+
         <div className="hero-actions">
           <a href="#days" className="primary-link">Browse the days</a>
-          <a href="#reservations" className="secondary-link">Jump to reservations</a>
+          <a href="#notes" className="secondary-link">Practical notes</a>
         </div>
       </header>
 
@@ -411,7 +425,7 @@ export default function App() {
         <div className="section-heading">
           <span className="eyebrow">Day by day</span>
           <h2>The Itinerary</h2>
-          <p className="section-desc">Tap any day for the brief schedule. Tap "See full details" to expand the cinematic version.</p>
+          <p className="section-desc">Tap a day to see the schedule. Past days are collapsed — tap to open.</p>
         </div>
 
         <div className="days-list">
@@ -419,19 +433,14 @@ export default function App() {
             <div key={day.id} ref={el => { dayRefs.current[day.id] = el; }}>
               <DaySection
                 day={day}
-                isExpanded={expandedDay === day.id}
-                onToggle={() => toggleDay(day.id)}
+                view={dayViews[day.id] || 'brief'}
+                onCycleView={() => cycleView(day.id)}
                 weather={weather[day.date]}
               />
             </div>
           ))}
         </div>
       </main>
-
-      {/* Reservations */}
-      <div id="reservations">
-        <ReservationsSection />
-      </div>
 
       {/* Practical Notes */}
       <NotesSection />
