@@ -156,7 +156,7 @@
       "subtitle": "A Saturday built from craft, history, and mezcal.",
       "summary": "Saturday moves from a slow Rosetta morning to San Angel, onward to one of the great museums in the world, then back into Roma for street food, a moody dinner, and the choice between mezcal or dancing.",
       "imageUrl": "https://images.pexels.com/photos/26920674/pexels-photo-26920674.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "transportSummary": "Longer rides to San Angel and Chapultepec, then back to Roma Norte for the rest of the night.",
+      "transportSummary": "Three Ubers today: Roma to San Angel, San Angel to Chapultepec, then Chapultepec back to Roma Norte. Walking for the rest of the night.",
       "events": [
         {
           "id": "slow-morning-rosetta",
@@ -220,6 +220,13 @@
             "This museum sets up Tuesday's Teotihuacan visit beautifully."
           ],
           "defaultExpanded": true
+        },
+        {
+          "id": "uber-to-roma-sat",
+          "time": "3:15 PM",
+          "title": "Uber Back to Roma Norte",
+          "kind": "transit",
+          "description": "About 15 minutes from Chapultepec back into the neighborhood."
         },
         {
           "id": "jennis",
@@ -295,7 +302,7 @@
       "subtitle": "The city slows down, then turns luminous again.",
       "summary": "Sunday is built around one of the most distinctive experiences of the trip: creating a fragrance together, then dressing up for Rayo and letting Condesa handle the rest.",
       "imageUrl": "https://images.pexels.com/photos/30163787/pexels-photo-30163787.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "transportSummary": "A short ride into Centro Historico, then back to Condesa for reset and evening wandering on foot.",
+      "transportSummary": "Two Ubers: Condesa to Centro Historico, then Centro back to the apartment. Evening is walking in Roma/Condesa.",
       "events": [
         {
           "id": "freims",
@@ -311,6 +318,13 @@
             "Chilaquiles deserve their reputation."
           ],
           "defaultExpanded": true
+        },
+        {
+          "id": "uber-to-centro-sun",
+          "time": "10:15 AM",
+          "title": "Uber to Centro Historico",
+          "kind": "transit",
+          "description": "About 15-20 minutes from Condesa into Centro."
         },
         {
           "id": "centro-wander",
@@ -339,6 +353,13 @@
           "reservationStatus": "confirmed",
           "confirmationCode": "Add from email",
           "defaultExpanded": true
+        },
+        {
+          "id": "uber-from-centro-sun",
+          "time": "3:00 PM",
+          "title": "Uber Back to Apartment",
+          "kind": "transit",
+          "description": "About 15-20 minutes from Centro back to Roma/Condesa."
         },
         {
           "id": "rest-sunday",
@@ -388,7 +409,7 @@
       "subtitle": "The neighborhood becomes the entire day, then your farewell night.",
       "summary": "This is the full Roma Norte immersion: breakfast, coffee, shopping, snack stop, long lunch, artisan market, and a night that closes the trip where it began.",
       "imageUrl": "https://images.pexels.com/photos/26920674/pexels-photo-26920674.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "transportSummary": "Mostly walking through Roma Norte, with one round-trip car hop for La Ciudadela.",
+      "transportSummary": "Mostly walking through Roma Norte. Two Ubers: Roma to La Ciudadela, then Ciudadela back to the apartment.",
       "events": [
         {
           "id": "yerba-santa",
@@ -454,6 +475,13 @@
           "defaultExpanded": true
         },
         {
+          "id": "uber-to-ciudadela",
+          "time": "3:30 PM",
+          "title": "Uber to La Ciudadela",
+          "kind": "transit",
+          "description": "About 10-15 minutes from Roma Norte to Centro."
+        },
+        {
           "id": "ciudadela",
           "time": "4:00 PM - 5:30 PM",
           "title": "La Ciudadela Crafts Market",
@@ -470,8 +498,15 @@
           "defaultExpanded": true
         },
         {
+          "id": "uber-from-ciudadela",
+          "time": "5:30 PM",
+          "title": "Uber Back to Apartment",
+          "kind": "transit",
+          "description": "About 10-15 minutes back to Roma Norte."
+        },
+        {
           "id": "farewell-reset",
-          "time": "5:45 PM - 6:45 PM",
+          "time": "5:55 PM - 6:45 PM",
           "title": "Freshen Up for the Farewell Night",
           "kind": "rest",
           "description": "Short reset, new outfit, and then back into the neighborhood for one last long evening."
@@ -530,7 +565,7 @@
       "subtitle": "Ancient pyramids in the morning, then one last precise nightcap.",
       "summary": "Tuesday belongs to Teotihuacan — walking the ancient grounds, taking in the scale, and letting the pyramids reset your sense of time. Then sleep, then one polished goodbye cocktail before the handoff to Puerto Vallarta.",
       "imageUrl": "https://images.pexels.com/photos/31646863/pexels-photo-31646863.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "transportSummary": "Uber out to Teotihuacan in the morning (~45 min), then back to the city for rest and the evening.",
+      "transportSummary": "Three rides: Uber to Teotihuacan (~45 min), Uber back (~1 hr), then walk or short Uber to Juarez for Hanky Panky.",
       "events": [
         {
           "id": "teotihuacan-drive",
@@ -562,8 +597,15 @@
           "description": "Grab lunch at one of the restaurants near the entrance before heading back into the city."
         },
         {
+          "id": "uber-from-teotihuacan",
+          "time": "1:00 PM",
+          "title": "Uber Back to the City",
+          "kind": "transit",
+          "description": "About 45-60 minutes back into Roma Norte. Settle in, decompress."
+        },
+        {
           "id": "pack-pv",
-          "time": "1:30 PM - 2:00 PM",
+          "time": "2:00 PM - 2:30 PM",
           "title": "Pack for Puerto Vallarta",
           "kind": "rest",
           "description": "Pack while the morning is still carrying you. Future you will be grateful.",
@@ -571,11 +613,18 @@
         },
         {
           "id": "nap",
-          "time": "2:00 PM - 5:00 PM",
+          "time": "2:30 PM - 5:00 PM",
           "title": "Nap",
           "kind": "rest",
           "description": "Three hours. Non-negotiable. The evening works better if you actually surrender to the rest.",
           "defaultExpanded": true
+        },
+        {
+          "id": "walk-to-hanky",
+          "time": "6:30 PM",
+          "title": "Walk or Short Uber to Juarez",
+          "kind": "transit",
+          "description": "About 20 minutes on foot or a quick 5-minute Uber from Roma to Colonia Juarez."
         },
         {
           "id": "hanky-panky",
