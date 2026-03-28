@@ -645,6 +645,42 @@ img { display: block; max-width: 100%; }
   font-style: italic;
 }
 
+/* ===== Copy Day Button ===== */
+.day-header-row {
+  display: flex;
+  align-items: stretch;
+  position: relative;
+}
+.day-header-row > .day-header {
+  flex: 1;
+  min-width: 0;
+}
+.copy-day-btn {
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--line);
+  border-radius: .4rem;
+  background: rgba(255, 249, 243, .7);
+  font-size: .6rem;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s ease, background-color .15s ease;
+  z-index: 2;
+}
+.day-section:hover .copy-day-btn { opacity: .5; }
+.copy-day-btn:hover { opacity: 1 !important; background: rgba(255, 240, 225, 1); }
+
+/* ===== SVG Art & Dividers — hidden on mobile ===== */
+.geo-art { display: block; }
+.mountain-divider, .greca-divider, .stepfret-divider, .bg-geo { display: none; }
+.hero-art { display: none; }
+
 /* ======================================================
    Tablet (720px+)
    ====================================================== */
@@ -1027,6 +1063,129 @@ img { display: block; max-width: 100%; }
     margin-left: auto;
     margin-right: auto;
   }
+
+  /* --- Mountain Divider --- */
+  .mountain-divider {
+    display: block;
+    position: relative;
+    height: 5rem;
+    margin-top: -2rem;
+    overflow: hidden;
+  }
+  .mountains-back {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: rgba(181, 108, 78, .06);
+    animation: mountainDrift 30s ease-in-out infinite;
+  }
+  .mountains-front {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%;
+    color: rgba(212, 162, 87, .05);
+    animation: mountainDrift 24s ease-in-out infinite reverse;
+  }
+  @keyframes mountainDrift {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-12px); }
+  }
+
+  /* --- Greca Band --- */
+  .greca-divider {
+    display: block;
+    padding: 0 3rem;
+    color: rgba(181, 108, 78, .12);
+    margin-bottom: 1rem;
+  }
+  .greca-divider .geo-art { width: 100%; height: 1.5rem; }
+
+  /* --- Step-Fret Divider --- */
+  .stepfret-divider {
+    display: block;
+    padding: 1.5rem 3rem;
+    color: rgba(212, 162, 87, .15);
+  }
+  .stepfret-divider .geo-art { width: 100%; height: 1rem; }
+
+  /* --- Background Floating Geometry --- */
+  .bg-geo {
+    display: block;
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: hidden;
+  }
+  .bg-geo-left {
+    position: absolute;
+    top: 20%;
+    left: -2rem;
+    width: 18rem;
+    height: 18rem;
+    color: rgba(181, 108, 78, .04);
+    animation: floatSlow 20s ease-in-out infinite;
+  }
+  .bg-geo-right {
+    position: absolute;
+    top: 50%;
+    right: -3rem;
+    width: 22rem;
+    height: 22rem;
+    color: rgba(212, 162, 87, .03);
+    animation: floatSlow 16s ease-in-out infinite reverse;
+  }
+
+  /* --- SVG element animations --- */
+  .geo-diamond { animation: floatSlow 8s ease-in-out infinite; }
+  .geo-diamond-2 { animation-delay: -2s; }
+  .geo-diamond-3 { animation-delay: -4s; animation-duration: 10s; }
+  .geo-diamond-4 { animation-delay: -1s; animation-duration: 6s; }
+  .geo-diamond-5 { animation-delay: -3s; animation-duration: 12s; }
+  .geo-tri { animation: floatSlow 9s ease-in-out infinite; }
+  .geo-tri-2 { animation-delay: -3s; }
+  .geo-tri-3 { animation-delay: -5s; animation-duration: 11s; }
+  .geo-tri-4 { animation-delay: -2s; animation-duration: 7s; }
+  .geo-tri-5 { animation-delay: -4s; }
+  .geo-tri-6 { animation-delay: -6s; animation-duration: 13s; }
+
+  /* Hero sun */
+  .hero-sun {
+    position: absolute;
+    top: 8%;
+    right: 6%;
+    width: 16rem;
+    height: 16rem;
+    color: rgba(181, 108, 78, .1);
+    animation: spinSlow 60s linear infinite;
+  }
+  @keyframes spinSlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .hero-diamonds {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 24rem;
+    height: 24rem;
+    color: rgba(212, 162, 87, .08);
+  }
+  .hero-triangles {
+    position: absolute;
+    bottom: 5%;
+    right: 2%;
+    width: 14rem;
+    height: 14rem;
+    color: var(--terracotta);
+  }
+
+  /* Copy btn always visible on desktop */
+  .copy-day-btn { opacity: .3; }
 }
 
 /* ======================================================
