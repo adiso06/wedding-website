@@ -40,15 +40,6 @@ type PlaceGuide = {
   imageAlt: string;
 };
 
-type Reservation = {
-  dateLabel: string;
-  venue: string;
-  time: string;
-  status: string;
-  confirmationCode?: string;
-  note?: string;
-};
-
 type DayWeather = {
   date: string;
   weatherCode: number;
@@ -59,11 +50,10 @@ type DayWeather = {
   isRainLikely: boolean;
 };
 
-const { meta, placeGuides, days, reservations, practicalNotes, closing } = data as {
+const { meta, placeGuides, days, practicalNotes, closing } = data as {
   meta: { dateRange: string; couple: { primary: string; secondary: string }; accommodation: { latitude: number; longitude: number }; closingImageUrl: string };
   placeGuides: Record<string, PlaceGuide>;
   days: Day[];
-  reservations: Reservation[];
   practicalNotes: { label: string; value: string }[];
   closing: { title: string; body: string; teaser: string };
 };
@@ -319,31 +309,9 @@ function DaySection({ day, view, onCycleView, weather }: { day: Day; view: DayVi
   );
 }
 
-function ReservationsSection() {
-  return (
-    <section className="reservations-section section-pad">
-      <div className="section-heading">
-        <span className="eyebrow">Practical</span>
-        <h2>Reservations</h2>
-        <p className="section-desc">The practical layer.</p>
-      </div>
-      <div className="reservation-table">
-        {reservations.map((r, i) => (
-          <div key={i} className="reservation-row">
-            <div className="res-venue">{r.venue}</div>
-            <StatusBadge status={r.status} />
-            <div className="res-date">{r.dateLabel} · <span className="res-time">{r.time}</span></div>
-            {(r.confirmationCode || r.note) && <div className="res-note">{r.confirmationCode || r.note}</div>}
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
 function NotesSection() {
   return (
-    <section className="notes-section section-pad">
+    <section id="notes" className="notes-section section-pad">
       <div className="section-heading">
         <span className="eyebrow">Reference</span>
         <h2>Practical Notes</h2>
@@ -434,7 +402,7 @@ export default function App() {
 
         <div className="hero-actions">
           <a href="#days" className="primary-link">Browse the days</a>
-          <a href="#reservations" className="secondary-link">Jump to reservations</a>
+          <a href="#notes" className="secondary-link">Practical notes</a>
         </div>
       </header>
 
@@ -459,11 +427,6 @@ export default function App() {
           ))}
         </div>
       </main>
-
-      {/* Reservations */}
-      <div id="reservations">
-        <ReservationsSection />
-      </div>
 
       {/* Practical Notes */}
       <NotesSection />
