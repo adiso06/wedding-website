@@ -327,11 +327,10 @@ function ReservationsSection() {
       <div className="reservation-table">
         {reservations.map((r, i) => (
           <div key={i} className="reservation-row">
-            <div className="res-date">{r.dateLabel}</div>
             <div className="res-venue">{r.venue}</div>
-            <div className="res-time">{r.time}</div>
             <StatusBadge status={r.status} />
-            <div className="res-note">{r.confirmationCode || r.note || ''}</div>
+            <div className="res-date">{r.dateLabel} · <span className="res-time">{r.time}</span></div>
+            {(r.confirmationCode || r.note) && <div className="res-note">{r.confirmationCode || r.note}</div>}
           </div>
         ))}
       </div>
