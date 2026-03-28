@@ -71,7 +71,7 @@
       "subtitle": "Land, exhale, and let the city introduce itself after dark.",
       "summary": "The first night is built like a soft ignition: arrive, drop the bags, drink somewhere lush, eat the city's most beloved vegan tacos, and wander Roma until the night feels fully yours.",
       "imageUrl": "https://images.pexels.com/photos/26920674/pexels-photo-26920674.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "transportSummary": "Airport to accommodation by car, then the rest of the evening unfolds within Condesa and Roma Norte.",
+      "transportSummary": "Airport to accommodation by car. Uber or long walk to Baltra in Condesa, then walking through Roma for the rest of the night.",
       "events": [
         {
           "id": "land-mex",
@@ -89,6 +89,7 @@
           "title": "Baltra Bar",
           "kind": "bar",
           "neighborhood": "Condesa",
+          "transportHint": "uber",
           "address": "Iztaccihuatl 36D, Hipodromo Condesa, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Baltra%20Bar%20Condesa%20Mexico%20City",
           "description": "A botanical room, agave-forward cocktails, and exactly the right amount of glamour for your opening toast.",
@@ -106,6 +107,7 @@
           "title": "Dinner at Por Siempre Vegana",
           "kind": "meal",
           "neighborhood": "Roma Norte",
+          "transportHint": "long-walk",
           "address": "Calle Manzanillo 66, Roma Norte, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Por%20Siempre%20Vegana%20Roma%20Norte%20Mexico%20City",
           "travelNote": "A short ride or walk into Roma Norte depending on energy.",
@@ -164,6 +166,7 @@
           "title": "Slow Morning with Panaderia Rosetta",
           "kind": "meal",
           "neighborhood": "Roma Norte",
+          "transportHint": "long-walk",
           "address": "Colima 179, Roma Norte, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Panaderia%20Rosetta%20Roma%20Norte%20Mexico%20City",
           "description": "Pick up pastries and coffee, then bring them home. The morning bun and guava ricotta pastry set the tone beautifully.",
@@ -257,6 +260,7 @@
           "title": "Dinner at Los Loosers",
           "kind": "meal",
           "neighborhood": "Roma Norte",
+          "transportHint": "long-walk",
           "address": "Sinaloa 20, Roma Norte, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Los%20Loosers%20Roma%20Norte%20Mexico%20City",
           "description": "Moody room, mushroom-forward menu, and a slightly theatrical intimacy that suits the evening.",
@@ -310,6 +314,7 @@
           "title": "Breakfast at Freims",
           "kind": "meal",
           "neighborhood": "Condesa",
+          "transportHint": "uber",
           "address": "Culiacan 99, Hipodromo, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Freims%20Condesa%20Mexico%20City",
           "description": "Garden brunch, weekend ease, and a soft landing before heading into Centro.",
@@ -375,6 +380,7 @@
           "title": "Rayo",
           "kind": "bar",
           "neighborhood": "Roma Norte",
+          "transportHint": "long-walk",
           "address": "Salamanca 85, Roma Norte, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Rayo%20Salamanca%2085%20Roma%20Norte%20Mexico%20City",
           "description": "The marquee bar moment of the trip: blind aroma box, agave-first cocktails, and a bar experience designed down to the last detail.",
@@ -392,6 +398,7 @@
           "kind": "wander",
           "placeKey": "condesa",
           "neighborhood": "Condesa",
+          "transportHint": "long-walk",
           "description": "Parque Mexico, Avenida Amsterdam, maybe food, maybe another bar, maybe just the walk home. This part is intentionally unclaimed.",
           "tips": [
             "If you want one more stop, Departamento is the late-night rooftop option.",
@@ -417,6 +424,7 @@
           "title": "Breakfast at Yerba Santa",
           "kind": "meal",
           "neighborhood": "Roma Norte",
+          "transportHint": "long-walk",
           "address": "Guanajuato 85, Roma Norte, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Yerba%20Santa%20Roma%20Norte%20Mexico%20City",
           "description": "Garden breakfast, herbal depth, and slow clay-pot cooking that gives the day a grounded start.",
@@ -517,6 +525,7 @@
           "title": "Dinner at Cancino Roma",
           "kind": "meal",
           "neighborhood": "Roma Norte",
+          "transportHint": "long-walk",
           "address": "Plaza Rio de Janeiro 54, Roma Norte, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Cancino%20Roma%20Plaza%20Rio%20de%20Janeiro%20Mexico%20City",
           "description": "Thin-crust pizza, trees overhead, and a terrace that feels almost European if you let the night soften around it.",
@@ -565,7 +574,7 @@
       "subtitle": "Ancient pyramids in the morning, then one last precise nightcap.",
       "summary": "Tuesday belongs to Teotihuacan — walking the ancient grounds, taking in the scale, and letting the pyramids reset your sense of time. Then sleep, then one polished goodbye cocktail before the handoff to Puerto Vallarta.",
       "imageUrl": "https://images.pexels.com/photos/31646863/pexels-photo-31646863.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "transportSummary": "Three rides: Uber to Teotihuacan (~45 min), Uber back (~1 hr), then walk or short Uber to Juarez for Hanky Panky.",
+      "transportSummary": "Two Ubers: to Teotihuacan (~45 min) and back (~1 hr). Hanky Panky is in Juárez — walking distance from the apartment.",
       "events": [
         {
           "id": "teotihuacan-drive",
@@ -620,13 +629,6 @@
           "defaultExpanded": true
         },
         {
-          "id": "walk-to-hanky",
-          "time": "6:30 PM",
-          "title": "Walk or Short Uber to Juarez",
-          "kind": "transit",
-          "description": "About 20 minutes on foot or a quick 5-minute Uber from Roma to Colonia Juarez."
-        },
-        {
           "id": "hanky-panky",
           "time": "7:00 PM",
           "title": "Hanky Panky",
@@ -645,6 +647,7 @@
           "title": "One Last Taco if Needed",
           "kind": "meal",
           "neighborhood": "Roma Norte",
+          "transportHint": "long-walk",
           "address": "Calle Manzanillo 66, Roma Norte, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Por%20Siempre%20Vegana%20Roma%20Norte%20Mexico%20City",
           "description": "Just enough time for one more taco and a final little ritual before home."
