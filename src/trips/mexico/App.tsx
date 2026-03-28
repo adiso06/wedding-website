@@ -49,14 +49,78 @@ type Reservation = {
   note?: string;
 };
 
+type DayWeather = {
+  date: string;
+  weatherCode: number;
+  highC: number;
+  lowC: number;
+  precipitationProbability: number;
+  description: string;
+  isRainLikely: boolean;
+};
+
 const { meta, placeGuides, days, reservations, practicalNotes, closing } = data as {
-  meta: { dateRange: string; couple: { primary: string; secondary: string }; closingImageUrl: string };
+  meta: { dateRange: string; couple: { primary: string; secondary: string }; accommodation: { latitude: number; longitude: number }; closingImageUrl: string };
   placeGuides: Record<string, PlaceGuide>;
   days: Day[];
   reservations: Reservation[];
   practicalNotes: { label: string; value: string }[];
   closing: { title: string; body: string; teaser: string };
 };
+
+function weatherCodeToDescription(code: number): string {
+  if (code <= 0) return 'Clear';
+  if (code <= 2) return 'Mostly clear';
+  if (code <= 3) return 'Overcast';
+  if (code <= 48) return 'Misty';
+  if (code <= 67) return 'Rain';
+  if (code <= 77) return 'Mixed precip';
+  if (code <= 82) return 'Showers';
+  if (code <= 86) return 'Rain / snow';
+  return 'Stormy';
+}
+
+function toF(c: number): number {
+  return Math.round(c * 9 / 5 + 32);
+}
+
+function useWeather(): Record<string, DayWeather> {
+  const [weather, setWeather] = useState<Record<string, DayWeather>>({});
+
+  useEffect(() => {
+    const dates = (days as Day[]).map(d => d.date);
+    const startDate = dates[0];
+    const endDate = dates[dates.length - 1];
+    const { latitude, longitude } = meta.accommodation;
+
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&start_date=${startDate}&end_date=${endDate}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=America/Mexico_City`;
+
+    fetch(url)
+      .then(r => r.json())
+      .then(json => {
+        if (!json.daily) return;
+        const result: Record<string, DayWeather> = {};
+        const d = json.daily;
+        for (let i = 0; i < d.time.length; i++) {
+          const code = d.weather_code[i];
+          const precip = d.precipitation_probability_max[i];
+          result[d.time[i]] = {
+            date: d.time[i],
+            weatherCode: code,
+            highC: d.temperature_2m_max[i],
+            lowC: d.temperature_2m_min[i],
+            precipitationProbability: precip,
+            description: weatherCodeToDescription(code),
+            isRainLikely: precip >= 35 || (code >= 51 && code <= 82),
+          };
+        }
+        setWeather(result);
+      })
+      .catch(() => { /* silently fail - weather is optional */ });
+  }, []);
+
+  return weather;
+}
 
 const KIND_ICONS: Record<string, string> = {
   arrival: '✈️', meal: '🍽', bar: '🍸', wander: '🚶', transit: '🚗',
@@ -165,7 +229,19 @@ function EventCardExpanded({ event }: { event: Event }) {
   );
 }
 
-function DaySection({ day, isExpanded, onToggle }: { day: Day; isExpanded: boolean; onToggle: () => void }) {
+function WeatherChip({ weather }: { weather: DayWeather }) {
+  return (
+    <div className={`weather-chip ${weather.isRainLikely ? 'rainy' : ''}`}>
+      <span className="weather-desc">{weather.description}</span>
+      <span className="weather-temps">{toF(weather.highC)}°F / {toF(weather.lowC)}°F</span>
+      {weather.precipitationProbability > 0 && (
+        <small className="weather-precip">{weather.precipitationProbability}% rain</small>
+      )}
+    </div>
+  );
+}
+
+function DaySection({ day, isExpanded, onToggle, weather }: { day: Day; isExpanded: boolean; onToggle: () => void; weather?: DayWeather }) {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const keyLocations = day.events.filter(e => e.address);
@@ -183,6 +259,7 @@ function DaySection({ day, isExpanded, onToggle }: { day: Day; isExpanded: boole
           <p className="day-subtitle">{day.subtitle}</p>
         </div>
         <div className="day-header-right">
+          {weather && <span className="day-weather-mini">{weather.description} {toF(weather.highC)}°</span>}
           <span className="day-event-count">{day.events.length} stops</span>
           <span className={`chevron ${isExpanded ? 'open' : ''}`}>▾</span>
         </div>
@@ -215,9 +292,12 @@ function DaySection({ day, isExpanded, onToggle }: { day: Day; isExpanded: boole
         <div className="day-expanded" ref={contentRef}>
           <div className="day-expanded-intro">
             <p className="day-summary">{day.summary}</p>
-            <div className="day-transport">
-              <span className="transport-icon">🚗</span>
-              <span>{day.transportSummary}</span>
+            <div className="day-meta">
+              <div className="day-transport">
+                <span className="transport-icon">🚗</span>
+                <span>{day.transportSummary}</span>
+              </div>
+              {weather && <WeatherChip weather={weather} />}
             </div>
           </div>
 
@@ -293,6 +373,7 @@ function ClosingSection() {
 export default function App() {
   const [expandedDay, setExpandedDay] = useState<string | null>(null);
   const dayRefs = useRef<Record<string, HTMLElement | null>>({});
+  const weather = useWeather();
 
   const toggleDay = (dayId: string) => {
     setExpandedDay(prev => prev === dayId ? null : dayId);
@@ -340,6 +421,7 @@ export default function App() {
                 day={day}
                 isExpanded={expandedDay === day.id}
                 onToggle={() => toggleDay(day.id)}
+                weather={weather[day.date]}
               />
             </div>
           ))}

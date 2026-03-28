@@ -217,6 +217,11 @@ img { display: block; max-width: 100%; }
   align-items: center;
   gap: .2rem;
 }
+.day-weather-mini {
+  font-size: .72rem;
+  color: var(--terracotta);
+  letter-spacing: .03em;
+}
 .day-event-count {
   font-size: .72rem;
   color: var(--soft);
@@ -395,16 +400,53 @@ img { display: block; max-width: 100%; }
   color: var(--muted);
   max-width: 44rem;
 }
+.day-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin-top: .6rem;
+}
 .day-transport {
   display: inline-flex;
   align-items: center;
   gap: .4rem;
-  margin-top: .6rem;
   padding: .45rem .8rem;
   border-radius: .8rem;
   background: rgba(115, 143, 131, .08);
   font-size: .82rem;
   color: var(--muted);
+}
+
+/* Weather Chip */
+.weather-chip {
+  display: inline-flex;
+  flex-direction: column;
+  gap: .15rem;
+  padding: .5rem .8rem;
+  border-radius: .8rem;
+  border: 1px solid var(--line);
+  background: rgba(255, 252, 248, .7);
+  font-size: .82rem;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.weather-chip:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(90, 62, 45, .08);
+}
+.weather-chip.rainy {
+  background: linear-gradient(180deg, rgba(219, 231, 236, .85), rgba(245, 248, 250, .8));
+}
+.weather-desc {
+  font-weight: 500;
+  color: var(--text);
+}
+.weather-temps {
+  font-size: .78rem;
+  color: var(--muted);
+}
+.weather-precip {
+  font-size: .72rem;
+  color: var(--soft);
 }
 
 .day-expanded-events {
