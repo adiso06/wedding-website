@@ -307,9 +307,7 @@ function PlaceTag({ event }: { event: Event }) {
   );
 }
 
-type TransportHint = 'uber' | 'long-walk' | null;
-
-function EventRow({ event, transportHint }: { event: Event; transportHint?: TransportHint }) {
+function EventRow({ event }: { event: Event }) {
   if (event.kind === 'transit') return null;
   return (
     <div className="event-row">
@@ -329,8 +327,7 @@ function EventRow({ event, transportHint }: { event: Event; transportHint?: Tran
             📍 Map
           </a>
         )}
-        {transportHint === 'uber' && <span className="transport-tag uber-tag" title="Uber needed">🚗</span>}
-        {transportHint === 'long-walk' && <span className="transport-tag walk-tag" title="15-20 min walk">🚶</span>}
+        {event.transportHint === 'uber' && <span className="transport-tag" title="Uber needed">🚗</span>}
       </div>
     </div>
   );
@@ -426,11 +423,7 @@ function DaySection({ day, view, onCycleView, weather }: { day: Day; view: DayVi
         <div className="day-brief">
           <div className="day-brief-events">
             {day.events.map((event) => (
-              <EventRow
-                key={event.id}
-                event={event}
-                transportHint={event.transportHint || null}
-              />
+              <EventRow key={event.id} event={event} />
             ))}
           </div>
           <button className="expand-btn" onClick={onCycleView}>
