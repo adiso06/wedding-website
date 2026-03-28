@@ -57,7 +57,7 @@
     "teotihuacan": {
       "name": "Teotihuacan",
       "summary": "An ancient city northeast of Mexico City where monumental pyramids rise out of the valley floor.",
-      "famousFor": "Famous for the Pyramids of the Sun and Moon and for being one of the most unforgettable sunrise experiences near the city.",
+      "famousFor": "Famous for the Pyramids of the Sun and Moon, the Avenue of the Dead, and some of the most monumental ancient architecture in the Americas.",
       "imageUrl": "https://images.pexels.com/photos/32042986/pexels-photo-32042986.jpeg?auto=compress&cs=tinysrgb&w=1200",
       "imageAlt": "The pyramids of Teotihuacan under warm light."
     }
@@ -217,7 +217,7 @@
           "description": "A two-and-a-half hour sweep through the Mexica, Maya, Oaxaca, and Teotihuacan halls. Monumental, grounding, and worth every minute.",
           "tips": [
             "Do not miss the Sun Stone and the Teotihuacan context rooms.",
-            "This museum sets up Tuesday's balloon morning beautifully."
+            "This museum sets up Tuesday's Teotihuacan visit beautifully."
           ],
           "defaultExpanded": true
         },
@@ -526,48 +526,47 @@
       "id": "day-5",
       "date": "2026-03-31",
       "shortLabel": "Tue 31",
-      "title": "Sunrise Balloon + Speakeasy Goodbye",
-      "subtitle": "A spectacular morning, then one last precise nightcap.",
-      "summary": "Tuesday belongs to Teotihuacan at sunrise, then sleep, then one polished goodbye cocktail before the handoff to Puerto Vallarta.",
+      "title": "Teotihuacan + Speakeasy Goodbye",
+      "subtitle": "Ancient pyramids in the morning, then one last precise nightcap.",
+      "summary": "Tuesday belongs to Teotihuacan — walking the ancient grounds, taking in the scale, and letting the pyramids reset your sense of time. Then sleep, then one polished goodbye cocktail before the handoff to Puerto Vallarta.",
       "imageUrl": "https://images.pexels.com/photos/31646863/pexels-photo-31646863.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "transportSummary": "Balloon operator handles the morning transport. The evening stays close to home.",
+      "transportSummary": "Uber out to Teotihuacan in the morning (~45 min), then back to the city for rest and the evening.",
       "events": [
         {
-          "id": "balloon-pickup",
-          "time": "4:15 AM",
-          "title": "Hot Air Balloon Pickup",
+          "id": "teotihuacan-drive",
+          "time": "7:30 AM",
+          "title": "Uber to Teotihuacan",
           "kind": "transit",
-          "description": "Pickup at or near the apartment for the drive out toward Teotihuacan before sunrise.",
-          "reservationStatus": "urgent",
-          "confirmationCode": "Still needs booking",
+          "description": "About 45 minutes northeast of the city. Leave early to beat the crowds and the midday heat.",
           "defaultExpanded": true
         },
         {
-          "id": "balloon-flight",
-          "time": "6:30 AM - 7:15 AM",
-          "title": "Sunrise Balloon Over Teotihuacan",
+          "id": "teotihuacan-visit",
+          "time": "8:30 AM - 12:00 PM",
+          "title": "Wander Teotihuacan",
           "kind": "experience",
           "placeKey": "teotihuacan",
           "neighborhood": "Teotihuacan",
-          "description": "The trip's high point: sunrise, valley light, and the pyramids opening beneath you from the air.",
+          "description": "Walk the Avenue of the Dead, climb the Pyramid of the Sun, and take in the full sweep of the ancient city from the ground. Monumental, humbling, and worth every step.",
           "tips": [
-            "This is the most urgent booking item left."
+            "Bring water and sunscreen — there's very little shade.",
+            "The Pyramid of the Moon view looking back down the avenue is the money shot."
           ],
           "defaultExpanded": true
         },
         {
-          "id": "balloon-post",
-          "time": "7:15 AM - 12:00 PM",
-          "title": "Breakfast + Ground Visit",
-          "kind": "experience",
-          "description": "Most operators include breakfast, a ground-level site visit, and transport back into the city."
+          "id": "teotihuacan-lunch",
+          "time": "12:00 PM - 1:00 PM",
+          "title": "Lunch Near the Site",
+          "kind": "meal",
+          "description": "Grab lunch at one of the restaurants near the entrance before heading back into the city."
         },
         {
           "id": "pack-pv",
           "time": "1:30 PM - 2:00 PM",
           "title": "Pack for Puerto Vallarta",
           "kind": "rest",
-          "description": "Pack while the balloon glow is still carrying you. Future you will be grateful.",
+          "description": "Pack while the morning is still carrying you. Future you will be grateful.",
           "defaultExpanded": true
         },
         {
@@ -690,13 +689,6 @@
       "time": "2:00 PM",
       "status": "planned",
       "note": "Book on OpenTable"
-    },
-    {
-      "dateLabel": "Tue Mar 31",
-      "venue": "Hot Air Balloon",
-      "time": "4:15 AM pickup",
-      "status": "urgent",
-      "note": "Most urgent open booking"
     },
     {
       "dateLabel": "Tue Mar 31",
