@@ -39,7 +39,6 @@ img { display: block; max-width: 100%; }
 
 /* ===== Hero ===== */
 .hero {
-  min-height: 60vh;
   display: grid;
   align-content: end;
   gap: .6rem;
@@ -154,6 +153,12 @@ img { display: block; max-width: 100%; }
 .day-section.expanded {
   border-color: rgba(181, 108, 78, .25);
   box-shadow: 0 28px 64px rgba(90, 62, 45, .14);
+}
+.day-section.past {
+  opacity: .65;
+}
+.day-section.past:hover {
+  opacity: .85;
 }
 
 /* Day Header — stacks on mobile */
@@ -689,7 +694,7 @@ img { display: block; max-width: 100%; }
    ====================================================== */
 @media (min-width: 720px) {
   .section-pad { padding-left: 1.5rem; padding-right: 1.5rem; }
-  .hero { padding: 1.7rem 1.5rem 2rem; min-height: 65vh; }
+  .hero { padding: 1.7rem 1.5rem 2rem; min-height: 50vh; }
   .hero h1 { font-size: clamp(4rem, 10vw, 9.6rem); }
   .hero-whisper { font-size: 1.05rem; }
 
