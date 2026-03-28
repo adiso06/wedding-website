@@ -306,12 +306,14 @@ function PlaceTag({ event }: { event: Event }) {
   );
 }
 
-function EventRow({ event }: { event: Event }) {
+function EventRow({ event, needsUber }: { event: Event; needsUber?: boolean }) {
+  if (event.kind === 'transit') return null; // transit rows are represented as 🚗 icons on the next event
   return (
     <div className="event-row">
       <span className="event-row-time">{event.time}</span>
       <span className="event-row-icon">{KIND_ICONS[event.kind] || '•'}</span>
       <div className="event-row-body">
+        {needsUber && <span className="uber-tag" title="Uber needed">🚗</span>}
         <span className="event-row-title">{event.title}</span>
         {event.reservationStatus && <StatusBadge status={event.reservationStatus} />}
         {event.mapUrl && (
@@ -419,8 +421,12 @@ function DaySection({ day, view, onCycleView, weather }: { day: Day; view: DayVi
       {view === 'brief' && (
         <div className="day-brief">
           <div className="day-brief-events">
-            {day.events.map(event => (
-              <EventRow key={event.id} event={event} />
+            {day.events.map((event, i) => (
+              <EventRow
+                key={event.id}
+                event={event}
+                needsUber={i > 0 && day.events[i - 1].kind === 'transit'}
+              />
             ))}
           </div>
           <button className="expand-btn" onClick={onCycleView}>

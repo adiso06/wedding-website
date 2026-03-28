@@ -289,6 +289,11 @@ img { display: block; max-width: 100%; }
   font-size: .85rem;
   font-weight: 500;
 }
+.uber-tag {
+  font-size: .6rem;
+  flex-shrink: 0;
+}
+
 .event-row-map {
   display: inline-flex;
   align-items: center;
