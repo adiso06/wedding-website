@@ -260,7 +260,6 @@
           "title": "Dinner at Los Loosers",
           "kind": "meal",
           "neighborhood": "Roma Norte",
-          "transportHint": "long-walk",
           "address": "Sinaloa 20, Roma Norte, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Los%20Loosers%20Roma%20Norte%20Mexico%20City",
           "description": "Moody room, mushroom-forward menu, and a slightly theatrical intimacy that suits the evening.",
@@ -380,7 +379,6 @@
           "title": "Rayo",
           "kind": "bar",
           "neighborhood": "Roma Norte",
-          "transportHint": "long-walk",
           "address": "Salamanca 85, Roma Norte, Ciudad de Mexico",
           "mapUrl": "https://www.google.com/maps/search/?api=1&query=Rayo%20Salamanca%2085%20Roma%20Norte%20Mexico%20City",
           "description": "The marquee bar moment of the trip: blind aroma box, agave-first cocktails, and a bar experience designed down to the last detail.",
@@ -398,7 +396,6 @@
           "kind": "wander",
           "placeKey": "condesa",
           "neighborhood": "Condesa",
-          "transportHint": "long-walk",
           "description": "Parque Mexico, Avenida Amsterdam, maybe food, maybe another bar, maybe just the walk home. This part is intentionally unclaimed.",
           "tips": [
             "If you want one more stop, Departamento is the late-night rooftop option.",
@@ -416,7 +413,7 @@
       "subtitle": "The neighborhood becomes the entire day, then your farewell night.",
       "summary": "This is the full Roma Norte immersion: breakfast, coffee, shopping, snack stop, long lunch, artisan market, and a night that closes the trip where it began.",
       "imageUrl": "https://images.pexels.com/photos/26920674/pexels-photo-26920674.jpeg?auto=compress&cs=tinysrgb&w=1200",
-      "transportSummary": "Mostly walking through Roma Norte. Two Ubers: Roma to La Ciudadela, then Ciudadela back to the apartment.",
+      "transportSummary": "All walking today. La Ciudadela is a 15-20 min walk from Roma — walkable, or grab an Uber if you're carrying bags.",
       "events": [
         {
           "id": "yerba-santa",
@@ -483,17 +480,11 @@
           "defaultExpanded": true
         },
         {
-          "id": "uber-to-ciudadela",
-          "time": "3:30 PM",
-          "title": "Uber to La Ciudadela",
-          "kind": "transit",
-          "description": "About 10-15 minutes from Roma Norte to Centro."
-        },
-        {
           "id": "ciudadela",
           "time": "4:00 PM - 5:30 PM",
           "title": "La Ciudadela Crafts Market",
           "kind": "market",
+          "transportHint": "long-walk",
           "placeKey": "centro-historico",
           "neighborhood": "Centro",
           "address": "Balderas s/n, Colonia Centro, Ciudad de Mexico",
@@ -506,15 +497,8 @@
           "defaultExpanded": true
         },
         {
-          "id": "uber-from-ciudadela",
-          "time": "5:30 PM",
-          "title": "Uber Back to Apartment",
-          "kind": "transit",
-          "description": "About 10-15 minutes back to Roma Norte."
-        },
-        {
           "id": "farewell-reset",
-          "time": "5:55 PM - 6:45 PM",
+          "time": "5:50 PM - 6:45 PM",
           "title": "Freshen Up for the Farewell Night",
           "kind": "rest",
           "description": "Short reset, new outfit, and then back into the neighborhood for one last long evening."
