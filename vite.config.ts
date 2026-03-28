@@ -12,6 +12,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'index.html'),
         wedding: resolve(__dirname, 'wedding/index.html'),
+        'trips-mexico': resolve(__dirname, 'trips/mexico/index.html'),
       },
       output: {
         manualChunks: {
