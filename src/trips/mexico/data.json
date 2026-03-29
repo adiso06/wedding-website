@@ -199,7 +199,8 @@
             "If something feels special, buy it here.",
             "The best selection is in the first half of the day."
           ],
-          "defaultExpanded": true
+          "defaultExpanded": true,
+          "transportHint": "uber"
         },
         {
           "id": "to-anthropology",
@@ -222,7 +223,8 @@
             "Do not miss the Sun Stone and the Teotihuacan context rooms.",
             "This museum sets up Tuesday's Teotihuacan visit beautifully."
           ],
-          "defaultExpanded": true
+          "defaultExpanded": true,
+          "transportHint": "uber"
         },
         {
           "id": "uber-to-roma-sat",
@@ -245,7 +247,8 @@
             "Then get queso con huitlacoche."
           ],
           "backupPlan": "If sold out, pivot to La Pitahaya Vegana nearby.",
-          "defaultExpanded": true
+          "defaultExpanded": true,
+          "transportHint": "uber"
         },
         {
           "id": "reset",
@@ -343,7 +346,8 @@
             "Palacio Postal is the don't-miss stop here.",
             "The whole wander can stay short and light."
           ],
-          "defaultExpanded": true
+          "defaultExpanded": true,
+          "transportHint": "uber"
         },
         {
           "id": "mupe",
@@ -372,7 +376,8 @@
           "title": "Rest, Shower, Dress Up",
           "kind": "rest",
           "description": "Come back to the apartment, reset, and give the evening a sharper silhouette.",
-          "defaultExpanded": true
+          "defaultExpanded": true,
+          "transportHint": "uber"
         },
         {
           "id": "rayo",
@@ -583,7 +588,8 @@
             "Bring water and sunscreen — there's very little shade.",
             "The Pyramid of the Moon view looking back down the avenue is the money shot."
           ],
-          "defaultExpanded": true
+          "defaultExpanded": true,
+          "transportHint": "uber"
         },
         {
           "id": "teotihuacan-lunch",
@@ -605,7 +611,8 @@
           "title": "Pack for Puerto Vallarta",
           "kind": "rest",
           "description": "Pack while the morning is still carrying you. Future you will be grateful.",
-          "defaultExpanded": true
+          "defaultExpanded": true,
+          "transportHint": "uber"
         },
         {
           "id": "nap",
@@ -681,7 +688,8 @@
           "title": "Viva Aerobus to Puerto Vallarta",
           "kind": "flight",
           "description": "Sleep on the plane, then wake up to the ocean half of the honeymoon.",
-          "defaultExpanded": true
+          "defaultExpanded": true,
+          "transportHint": "uber"
         }
       ]
     }
