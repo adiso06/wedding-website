@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chore Stats · xkcd edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="stats.css">
+</head>
+<body>
+    <header class="page-header">
+        <a href="index.html" class="back-link">&larr; back to chores</a>
+        <h1>the stats page</h1>
+        <p class="subtitle">who actually does what around here?</p>
+    </header>
+
+    <nav class="range-toggle" aria-label="Time range">
+        <button class="range-btn active" data-range="7">7d</button>
+        <button class="range-btn" data-range="30">30d</button>
+        <button class="range-btn" data-range="90">90d</button>
+        <button class="range-btn" data-range="0">all</button>
+    </nav>
+
+    <section class="scoreboard" aria-label="Quick stats">
+        <div class="scoreboard-stats">
+            <div class="scoreboard-row">
+                <span class="scoreboard-icon">~*~</span>
+                <span class="scoreboard-text">daily streak: <strong data-stat="streak">&mdash;</strong> days</span>
+                <span class="scoreboard-aside">(best: <span data-stat="best-streak">&mdash;</span>)</span>
+            </div>
+            <div class="scoreboard-row">
+                <span class="scoreboard-icon">[=]</span>
+                <span class="scoreboard-text">weekly streak: <strong data-stat="weekly-streak">&mdash;</strong> weeks</span>
+                <span class="scoreboard-aside">(best: <span data-stat="best-weekly-streak">&mdash;</span>)</span>
+            </div>
+            <div class="scoreboard-row">
+                <span class="scoreboard-icon">(o)</span>
+                <span class="scoreboard-text">golden months: <strong data-stat="golden-months">&mdash;</strong></span>
+                <span class="scoreboard-aside">(&ge;85% for a month)</span>
+            </div>
+            <div class="scoreboard-row">
+                <span class="scoreboard-icon">[!]</span>
+                <span class="scoreboard-text">mvp: <strong data-stat="mvp">&mdash;</strong></span>
+                <span class="scoreboard-aside" data-stat="mvp-detail"></span>
+            </div>
+        </div>
+        <div class="scoreboard-verdict">
+            <span class="verdict-label">the verdict:</span>
+            <span class="verdict-quote" data-stat="quote">loading...</span>
+        </div>
+    </section>
+
+    <section class="chart-section">
+        <h2>points over time</h2>
+        <p class="chart-desc">daily chores, deep cleans, and extras — everything counts</p>
+        <div class="chart-container" id="chart-line"></div>
+    </section>
+
+    <section class="chart-section">
+        <h2>contribution breakdown</h2>
+        <p class="chart-desc">points split by person</p>
+        <div class="chart-container" id="chart-stacked"></div>
+    </section>
+
+    <section class="chart-section">
+        <h2>daily completion rate</h2>
+        <p class="chart-desc">what % of the daily board got done</p>
+        <div class="chart-container" id="chart-bar"></div>
+    </section>
+
+    <section class="chart-section">
+        <h2>the split</h2>
+        <p class="chart-desc">aggregate effort across the whole range</p>
+        <div class="chart-container" id="chart-donut"></div>
+    </section>
+
+    <section class="chart-section" id="monthly-section" style="display:none">
+        <h2>month by month</h2>
+        <p class="chart-desc">the long view — how the months stack up</p>
+        <div class="chart-container" id="chart-monthly"></div>
+    </section>
+
+    <section class="chart-section achievements-section">
+        <h2>achievements</h2>
+        <p class="chart-desc">milestones and badges earned</p>
+        <div id="achievements-grid" class="achievements-grid"></div>
+    </section>
+
+    <section class="chart-section kudos-section">
+        <h2>kudos</h2>
+        <p class="chart-desc">appreciation log</p>
+        <p class="kudos-counts" id="kudos-counts"></p>
+        <div id="kudos-feed" class="kudos-feed"></div>
+    </section>
+
+    <section class="chart-section changelog-section">
+        <h2>change history</h2>
+        <p class="chart-desc">who tweaked the board, and when</p>
+        <div id="changelog-list" class="changelog-list"></div>
+    </section>
+
+    <footer class="page-footer">
+        <p>short ranges sync live · 90d and all-time read the daily archive</p>
+    </footer>
+
+    <script src="https://unpkg.com/rough-viz@2.0.5"></script>
+    <script type="module" src="stats.js"></script>
+</body>
+</html>
