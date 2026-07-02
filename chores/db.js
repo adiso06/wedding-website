@@ -780,6 +780,29 @@ export function buildBackfill(state, taskId, who, dayKey, priorDayEvents, today 
     return { event, entry, dayEvents, isLiveWeek, checkNow };
 }
 
+// Inverse of buildBackfill: remove a specific day's completion of a task
+// (mis-checked in the snapshot view). Day-targeted on purpose — the plain
+// removeCompletion() takes the task's LATEST event, which could be today's.
+export function buildRetroUncheck(state, taskId, dayKey, priorDayEvents, today = new Date()) {
+    const defs = getMergedDefs(state);
+    const def = defs.byId[taskId];
+    if (!def) return null;
+    const prior = (priorDayEvents || []).filter(e => e.day === dayKey);
+    const event = [...prior].reverse().find(e => e.taskId === taskId);
+    if (!event) return null;
+    const dayEvents = prior.filter(e => e.id !== event.id);
+    const entry = aggregateDayEntry(defs, dayKey, dayEvents);
+    const prevEntry = (state.dailyHistory || []).find(h => h.day === dayKey);
+    if (prevEntry && prevEntry.travel) entry.travel = true;
+    const isLiveWeek = dayKey >= getWeekKey(today);
+    // the live weekly checkbox owes its state to this event unless another
+    // current-week event for the task remains
+    const uncheckNow = isLiveWeek && def.cadence === 'weekly' && !hasCustomInterval(def)
+        && Boolean(state.tasks && state.tasks[taskId])
+        && !(state.events || []).some(e => e.taskId === taskId && e.id !== event.id);
+    return { event, entry, dayEvents, isLiveWeek, uncheckNow };
+}
+
 // Merge a rewritten day entry into dailyHistory (insert if the day was
 // never closed — e.g. it had zero events at rollover time).
 export function mergeHistoryEntry(dailyHistory, entry) {
@@ -1217,6 +1240,18 @@ export async function backfillCompletionInCloud({ event, appendToLive, checkNow,
     if (checkNow) {
         update[`tasks.${event.taskId}`] = true;
         update[`taskActor.${event.taskId}`] = event.who;
+    }
+    await firestoreApi.updateDoc(docRef, stamp(update));
+    if (archiveDay) await archiveDayToSubcollection(archiveDay.day, archiveDay);
+}
+
+export async function retroUncheckInCloud({ event, removeFromLive, uncheckNow, historyRewrite, archiveDay }) {
+    if (!firestoreApi || !docRef) return;
+    const update = { dailyHistory: historyRewrite };
+    if (removeFromLive) update.events = firestoreApi.arrayRemove(event);
+    if (uncheckNow) {
+        update[`tasks.${event.taskId}`] = false;
+        update[`taskActor.${event.taskId}`] = firestoreApi.deleteField();
     }
     await firestoreApi.updateDoc(docRef, stamp(update));
     if (archiveDay) await archiveDayToSubcollection(archiveDay.day, archiveDay);

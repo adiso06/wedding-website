@@ -6,7 +6,7 @@ import {
     buildEvent, aggregateDayEntry, computeWeightedLoad, pointsToBadge,
     getDayKey, getWeekKey, monthKeyOf,
     travelActive, isTaskPausedForTravel, filterTravelPaused,
-    buildBackfill, mergeHistoryEntry
+    buildBackfill, buildRetroUncheck, mergeHistoryEntry
 } from '../db.js';
 
 let failures = 0;
@@ -366,6 +366,58 @@ section('backfill: logging a missed chore onto a closed day');
     const tFill = buildBackfill(sTravel, 'c2', 'both', '2026-06-02', prior, dateFor('2026-06-04'));
     assert(tFill.entry.travel === true, 'travel flag preserved');
     approx(tFill.entry.adityaPoints, 7, 'shared backfill splits points');
+}
+
+// ---------------------------------------------------------------
+section('retro-uncheck: removing a mis-checked past-day completion');
+{
+    // Tue 06-02 closed with two chores; a1 turns out to be a mistake
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    s = check(s, 'a1', 'aditya', '2026-06-02');
+    s = check(s, 'c2', 'chhaya', '2026-06-02');
+    s = applyResetRules(s, dateFor('2026-06-04')).state;
+    const prior = s.events.filter(e => e.day === '2026-06-02');
+
+    const un = buildRetroUncheck(s, 'a1', '2026-06-02', prior, dateFor('2026-06-04'));
+    assert(!!un && un.event.taskId === 'a1' && un.event.day === '2026-06-02', 'targets that day\'s event');
+    assert(un.isLiveWeek === true && un.uncheckNow === false, 'past daily leaves today\'s box alone');
+    approx(un.entry.adityaPoints, 0, 'points removed from the day');
+    approx(un.entry.chhayaPoints, 12, 'other completions preserved');
+    assert(un.dayEvents.length === 1, 'day ledger shrinks by one');
+
+    // it removes THAT day's event even when the task also has one today
+    let s2 = check(s, 'a1', 'chhaya', '2026-06-04');
+    const un2 = buildRetroUncheck(s2, 'a1', '2026-06-02', prior, dateFor('2026-06-04'));
+    assert(un2.event.day === '2026-06-02' && un2.event.who === 'aditya', 'today\'s event untouched');
+
+    // current-week weekly: unchecking its only event flips the live box too
+    let sw = buildDefaultState(dateFor('2026-06-02'));
+    sw = check(sw, 'a9', 'aditya', '2026-06-02');
+    sw = applyResetRules(sw, dateFor('2026-06-04')).state;
+    assert(sw.tasks.a9 === true, 'weekly still checked midweek');
+    const wPrior = sw.events.filter(e => e.day === '2026-06-02');
+    const unW = buildRetroUncheck(sw, 'a9', '2026-06-02', wPrior, dateFor('2026-06-04'));
+    assert(unW.uncheckNow === true, 'live weekly box owes its state to this event');
+
+    // previous-week day: archive-only, live state untouched
+    const unOld = buildRetroUncheck(sw, 'a9', '2026-05-28',
+        [{ id: 'e_old', taskId: 'a9', name: 'x', pts: 1.33, who: 'aditya', owner: 'aditya', day: '2026-05-28', kind: 'weekly' }],
+        dateFor('2026-06-04'));
+    assert(unOld.isLiveWeek === false && unOld.uncheckNow === false, 'old week stays archive-only');
+
+    // nothing to remove -> null
+    assert(buildRetroUncheck(s, 'a2', '2026-06-02', prior, dateFor('2026-06-04')) === null, 'no event, no-op');
+
+    // backfill then uncheck round-trips the history entry
+    const fill = buildBackfill(s, 'a2', 'both', '2026-06-02', prior, dateFor('2026-06-04'));
+    const afterFill = mergeHistoryEntry(s.dailyHistory, fill.entry);
+    const unRt = buildRetroUncheck({ ...s, dailyHistory: afterFill }, 'a2', '2026-06-02', fill.dayEvents, dateFor('2026-06-04'));
+    const afterUn = mergeHistoryEntry(afterFill, unRt.entry);
+    const orig = s.dailyHistory.find(h => h.day === '2026-06-02');
+    const rt = afterUn.find(h => h.day === '2026-06-02');
+    approx(rt.adityaPoints, orig.adityaPoints, 'round-trip restores aditya pts');
+    approx(rt.chhayaPoints, orig.chhayaPoints, 'round-trip restores chhaya pts');
+    assert(rt.done === orig.done, 'round-trip restores done count');
 }
 
 // ---------------------------------------------------------------

@@ -5,7 +5,8 @@ import {
     pointsToBadge, getDayKey, getWeekKey, getWeekKeyFromDayKey, formatDateKey, fmtPts,
     pointsFor, pointsForChecked, countChecked,
     buildEvent, findEventForTask, removeCompletion,
-    buildBackfill, mergeHistoryEntry, backfillCompletionInCloud,
+    buildBackfill, buildRetroUncheck, mergeHistoryEntry,
+    backfillCompletionInCloud, retroUncheckInCloud,
     travelActive, isTaskPausedForTravel, filterTravelPaused, updateTravelInCloud,
     buildDefaultState, normalizeState, applyResetRules,
     saveLocalState, loadLocalState,
@@ -705,8 +706,8 @@ function syncCheckboxes() {
         const doneIds = new Set(events.map(e => e.taskId));
         document.querySelectorAll('[data-board] .checkbox').forEach(cb => {
             cb.checked = doneIds.has(cb.id);
-            // what's done stays done; unchecked rows accept a backfill
-            cb.disabled = cb.checked || !ready;
+            // both directions editable: check to backfill, uncheck a mistake
+            cb.disabled = !ready;
         });
         return;
     }
@@ -889,7 +890,7 @@ function renderDayBanner(detail) {
     if (status === 'ready') {
         const hint = document.createElement('div');
         hint.className = 'day-detail-hint';
-        hint.textContent = 'missed something? check it off and it logs to this day';
+        hint.textContent = 'edits log to this day — check a missed chore, or uncheck a mistake';
         detail.appendChild(hint);
     }
 }
@@ -1859,9 +1860,55 @@ async function handleBackfillToggle(taskId, cb) {
     }
 }
 
+// Unchecking in the snapshot removes that specific day's event.
+async function handleRetroUncheckToggle(taskId) {
+    const dayKey = selectedHistoryDay;
+    const { status, events: dayEvents } = dayEventsStatus(dayKey);
+    if (status !== 'ready') { refreshBoardsView(); return; }
+
+    const current = state || buildDefaultState();
+    const un = buildRetroUncheck(current, taskId, dayKey, dayEvents);
+    if (!un) { refreshBoardsView(); return; }
+
+    const next = {
+        ...current,
+        dailyHistory: mergeHistoryEntry(current.dailyHistory, un.entry)
+    };
+    if (un.isLiveWeek) next.events = (current.events || []).filter(e => e.id !== un.event.id);
+    else archivedDayCache[dayKey] = un.dayEvents;
+    if (un.uncheckNow) {
+        next.tasks = { ...next.tasks, [taskId]: false };
+        const actorMap = { ...(next.taskActor || {}) };
+        delete actorMap[taskId];
+        next.taskActor = actorMap;
+    }
+    applyStateToDom(next);
+
+    if (!isFirebaseReady()) {
+        setStatus(`saved locally · ${RESET_INFO}`, 'warning');
+        return;
+    }
+    try {
+        await retroUncheckInCloud({
+            event: un.event,
+            removeFromLive: un.isLiveWeek,
+            uncheckNow: un.uncheckNow,
+            historyRewrite: next.dailyHistory,
+            archiveDay: {
+                ...un.entry,
+                weekKey: getWeekKeyFromDayKey(dayKey),
+                events: un.dayEvents
+            }
+        });
+    } catch {
+        setStatus(`saved locally · ${RESET_INFO}`, 'warning');
+    }
+}
+
 async function handleRecurringToggle(taskId, cb) {
     if (isHistoryView()) {
         if (cb.checked) await handleBackfillToggle(taskId, cb);
+        else await handleRetroUncheckToggle(taskId);
         return;
     }
     const actor = getActiveActor();
