@@ -2,9 +2,11 @@ import {
     LOCAL_STORAGE_KEY, ACTIVE_USER_KEY, COLLAPSED_SECTIONS_KEY, RESET_INFO,
     KUDOS_CAP, USERS, DEFAULT_TASK_DEFS, ACHIEVEMENT_DEFS,
     getMergedDefs, defaultIntervalFor, hasCustomInterval, dailyIdsOf, weeklyIdsOf,
-    pointsToBadge, getDayKey, getWeekKeyFromDayKey, fmtPts,
+    pointsToBadge, getDayKey, getWeekKey, getWeekKeyFromDayKey, formatDateKey, fmtPts,
     pointsFor, pointsForChecked, countChecked,
     buildEvent, findEventForTask, removeCompletion,
+    buildBackfill, mergeHistoryEntry, backfillCompletionInCloud,
+    travelActive, isTaskPausedForTravel, filterTravelPaused, updateTravelInCloud,
     buildDefaultState, normalizeState, applyResetRules,
     saveLocalState, loadLocalState,
     computeWeightedLoad, getLoadStage, getLighterPose,
@@ -12,7 +14,7 @@ import {
     connectFirebase, isFirebaseReady, syncResetsToCloud, updateTaskInCloud,
     updateTaskDefInCloud, addOneTimeTaskInCloud, updateOneTimeTaskInCloud,
     deleteOneTimeTaskInCloud, sendKudosToCloud, markKudosSeenInCloud,
-    saveAchievementsToCloud, archiveDayToSubcollection,
+    saveAchievementsToCloud, archiveDayToSubcollection, fetchArchivedDay,
     subscribeToSharedState, getSnapshotData, teardown, resetCloudState
 } from './db.js';
 
@@ -370,6 +372,11 @@ async function triggerAffectionBeat() {
 // --- Check-off celebration ---
 
 function celebrateCheck(who) {
+    if (who === 'both') {
+        celebrateCheck('aditya');
+        celebrateCheck('chhaya');
+        return;
+    }
     const fig = figures[who];
     if (!fig || reducedMotion() || sceneLock || fig.walkAnim) return;
     const pose = fig.pose || 'standing';
@@ -553,6 +560,29 @@ function getActiveUser() {
     return document.body.dataset.activeUser === 'chhaya' ? 'chhaya' : 'aditya';
 }
 
+// Together mode: while on, check-offs are credited to 'both' and the
+// points split 50/50 in every aggregation. Session-only on purpose — it's
+// a "this time we did it together" switch, not a persistent setting.
+let togetherMode = false;
+
+function getActiveActor() {
+    return togetherMode ? 'both' : getActiveUser();
+}
+
+function partnerOf(user) {
+    return user === 'aditya' ? 'chhaya' : 'aditya';
+}
+
+function setupTogetherToggle() {
+    const btn = document.getElementById('together-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+        togetherMode = !togetherMode;
+        btn.setAttribute('aria-pressed', String(togetherMode));
+        document.body.dataset.together = togetherMode ? 'true' : 'false';
+    });
+}
+
 function buildTaskRow(def) {
     const li = document.createElement('li');
     li.className = 'task-item';
@@ -669,8 +699,20 @@ function renderBoards() {
 
 function syncCheckboxes() {
     if (!state) return;
+    if (isHistoryView()) {
+        const { status, events } = dayEventsStatus(selectedHistoryDay);
+        const ready = status === 'ready';
+        const doneIds = new Set(events.map(e => e.taskId));
+        document.querySelectorAll('[data-board] .checkbox').forEach(cb => {
+            cb.checked = doneIds.has(cb.id);
+            // what's done stays done; unchecked rows accept a backfill
+            cb.disabled = cb.checked || !ready;
+        });
+        return;
+    }
     document.querySelectorAll('[data-board] .checkbox').forEach(cb => {
         cb.checked = Boolean(state.tasks[cb.id]);
+        cb.disabled = false;
     });
 }
 
@@ -703,6 +745,155 @@ function setupCollapsibles() {
     });
 }
 
+// --- Day history: rolling last-7-days strip ---
+// Picking a past day flips the boards into a read-only snapshot of what
+// was checked off that day. Current-week days come off the live events
+// ledger (pruned only at the Monday rollover); older days are fetched
+// from the days/ archive subcollection and cached for the session.
+
+const WEEKDAY_CHIP = ['Su', 'M', 'T', 'W', 'Th', 'F', 'Sa'];
+let selectedHistoryDay = null;          // null = live view of today
+const archivedDayCache = {};            // dayKey -> events[] | 'loading' | 'missing'
+
+function addDaysToKey(key, n) {
+    const [y, m, d] = key.split('-').map(Number);
+    const dt = new Date(Date.UTC(y, m - 1, d + n, 12));
+    return formatDateKey(dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate());
+}
+
+function weekdayOfKey(key) {
+    const [y, m, d] = key.split('-').map(Number);
+    return new Date(Date.UTC(y, m - 1, d, 12)).getUTCDay();
+}
+
+function dayKeyLabel(key, style = 'long') {
+    const [y, m, d] = key.split('-').map(Number);
+    return new Date(Date.UTC(y, m - 1, d, 12)).toLocaleDateString(undefined,
+        { timeZone: 'UTC', weekday: style, month: 'short', day: 'numeric' });
+}
+
+function isHistoryView() {
+    return Boolean(selectedHistoryDay && selectedHistoryDay !== getDayKey());
+}
+
+// Events for a day: 'live' days read state.events, older ones the archive.
+function dayEventsStatus(dayKey) {
+    if (dayKey >= getWeekKey()) {
+        return { status: 'ready', events: (state.events || []).filter(e => e.day === dayKey) };
+    }
+    const cached = archivedDayCache[dayKey];
+    if (Array.isArray(cached)) return { status: 'ready', events: cached };
+    if (cached === 'missing') return { status: 'ready', events: [] };
+    if (cached === 'loading') return { status: 'loading', events: [] };
+    if (!isFirebaseReady()) return { status: 'offline', events: [] };
+    archivedDayCache[dayKey] = 'loading';
+    fetchArchivedDay(dayKey).then(doc => {
+        archivedDayCache[dayKey] = doc && Array.isArray(doc.events) ? doc.events : 'missing';
+        refreshBoardsView();
+    });
+    return { status: 'loading', events: [] };
+}
+
+function dayHadActivity(dayKey) {
+    if ((state.events || []).some(e => e.day === dayKey)) return true;
+    const h = (state.dailyHistory || []).find(x => x.day === dayKey);
+    return Boolean(h && ((h.acts || 0) > 0 || (h.points || 0) > 0 || (h.adityaPoints || 0) > 0 || (h.chhayaPoints || 0) > 0));
+}
+
+function selectHistoryDay(dayKey) {
+    const todayKey = getDayKey();
+    selectedHistoryDay = (dayKey === todayKey || dayKey === selectedHistoryDay) ? null : dayKey;
+    refreshBoardsView();
+}
+
+// Everything that depends on which day the boards are showing.
+function refreshBoardsView() {
+    if (!state) return;
+    document.body.classList.toggle('history-view', isHistoryView());
+    syncCheckboxes();
+    renderTravelState();
+    updateProgress();
+    renderTaskDecorations();
+    renderOneTimeTasks();
+    renderDayHistory();
+}
+
+function renderDayHistory() {
+    const strip = document.getElementById('day-strip');
+    const detail = document.getElementById('day-detail');
+    if (!strip || !detail || !state) return;
+
+    const todayKey = getDayKey();
+    strip.innerHTML = '';
+    for (let i = 6; i >= 0; i--) {
+        const dayKey = addDaysToKey(todayKey, -i);
+        const selected = dayKey === (selectedHistoryDay || todayKey);
+        const chip = document.createElement('button');
+        chip.type = 'button';
+        chip.className = 'day-chip';
+        chip.setAttribute('role', 'tab');
+        chip.innerHTML = `<span class="day-chip-label">${WEEKDAY_CHIP[weekdayOfKey(dayKey)]}</span>`
+            + `<span class="day-chip-date">${Number(dayKey.slice(8))}</span>`;
+        chip.title = dayKeyLabel(dayKey);
+        if (dayKey === todayKey) chip.classList.add('is-today');
+        if (dayHadActivity(dayKey)) chip.classList.add('has-activity');
+        chip.classList.toggle('is-selected', selected);
+        chip.setAttribute('aria-selected', String(selected));
+        chip.addEventListener('click', () => selectHistoryDay(dayKey));
+        strip.appendChild(chip);
+    }
+
+    renderDayBanner(detail);
+}
+
+function renderDayBanner(detail) {
+    if (!isHistoryView()) {
+        detail.hidden = true;
+        detail.innerHTML = '';
+        return;
+    }
+    const dayKey = selectedHistoryDay;
+    const { status, events } = dayEventsStatus(dayKey);
+    detail.hidden = false;
+    detail.innerHTML = '';
+
+    const banner = document.createElement('div');
+    banner.className = 'day-detail-banner';
+
+    const text = document.createElement('span');
+    text.className = 'day-detail-header';
+    if (status === 'loading') {
+        text.textContent = `${dayKeyLabel(dayKey)} · fetching…`;
+    } else if (status === 'offline') {
+        text.textContent = `${dayKeyLabel(dayKey)} · archive needs a connection`;
+    } else if (events.length === 0) {
+        text.textContent = `${dayKeyLabel(dayKey)} · nothing was checked off`;
+    } else {
+        // shared ('both') completions credit half to each side
+        const sum = who => events.reduce((s, e) =>
+            s + (e.who === who ? (e.pts || 0) : e.who === 'both' ? (e.pts || 0) / 2 : 0), 0);
+        text.textContent = `${dayKeyLabel(dayKey)} · ${events.length} ${events.length === 1 ? 'chore' : 'chores'}`
+            + ` · aditya ${fmtPts(sum('aditya'))} · chhaya ${fmtPts(sum('chhaya'))} pts`;
+    }
+    banner.appendChild(text);
+
+    const back = document.createElement('button');
+    back.type = 'button';
+    back.className = 'day-detail-back';
+    back.textContent = '↩ back to today';
+    back.addEventListener('click', () => selectHistoryDay(getDayKey()));
+    banner.appendChild(back);
+
+    detail.appendChild(banner);
+
+    if (status === 'ready') {
+        const hint = document.createElement('div');
+        hint.className = 'day-detail-hint';
+        hint.textContent = 'missed something? check it off and it logs to this day';
+        detail.appendChild(hint);
+    }
+}
+
 // --- Stats panel ---
 
 function setText(key, value) {
@@ -716,9 +907,10 @@ function setWidth(key, value) {
 }
 
 function updateProgress() {
+    // travel-paused rows sit out of the counts
     document.querySelectorAll('.card[data-user]').forEach(card => {
-        const total = card.querySelectorAll('.checkbox').length;
-        const done = card.querySelectorAll('.checkbox:checked').length;
+        const total = card.querySelectorAll('.task-item:not(.is-travel-paused) .checkbox').length;
+        const done = card.querySelectorAll('.task-item:not(.is-travel-paused) .checkbox:checked').length;
         const pill = card.querySelector('[data-progress-pill]');
         if (pill) {
             pill.textContent = `${done} / ${total}`;
@@ -726,8 +918,8 @@ function updateProgress() {
         }
     });
     document.querySelectorAll('.section').forEach(section => {
-        const total = section.querySelectorAll('.checkbox').length;
-        const done = section.querySelectorAll('.checkbox:checked').length;
+        const total = section.querySelectorAll('.task-item:not(.is-travel-paused) .checkbox').length;
+        const done = section.querySelectorAll('.task-item:not(.is-travel-paused) .checkbox:checked').length;
         const progress = section.querySelector('[data-section-progress]');
         if (progress) progress.textContent = `${done}/${total}`;
     });
@@ -737,7 +929,7 @@ function updateStats() {
     if (!state) return;
     const defs = getMergedDefs(state);
     const tasks = state.tasks;
-    const dailyIds = dailyIdsOf(defs);
+    const dailyIds = filterTravelPaused(defs, dailyIdsOf(defs), state.travel);
     const weeklyIds = weeklyIdsOf(defs);
 
     const dailyDone = countChecked(dailyIds, tasks);
@@ -756,7 +948,7 @@ function updateStats() {
     const streak = state.streak ?? 0;
     const best = state.bestStreak ?? 0;
     setText('streak-days', String(streak));
-    setText('streak-meta', streak === 1 ? 'day' : 'days');
+    setText('streak-meta', (streak === 1 ? 'day' : 'days') + (travelActive(state) ? ' · ✈ frozen' : ''));
     setText('streak-best', best > 0 ? ` · best ${best}d` : '');
 
     const totalBoardPts = dailyTotalPts + weeklyTotalPts;
@@ -812,7 +1004,7 @@ function renderHistory() {
             sumPct += pct;
             countDays++;
         } else if (day === todayKey) {
-            const dailyIds = dailyIdsOf(defs);
+            const dailyIds = filterTravelPaused(defs, dailyIdsOf(defs), state.travel);
             const dailyPtsNow = pointsForChecked(defs, dailyIds, state.tasks);
             const totalNow = pointsFor(defs, dailyIds);
             const pct = totalNow > 0 ? (dailyPtsNow / totalNow) * 100 : 0;
@@ -837,7 +1029,11 @@ function renderHistory() {
 function renderTaskDecorations() {
     if (!state) return;
     const defs = getMergedDefs(state);
-    const actor = state.taskActor || {};
+    const history = isHistoryView();
+    // in history view the actor comes from that day's ledger, not live state
+    const actor = history
+        ? Object.fromEntries(dayEventsStatus(selectedHistoryDay).events.map(e => [e.taskId, e.who]))
+        : (state.taskActor || {});
     document.querySelectorAll('[data-board] .task-item').forEach(item => {
         const id = item.dataset.taskId;
         const def = defs.byId[id];
@@ -873,7 +1069,8 @@ function renderTaskDecorations() {
             delete item.dataset.reassigned;
         }
 
-        updateKudosButton(item, id, def.name, cb.checked ? a : null);
+        // no kudos buttons on a read-only snapshot
+        updateKudosButton(item, id, def.name, !history && cb.checked ? a : null);
     });
 }
 
@@ -907,6 +1104,8 @@ function updateKudosButton(item, taskKey, taskName, doneBy) {
     if (!doneBy) return;
     const active = getActiveUser();
     if (doneBy === active) return;
+    // shared completion: the kudos goes to the partner ("thanks for pitching in")
+    const target = doneBy === 'both' ? partnerOf(active) : doneBy;
 
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -918,11 +1117,11 @@ function updateKudosButton(item, taskKey, taskName, doneBy) {
         btn.disabled = true;
         btn.title = 'Kudos sent';
     } else {
-        btn.title = `Send kudos to ${doneBy}`;
+        btn.title = `Send kudos to ${target}`;
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
             e.preventDefault();
-            sendKudos({ to: doneBy, taskId: taskKey, taskName });
+            sendKudos({ to: target, taskId: taskKey, taskName });
             btn.classList.add('is-sent', 'is-given');
             btn.disabled = true;
         });
@@ -1009,17 +1208,26 @@ function renderLoveNotes() {
 
     if (!lnOpen) return;
     feed.innerHTML = '';
-    const recent = (state.kudos || []).slice(-14).reverse();
+    // only the past week shows here — older kudos live on in the stats log
+    const weekAgoIso = new Date(Date.now() - 7 * 86400000).toISOString();
+    const recent = (state.kudos || [])
+        .filter(k => (k.timestamp || '') >= weekAgoIso)
+        .slice(-14)
+        .reverse();
     if (recent.length === 0) {
         const empty = document.createElement('div');
         empty.className = 'ln-empty';
-        empty.textContent = 'no kudos yet — check off a chore done by your partner and tap the ⭐';
+        empty.textContent = (state.kudos || []).length === 0
+            ? 'no kudos yet — check off a chore done by your partner and tap the ⭐'
+            : 'quiet week — older kudos are on the stats page';
         feed.appendChild(empty);
         return;
     }
+    const twoDaysAgoIso = new Date(Date.now() - 2 * 86400000).toISOString();
     recent.forEach(k => {
         const row = document.createElement('div');
         row.className = 'ln-row';
+        if ((k.timestamp || '') < twoDaysAgoIso) row.classList.add('is-fading');
         const emoji = KUDOS_EMOJI_MAP[k.emoji] || '⭐';
         const what = k.taskName ? ` · ${k.taskName}` : '';
         row.innerHTML = `<span class="ln-emoji">${emoji}</span>`
@@ -1059,10 +1267,22 @@ function setupLoveNotes() {
 
 // --- User tabs ---
 
+// Whoever is "checking as" sees their own card first. The desktop grid
+// swap lives in styles.css (body[data-active-user] grid-area rules); this
+// reorder covers the stacked flex layouts.
+function applyCardOrder(active) {
+    const mine = document.querySelector(`.card[data-user="${active}"]`);
+    const theirs = document.querySelector(`.card[data-user="${active === 'chhaya' ? 'aditya' : 'chhaya'}"]`);
+    if (mine && theirs && (mine.compareDocumentPosition(theirs) & Node.DOCUMENT_POSITION_PRECEDING)) {
+        theirs.parentNode.insertBefore(mine, theirs);
+    }
+}
+
 function setupUserTabs() {
     const stored = localStorage.getItem(ACTIVE_USER_KEY);
     const active = stored === 'chhaya' ? 'chhaya' : 'aditya';
     document.body.dataset.activeUser = active;
+    applyCardOrder(active);
     document.querySelectorAll('.user-tab').forEach(tab => {
         tab.setAttribute('aria-selected', String(tab.dataset.user === active));
         tab.addEventListener('click', () => {
@@ -1072,12 +1292,83 @@ function setupUserTabs() {
             document.querySelectorAll('.user-tab').forEach(t => {
                 t.setAttribute('aria-selected', String(t.dataset.user === user));
             });
+            applyCardOrder(user);
             // kudos buttons + unread badge are per-user
             renderTaskDecorations();
             renderOneTimeTasks();
             renderLoveNotes();
         });
     });
+}
+
+// --- Travel mode ---
+// Toggling ✈ on a card pauses that person's owned dailies (they leave the
+// day's denominators but stay checkable for the partner) and freezes both
+// streaks for every day/week the trip touches. Both toggles on = all
+// dailies paused. The streak math lives in applyResetRules (db.js).
+
+function renderTravelState() {
+    if (!state) return;
+    const travel = state.travel || {};
+    const defs = getMergedDefs(state);
+    USERS.forEach(user => {
+        const card = document.querySelector(`.card[data-user="${user}"]`);
+        if (!card) return;
+        const on = Boolean(travel[user]);
+        card.classList.toggle('is-traveling', on);
+        const btn = card.querySelector('[data-travel-toggle]');
+        if (btn) btn.setAttribute('aria-pressed', String(on));
+        const note = card.querySelector('[data-travel-note]');
+        if (note) note.hidden = !on;
+    });
+    document.querySelectorAll('[data-board] .task-item').forEach(li => {
+        const def = defs.byId[li.dataset.taskId];
+        // a historical snapshot shows what happened, not today's pauses
+        li.classList.toggle('is-travel-paused', !isHistoryView() && isTaskPausedForTravel(def, travel));
+    });
+}
+
+function setupTravelToggles() {
+    document.querySelectorAll('[data-travel-toggle]').forEach(btn => {
+        btn.addEventListener('click', () => handleTravelToggle(btn.dataset.travelToggle));
+    });
+}
+
+async function handleTravelToggle(who) {
+    const current = state || buildDefaultState();
+    const travel = { aditya: false, chhaya: false, ...(current.travel || {}) };
+    const turningOn = !travel[who];
+    travel[who] = turningOn;
+
+    const today = getDayKey();
+    // fresh trip starts a new travel window; overlapping trips share one
+    let travelSince = current.travelSince || '';
+    if (turningOn && (!travelActive(current) || !travelSince)) travelSince = today;
+
+    const logEntry = {
+        ts: new Date().toISOString(),
+        who: getActiveUser(),
+        action: turningOn ? 'travel_on' : 'travel_off',
+        taskId: null,
+        detail: `${who} ${turningOn ? 'started' : 'ended'} travel mode`
+    };
+    const next = {
+        ...current,
+        travel,
+        travelSince,
+        lastTravelDay: today,
+        changeLog: [...(current.changeLog || []), logEntry]
+    };
+    applyStateToDom(next);
+    if (!isFirebaseReady()) {
+        setStatus(`saved locally · ${RESET_INFO}`, 'warning');
+        return;
+    }
+    try {
+        await updateTravelInCloud({ travel, travelSince, lastTravelDay: today, logEntry });
+    } catch {
+        setStatus(`saved locally · ${RESET_INFO}`, 'warning');
+    }
 }
 
 // =================================================================
@@ -1187,6 +1478,7 @@ function buildPresetRow(labelText, presets, currentValue, customAttrs) {
 }
 
 function openEditPanel(taskItem, taskId) {
+    if (isHistoryView()) return; // snapshot is read-only
     if (activeEditTaskId === taskId) {
         closeEditPanel();
         return;
@@ -1524,29 +1816,76 @@ function renderRetiredLists() {
 // extra points survive into history.
 // =================================================================
 
+// Backfill: checking an unchecked chore on a past day logs it to that day.
+async function handleBackfillToggle(taskId, cb) {
+    const dayKey = selectedHistoryDay;
+    const { status, events: dayEvents } = dayEventsStatus(dayKey);
+    if (status !== 'ready') { cb.checked = false; return; }
+
+    const current = state || buildDefaultState();
+    const fill = buildBackfill(current, taskId, getActiveActor(), dayKey, dayEvents);
+    if (!fill) { refreshBoardsView(); return; }
+
+    const next = {
+        ...current,
+        dailyHistory: mergeHistoryEntry(current.dailyHistory, fill.entry)
+    };
+    if (fill.isLiveWeek) next.events = [...(current.events || []), fill.event];
+    else archivedDayCache[dayKey] = fill.dayEvents;
+    if (fill.checkNow) {
+        next.tasks = { ...next.tasks, [taskId]: true };
+        next.taskActor = { ...(next.taskActor || {}), [taskId]: fill.event.who };
+    }
+    applyStateToDom(next);
+
+    if (!isFirebaseReady()) {
+        setStatus(`saved locally · ${RESET_INFO}`, 'warning');
+        return;
+    }
+    try {
+        await backfillCompletionInCloud({
+            event: fill.event,
+            appendToLive: fill.isLiveWeek,
+            checkNow: fill.checkNow,
+            historyRewrite: next.dailyHistory,
+            archiveDay: {
+                ...fill.entry,
+                weekKey: getWeekKeyFromDayKey(dayKey),
+                events: fill.dayEvents
+            }
+        });
+    } catch {
+        setStatus(`saved locally · ${RESET_INFO}`, 'warning');
+    }
+}
+
 async function handleRecurringToggle(taskId, cb) {
-    const active = getActiveUser();
+    if (isHistoryView()) {
+        if (cb.checked) await handleBackfillToggle(taskId, cb);
+        return;
+    }
+    const actor = getActiveActor();
     const current = state || buildDefaultState();
     const defs = getMergedDefs(current);
     const def = defs.byId[taskId];
     if (!def) return;
 
     if (cb.checked) {
-        const event = buildEvent(def, active, getDayKey());
+        const event = buildEvent(def, actor, getDayKey());
         const next = {
             ...current,
             tasks: { ...current.tasks, [taskId]: true },
-            taskActor: { ...(current.taskActor || {}), [taskId]: active },
+            taskActor: { ...(current.taskActor || {}), [taskId]: actor },
             events: [...(current.events || []), event]
         };
         applyStateToDom(next);
-        celebrateCheck(active);
+        celebrateCheck(actor);
         if (!isFirebaseReady()) {
             setStatus(`saved locally · ${RESET_INFO}`, 'warning');
         } else {
             try {
                 await syncResetsToCloud(state);
-                await updateTaskInCloud({ taskId, checked: true, actor: active, event, currentState: state });
+                await updateTaskInCloud({ taskId, checked: true, actor, event, currentState: state });
             } catch {
                 setStatus(`saved locally · ${RESET_INFO}`, 'warning');
             }
@@ -1587,6 +1926,49 @@ function renderOneTimeTasks() {
     const section = document.getElementById('extras-section');
     const pill = document.getElementById('extras-pill');
     if (!container || !section || !state) return;
+
+    // history view: extras done that day, straight from the ledger
+    if (isHistoryView()) {
+        const extras = dayEventsStatus(selectedHistoryDay).events.filter(e => e.kind === 'extra');
+        section.style.display = extras.length > 0 ? '' : 'none';
+        if (pill) {
+            pill.textContent = `${extras.length} done`;
+            pill.classList.remove('is-complete');
+        }
+        container.innerHTML = '';
+        extras.forEach(e => {
+            const li = document.createElement('li');
+            li.className = 'task-item is-one-time-done';
+
+            const cb = document.createElement('input');
+            cb.type = 'checkbox';
+            cb.className = 'checkbox';
+            cb.checked = true;
+            cb.disabled = true;
+
+            const label = document.createElement('span');
+            label.className = 'task-name';
+            label.textContent = e.name;
+
+            const actor = document.createElement('span');
+            actor.className = 'actor-mark';
+            actor.textContent = e.who;
+            actor.style.opacity = '0.7';
+
+            const badge = document.createElement('span');
+            badge.className = 'badge';
+            badge.dataset.points = String(e.pts);
+            badge.textContent = pointsToBadge(e.pts);
+            badge.title = `${fmtPts(e.pts)} pts`;
+
+            li.appendChild(cb);
+            li.appendChild(label);
+            li.appendChild(actor);
+            li.appendChild(badge);
+            container.appendChild(li);
+        });
+        return;
+    }
 
     const tasks = state.oneTimeTasks || {};
     const entries = Object.entries(tasks);
@@ -1657,7 +2039,8 @@ function renderOneTimeTasks() {
 }
 
 async function handleOneTimeToggle(id, cb) {
-    const active = getActiveUser();
+    if (isHistoryView()) return; // snapshot is read-only
+    const actor = getActiveActor();
     const t = state.oneTimeTasks?.[id];
     if (!t) return;
 
@@ -1668,15 +2051,15 @@ async function handleOneTimeToggle(id, cb) {
             points: t.points,
             owner: (t.assignee === 'aditya' || t.assignee === 'chhaya') ? t.assignee : null,
             cadence: 'extra'
-        }, active, getDayKey(), 'extra');
-        const updates = { done: true, doneBy: active, completedAt: getDayKey() };
+        }, actor, getDayKey(), 'extra');
+        const updates = { done: true, doneBy: actor, completedAt: getDayKey() };
         const next = {
             ...state,
             oneTimeTasks: { ...state.oneTimeTasks, [id]: { ...t, ...updates } },
             events: [...(state.events || []), event]
         };
         applyStateToDom(next);
-        celebrateCheck(active);
+        celebrateCheck(actor);
         if (isFirebaseReady()) {
             try { await updateOneTimeTaskInCloud(id, updates, { add: true, entry: event }); }
             catch { setStatus(`saved locally · ${RESET_INFO}`, 'warning'); }
@@ -1820,11 +2203,8 @@ function applyStateToDom(next) {
     state = next;
     saveLocalState(next);
     renderBoards();
-    syncCheckboxes();
-    updateProgress();
     updateStats();
-    renderTaskDecorations();
-    renderOneTimeTasks();
+    refreshBoardsView();
     renderLoveNotes();
 }
 
@@ -1858,6 +2238,8 @@ async function handleSnapshot(snapshot) {
 
 async function initializeDashboard() {
     setupUserTabs();
+    setupTogetherToggle();
+    setupTravelToggles();
     initFigures();
     setupAddTaskForm();
     setupCardFooters();

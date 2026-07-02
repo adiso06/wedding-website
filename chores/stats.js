@@ -141,7 +141,9 @@ function historyToCsvUrl(history) {
     ).join('\n');
     const url = URL.createObjectURL(new Blob([header + rows], { type: 'text/csv' }));
     blobUrls.push(url);
-    return url;
+    // rough-viz Line only treats URLs containing ".csv" as fetchable —
+    // anything else makes its constructor throw. The fragment is inert.
+    return url + '#.csv';
 }
 
 // --- Scoreboard ---
@@ -428,6 +430,12 @@ function renderChangeLog() {
 
 let renderSeq = 0;
 
+// One broken chart must not blank the rest of the page.
+function safely(renderFn) {
+    try { renderFn(); }
+    catch (e) { console.error('Chart render failed:', e); }
+}
+
 async function renderAll() {
     if (!state) return;
     const seq = ++renderSeq;
@@ -442,6 +450,7 @@ async function renderAll() {
 
     if (rawHistory.length === 0) {
         document.querySelectorAll('.chart-desc').forEach(el => {
+            if (!el.dataset.desc) el.dataset.desc = el.textContent;
             el.textContent = 'no data yet — check back after a few days!';
         });
         const monthly = document.getElementById('monthly-section');
@@ -449,15 +458,20 @@ async function renderAll() {
         return;
     }
 
+    // undo any "no data yet" left by an earlier empty render
+    document.querySelectorAll('.chart-desc').forEach(el => {
+        if (el.dataset.desc) el.textContent = el.dataset.desc;
+    });
+
     const chartHistory = (currentRange === 0 || currentRange > 35)
         ? aggregateByWeek(rawHistory)
         : rawHistory;
 
-    renderLineChart(chartHistory);
-    renderStackedBar(chartHistory);
-    renderBarChart(chartHistory);
-    renderDonutChart(rawHistory);
-    renderMonthlyChart(rawHistory);
+    safely(() => renderLineChart(chartHistory));
+    safely(() => renderStackedBar(chartHistory));
+    safely(() => renderBarChart(chartHistory));
+    safely(() => renderDonutChart(rawHistory));
+    safely(() => renderMonthlyChart(rawHistory));
 }
 
 function setupRangeToggle() {

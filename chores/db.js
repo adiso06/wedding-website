@@ -90,6 +90,11 @@ function isUser(v) {
     return v === 'aditya' || v === 'chhaya';
 }
 
+// Completion credit can also go to 'both' (together mode: points split 50/50)
+function isActor(v) {
+    return isUser(v) || v === 'both';
+}
+
 function sanitizeDefOverride(raw) {
     if (!raw || typeof raw !== 'object') return null;
     const o = {};
@@ -164,6 +169,31 @@ export function weeklyIdsOf(defs) {
 // their own schedule and are excluded from the daily completion denominator).
 export function defaultCycleIds(defs, cadence) {
     return defs.list.filter(d => d.cadence === cadence && !hasCustomInterval(d)).map(d => d.id);
+}
+
+// --- Travel mode ---
+// A traveler's owned dailies pause: they leave the day's denominator (and
+// get a paused look on the board) but stay checkable, so the partner can
+// still cover shared-critical ones like cat care. When both travel, the
+// 'either'-owned dailies pause too. Weeklies never pause — streaks freeze
+// instead (see applyResetRules).
+
+export function travelActive(state) {
+    const t = state && state.travel;
+    return Boolean(t && (t.aditya || t.chhaya));
+}
+
+export function isTaskPausedForTravel(def, travel) {
+    if (!def || !travel || def.cadence !== 'daily') return false;
+    if (travel.aditya && travel.chhaya) return true;
+    if (def.owner === 'aditya') return Boolean(travel.aditya);
+    if (def.owner === 'chhaya') return Boolean(travel.chhaya);
+    return false;
+}
+
+export function filterTravelPaused(defs, ids, travel) {
+    if (!travel || (!travel.aditya && !travel.chhaya)) return ids;
+    return ids.filter(id => !isTaskPausedForTravel(defs.byId[id] || defs.allById[id], travel));
 }
 
 const BADGE_STOPS = [[1, 'S'], [1.33, 'SM'], [1.67, 'MS'], [2, 'M'], [2.67, 'ML'], [4, 'L']];
@@ -294,7 +324,11 @@ export function findEventForTask(events, taskId) {
 }
 
 function sumEventPts(events, who) {
-    return events.filter(e => !who || e.who === who).reduce((s, e) => s + (e.pts || 0), 0);
+    return events.reduce((s, e) => {
+        if (!who || e.who === who) return s + (e.pts || 0);
+        if (e.who === 'both') return s + (e.pts || 0) / 2;
+        return s;
+    }, 0);
 }
 
 // Aggregate one day's events into a history entry. The completion %
@@ -336,6 +370,9 @@ export function buildDefaultState(date = new Date()) {
         lifetime: { tasks: 0, adityaPoints: 0, chhayaPoints: 0, crossHelps: 0, kudosAditya: 0, kudosChhaya: 0 },
         lastDailyReset: getDayKey(date),
         lastWeeklyReset: getWeekKey(date),
+        travel: { aditya: false, chhaya: false },
+        travelSince: '',
+        lastTravelDay: '',
         streak: 0,
         bestStreak: 0,
         weeklyStreak: 0,
@@ -379,7 +416,7 @@ export function normalizeState(rawState) {
     const taskActor = {};
     merged.list.forEach(d => {
         tasks[d.id] = Boolean(rawTasks[d.id]);
-        if (tasks[d.id] && isUser(rawActor[d.id])) taskActor[d.id] = rawActor[d.id];
+        if (tasks[d.id] && isActor(rawActor[d.id])) taskActor[d.id] = rawActor[d.id];
     });
 
     const lastDailyReset = typeof rawState.lastDailyReset === 'string' ? rawState.lastDailyReset : def.lastDailyReset;
@@ -390,7 +427,7 @@ export function normalizeState(rawState) {
     if (Array.isArray(rawState.events)) {
         events = rawState.events
             .filter(e => e && typeof e.id === 'string' && typeof e.taskId === 'string'
-                && isUser(e.who) && typeof e.day === 'string' && Number.isFinite(e.pts))
+                && isActor(e.who) && typeof e.day === 'string' && Number.isFinite(e.pts))
             .map(e => ({
                 id: e.id,
                 taskId: e.taskId,
@@ -430,7 +467,7 @@ export function normalizeState(rawState) {
             assignee: (isUser(t.assignee) || t.assignee === 'either') ? t.assignee : 'either',
             createdBy: isUser(t.createdBy) ? t.createdBy : 'aditya',
             done: Boolean(t.done),
-            doneBy: isUser(t.doneBy) ? t.doneBy : null,
+            doneBy: isActor(t.doneBy) ? t.doneBy : null,
             createdAt: typeof t.createdAt === 'string' ? t.createdAt : getDayKey(),
             completedAt: typeof t.completedAt === 'string' ? t.completedAt : (Boolean(t.done) ? (typeof t.createdAt === 'string' ? t.createdAt : getDayKey()) : null)
         };
@@ -488,6 +525,12 @@ export function normalizeState(rawState) {
 
     const nonNegInt = v => Number.isFinite(v) ? Math.max(0, Math.floor(v)) : 0;
 
+    const rawTravel = (typeof rawState.travel === 'object' && rawState.travel !== null) ? rawState.travel : {};
+    const travel = {
+        aditya: rawTravel.aditya === true,
+        chhaya: rawTravel.chhaya === true
+    };
+
     return {
         taskDefs,
         tasks,
@@ -501,6 +544,9 @@ export function normalizeState(rawState) {
         lifetime,
         lastDailyReset,
         lastWeeklyReset: typeof rawState.lastWeeklyReset === 'string' ? rawState.lastWeeklyReset : def.lastWeeklyReset,
+        travel,
+        travelSince: typeof rawState.travelSince === 'string' ? rawState.travelSince : '',
+        lastTravelDay: typeof rawState.lastTravelDay === 'string' ? rawState.lastTravelDay : '',
         streak: nonNegInt(rawState.streak),
         bestStreak: nonNegInt(rawState.bestStreak),
         weeklyStreak: nonNegInt(rawState.weeklyStreak),
@@ -523,7 +569,8 @@ export function normalizeState(rawState) {
                         daily: Number.isFinite(h.byKind.daily) ? h.byKind.daily : 0,
                         weekly: Number.isFinite(h.byKind.weekly) ? h.byKind.weekly : 0,
                         extra: Number.isFinite(h.byKind.extra) ? h.byKind.extra : 0
-                    } : null
+                    } : null,
+                    ...(h.travel === true ? { travel: true } : {})
                 }))
                 .slice(-HISTORY_CAP)
             : []
@@ -558,6 +605,13 @@ export function applyResetRules(sourceState, date = new Date()) {
     const cycleDailyIds = defaultCycleIds(defs, 'daily');
     const cycleWeeklyIds = defaultCycleIds(defs, 'weekly');
 
+    // Travel window [travelSince, lastTravelDay] — extended to today while
+    // travel is on. Days inside it don't move streaks in either direction.
+    const travelNow = travelActive(next);
+    const travelEnd = travelNow ? todayKey : (next.lastTravelDay || '');
+    const isTravelDay = d => Boolean(next.travelSince && travelEnd
+        && d >= next.travelSince && d <= travelEnd);
+
     // 1. Daily rollover: close every past day that has events or was the open day
     if (next.lastDailyReset !== todayKey) {
         const historyDays = new Set(next.dailyHistory.map(h => h.day));
@@ -570,6 +624,7 @@ export function applyResetRules(sourceState, date = new Date()) {
             .sort()
             .forEach(d => {
                 const entry = aggregateDayEntry(defs, d, next.events);
+                if (isTravelDay(d)) entry.travel = true;
                 next.dailyHistory.push(entry);
                 archivedDays.push({
                     ...entry,
@@ -586,24 +641,26 @@ export function applyResetRules(sourceState, date = new Date()) {
             next.dailyHistory = next.dailyHistory.slice(-HISTORY_CAP);
         }
 
-        // streak from the day that just closed
-        const closing = next.dailyHistory.find(h => h.day === next.lastDailyReset)
-            || aggregateDayEntry(defs, next.lastDailyReset, next.events);
-        const daysPassed = daysBetween(next.lastDailyReset, todayKey);
-        const pctDone = closing.totalPoints > 0 ? closing.points / closing.totalPoints : 0;
-        const earned = daysPassed === 1 && pctDone >= STREAK_THRESHOLD
-            && closing.adityaPoints > 0 && closing.chhayaPoints > 0;
-        if (earned) {
-            next.streak += 1;
-            if (next.streak > next.bestStreak) next.bestStreak = next.streak;
-        } else {
-            next.streak = 0;
+        // streak from the day that just closed — frozen on travel days
+        if (!isTravelDay(next.lastDailyReset)) {
+            const closing = next.dailyHistory.find(h => h.day === next.lastDailyReset)
+                || aggregateDayEntry(defs, next.lastDailyReset, next.events);
+            const daysPassed = daysBetween(next.lastDailyReset, todayKey);
+            const pctDone = closing.totalPoints > 0 ? closing.points / closing.totalPoints : 0;
+            const earned = daysPassed === 1 && pctDone >= STREAK_THRESHOLD
+                && closing.adityaPoints > 0 && closing.chhayaPoints > 0;
+            if (earned) {
+                next.streak += 1;
+                if (next.streak > next.bestStreak) next.bestStreak = next.streak;
+            } else {
+                next.streak = 0;
+            }
         }
 
         // monthly evaluation when the calendar month rolled over
         const closedMonth = monthKeyOf(next.lastDailyReset);
         if (closedMonth && closedMonth !== monthKeyOf(todayKey) && closedMonth !== next.lastMonthProcessed) {
-            const monthEntries = next.dailyHistory.filter(h => monthKeyOf(h.day) === closedMonth && h.totalPoints > 0);
+            const monthEntries = next.dailyHistory.filter(h => monthKeyOf(h.day) === closedMonth && h.totalPoints > 0 && !h.travel);
             if (monthEntries.length >= MONTHLY_MIN_DAYS) {
                 const avg = monthEntries.reduce((s, h) => s + h.points / h.totalPoints, 0) / monthEntries.length;
                 if (avg >= MONTHLY_THRESHOLD) next.goldenMonths += 1;
@@ -619,20 +676,26 @@ export function applyResetRules(sourceState, date = new Date()) {
         changed = true;
     }
 
-    // 2. Weekly rollover: weekly streak from the closed week, then reset weeklies
+    // 2. Weekly rollover: weekly streak from the closed week, then reset weeklies.
+    // A week the travel window touched freezes the weekly streak.
     if (next.lastWeeklyReset !== weekKey) {
-        const wTotal = pointsFor(defs, cycleWeeklyIds);
-        const wDone = pointsForChecked(defs, cycleWeeklyIds, next.tasks);
-        const weekEvents = next.events.filter(e => e.day >= next.lastWeeklyReset && e.day < weekKey);
-        const weeksPassed = weeksApart(weekKey, next.lastWeeklyReset);
-        const earned = weeksPassed === 1
-            && wTotal > 0 && wDone / wTotal >= WEEKLY_STREAK_THRESHOLD
-            && weekEvents.some(e => e.who === 'aditya') && weekEvents.some(e => e.who === 'chhaya');
-        if (earned) {
-            next.weeklyStreak += 1;
-            if (next.weeklyStreak > next.bestWeeklyStreak) next.bestWeeklyStreak = next.weeklyStreak;
-        } else {
-            next.weeklyStreak = 0;
+        const travelWeek = Boolean(next.travelSince && travelEnd
+            && next.travelSince < weekKey && travelEnd >= next.lastWeeklyReset);
+        if (!travelWeek) {
+            const wTotal = pointsFor(defs, cycleWeeklyIds);
+            const wDone = pointsForChecked(defs, cycleWeeklyIds, next.tasks);
+            const weekEvents = next.events.filter(e => e.day >= next.lastWeeklyReset && e.day < weekKey);
+            const weeksPassed = weeksApart(weekKey, next.lastWeeklyReset);
+            const acted = who => weekEvents.some(e => e.who === who || e.who === 'both');
+            const earned = weeksPassed === 1
+                && wTotal > 0 && wDone / wTotal >= WEEKLY_STREAK_THRESHOLD
+                && acted('aditya') && acted('chhaya');
+            if (earned) {
+                next.weeklyStreak += 1;
+                if (next.weeklyStreak > next.bestWeeklyStreak) next.bestWeeklyStreak = next.weeklyStreak;
+            } else {
+                next.weeklyStreak = 0;
+            }
         }
 
         cycleWeeklyIds.forEach(id => {
@@ -666,6 +729,13 @@ export function applyResetRules(sourceState, date = new Date()) {
         }
     });
 
+    // 5. Ongoing travel extends its window through today
+    if (travelNow && next.lastTravelDay !== todayKey) {
+        next.lastTravelDay = todayKey;
+        if (!next.travelSince) next.travelSince = todayKey;
+        changed = true;
+    }
+
     return { state: next, changed, archivedDays };
 }
 
@@ -681,6 +751,46 @@ export function loadLocalState() {
     } catch {
         return buildDefaultState();
     }
+}
+
+// --- Backfill ---
+// Record a completion for an already-closed day ("I did wash the dishes
+// on Tuesday, just never checked it"). Pure: returns the new event, the
+// rewritten history entry for that day (travel flag preserved), and
+// whether the current week's checkbox should flip too (a default-cycle
+// weekly done earlier this week still counts for this week). Streaks are
+// NOT re-evaluated — the day already closed.
+export function buildBackfill(state, taskId, who, dayKey, priorDayEvents, today = new Date()) {
+    const defs = getMergedDefs(state);
+    const def = defs.byId[taskId];
+    if (!def) return null;
+    const prior = (priorDayEvents || []).filter(e => e.day === dayKey);
+    if (prior.some(e => e.taskId === taskId)) return null;
+    const isLiveWeek = dayKey >= getWeekKey(today);
+    // a weekly/custom-interval task already checked spans multiple days —
+    // backfilling it inside the same cycle would double-count it
+    const spansDays = def.cadence === 'weekly' || hasCustomInterval(def);
+    if (isLiveWeek && spansDays && state.tasks && state.tasks[taskId]) return null;
+    const event = buildEvent(def, who, dayKey);
+    const dayEvents = [...prior, event];
+    const entry = aggregateDayEntry(defs, dayKey, dayEvents);
+    const prevEntry = (state.dailyHistory || []).find(h => h.day === dayKey);
+    if (prevEntry && prevEntry.travel) entry.travel = true;
+    const checkNow = isLiveWeek && def.cadence === 'weekly' && !hasCustomInterval(def);
+    return { event, entry, dayEvents, isLiveWeek, checkNow };
+}
+
+// Merge a rewritten day entry into dailyHistory (insert if the day was
+// never closed — e.g. it had zero events at rollover time).
+export function mergeHistoryEntry(dailyHistory, entry) {
+    const next = [...(dailyHistory || [])];
+    const idx = next.findIndex(h => h.day === entry.day);
+    if (idx >= 0) next[idx] = entry;
+    else {
+        next.push(entry);
+        next.sort((a, b) => a.day < b.day ? -1 : 1);
+    }
+    return next.slice(-HISTORY_CAP);
 }
 
 // --- Uncheck handling ---
@@ -722,7 +832,12 @@ export function computeWeightedLoad(stateRef, today = new Date()) {
     const buckets = {};
     const add = (wk, who, pts) => {
         if (!buckets[wk]) buckets[wk] = { aditya: 0, chhaya: 0 };
-        buckets[wk][who] += pts;
+        if (who === 'both') {
+            buckets[wk].aditya += pts / 2;
+            buckets[wk].chhaya += pts / 2;
+        } else {
+            buckets[wk][who] += pts;
+        }
     };
     history.forEach(h => {
         const wk = getWeekKeyFromDayKey(h.day);
@@ -897,6 +1012,7 @@ export async function connectFirebase() {
         orderBy: firestoreModule.orderBy,
         limit: firestoreModule.limit,
         startAt: firestoreModule.startAt,
+        getDoc: firestoreModule.getDoc,
         getDocs: firestoreModule.getDocs,
         runTransaction: firestoreModule.runTransaction,
         deleteField: firestoreModule.deleteField,
@@ -922,6 +1038,17 @@ export async function archiveDayToSubcollection(dayKey, dayData) {
     if (!firestoreApi || !daysCollectionRef) return;
     const dayDocRef = firestoreApi.doc(daysCollectionRef, dayKey);
     await firestoreApi.setDoc(dayDocRef, dayData, { merge: true });
+}
+
+// One archived day doc (carries that day's events); null if none/offline.
+export async function fetchArchivedDay(dayKey) {
+    if (!firestoreApi || !daysCollectionRef) return null;
+    try {
+        const snap = await firestoreApi.getDoc(firestoreApi.doc(daysCollectionRef, dayKey));
+        return snap.exists() ? { day: dayKey, ...snap.data() } : null;
+    } catch {
+        return null;
+    }
 }
 
 export async function fetchHistory(count = 7) {
@@ -970,6 +1097,9 @@ function fullDocPayload(s) {
         lifetime: s.lifetime || buildDefaultState().lifetime,
         lastDailyReset: s.lastDailyReset,
         lastWeeklyReset: s.lastWeeklyReset,
+        travel: s.travel || { aditya: false, chhaya: false },
+        travelSince: s.travelSince || '',
+        lastTravelDay: s.lastTravelDay || '',
         streak: s.streak,
         bestStreak: s.bestStreak,
         weeklyStreak: s.weeklyStreak || 0,
@@ -1073,6 +1203,29 @@ export async function deleteOneTimeTaskInCloud(taskId, logEntry, removedEvent) {
     const update = { [`oneTimeTasks.${taskId}`]: firestoreApi.deleteField() };
     if (logEntry) update.changeLog = firestoreApi.arrayUnion(logEntry);
     if (removedEvent) update.events = firestoreApi.arrayRemove(removedEvent);
+    await firestoreApi.updateDoc(docRef, stamp(update));
+}
+
+// Backfill sync: append the event to the live ledger only when the day is
+// still inside the current week (older days live solely in the archive),
+// rewrite dailyHistory, optionally flip the current checkbox for weeklies,
+// and refresh the day's archive doc.
+export async function backfillCompletionInCloud({ event, appendToLive, checkNow, historyRewrite, archiveDay }) {
+    if (!firestoreApi || !docRef) return;
+    const update = { dailyHistory: historyRewrite };
+    if (appendToLive) update.events = firestoreApi.arrayUnion(event);
+    if (checkNow) {
+        update[`tasks.${event.taskId}`] = true;
+        update[`taskActor.${event.taskId}`] = event.who;
+    }
+    await firestoreApi.updateDoc(docRef, stamp(update));
+    if (archiveDay) await archiveDayToSubcollection(archiveDay.day, archiveDay);
+}
+
+export async function updateTravelInCloud({ travel, travelSince, lastTravelDay, logEntry }) {
+    if (!firestoreApi || !docRef) return;
+    const update = { travel, travelSince, lastTravelDay };
+    if (logEntry) update.changeLog = firestoreApi.arrayUnion(logEntry);
     await firestoreApi.updateDoc(docRef, stamp(update));
 }
 

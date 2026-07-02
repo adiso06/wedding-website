@@ -4,7 +4,9 @@ import {
     DEFAULT_TASK_DEFS, getMergedDefs, defaultCycleIds, pointsFor,
     buildDefaultState, normalizeState, applyResetRules, removeCompletion,
     buildEvent, aggregateDayEntry, computeWeightedLoad, pointsToBadge,
-    getDayKey, getWeekKey, monthKeyOf
+    getDayKey, getWeekKey, monthKeyOf,
+    travelActive, isTaskPausedForTravel, filterTravelPaused,
+    buildBackfill, mergeHistoryEntry
 } from '../db.js';
 
 let failures = 0;
@@ -254,6 +256,239 @@ section('custom chore defs merge + retire');
     assert(defs.allById.a2.retired === true, 'retired def still in allById');
     assert(defs.byId.a1.name === 'Tidy living room' && defs.byId.a1.points === 2, 'rename + repoint override');
     assert(defs.byId.a1.owner === 'aditya', 'unoverridden fields fall through');
+}
+
+// ---------------------------------------------------------------
+section('together mode: shared completions split points');
+{
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    s = check(s, 'c2', 'both', '2026-06-02'); // 12-pt daily done together
+    s = check(s, 'a1', 'aditya', '2026-06-02'); // 1 pt solo
+    const defs = getMergedDefs(s);
+    const entry = aggregateDayEntry(defs, '2026-06-02', s.events);
+    approx(entry.adityaPoints, 7, 'aditya gets half of shared + own solo');
+    approx(entry.chhayaPoints, 6, 'chhaya gets half of shared');
+    approx(entry.points, 13, 'completion pts count the full task');
+    assert(entry.done === 2, 'both tasks count as done');
+
+    // uncheck removes the single shared event cleanly
+    const { state: after, removedEvent } = removeCompletion(s, 'c2');
+    assert(removedEvent && removedEvent.who === 'both', 'shared event found for uncheck');
+    assert(after.events.every(e => e.taskId !== 'c2'), 'shared event fully removed');
+
+    // weighted load splits evenly
+    const load = computeWeightedLoad(check(buildDefaultState(dateFor('2026-06-02')), 'c2', 'both', '2026-06-02'), dateFor('2026-06-02'));
+    approx(load.aWeighted, load.cWeighted, 'shared completion loads both sides equally');
+}
+
+// ---------------------------------------------------------------
+section('together mode: a fully-shared day still earns the streak');
+{
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    const defs = getMergedDefs(s);
+    defaultCycleIds(defs, 'daily').forEach(id => { s = check(s, id, 'both', '2026-06-02'); });
+    const r = applyResetRules(s, dateFor('2026-06-03'));
+    assert(r.state.streak === 1, `shared day counts as both acting (got ${r.state.streak})`);
+}
+
+// ---------------------------------------------------------------
+section('together mode: shared weeklies satisfy the weekly streak');
+{
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    const defs = getMergedDefs(s);
+    defaultCycleIds(defs, 'weekly').forEach(id => { s = check(s, id, 'both', '2026-06-02'); });
+    const r = applyResetRules(s, dateFor('2026-06-08'));
+    assert(r.state.weeklyStreak === 1, `weekly streak from shared events (got ${r.state.weeklyStreak})`);
+}
+
+// ---------------------------------------------------------------
+section('together mode: both survives normalize round-trip');
+{
+    const n = normalizeState({
+        tasks: { c2: true },
+        taskActor: { c2: 'both' },
+        events: [{ id: 'e_1', taskId: 'c2', name: 'Cook dinner', pts: 12, who: 'both', owner: 'chhaya', day: '2026-06-02', kind: 'daily' }],
+        oneTimeTasks: { ot_z: { name: 'Assemble bed', points: 4, assignee: 'either', createdBy: 'aditya', done: true, doneBy: 'both', createdAt: '2026-06-02' } }
+    });
+    assert(n.taskActor.c2 === 'both', 'taskActor both kept');
+    assert(n.events.length === 1 && n.events[0].who === 'both', 'both event kept');
+    assert(n.oneTimeTasks.ot_z.doneBy === 'both', 'one-time doneBy both kept');
+}
+
+// ---------------------------------------------------------------
+section('backfill: logging a missed chore onto a closed day');
+{
+    // Tue 06-02 closed with one chore; on Thu we backfill another
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    s = check(s, 'a1', 'aditya', '2026-06-02');
+    s = applyResetRules(s, dateFor('2026-06-04')).state;
+    const prior = s.events.filter(e => e.day === '2026-06-02');
+
+    // daily task: history entry gains the points, today's box untouched
+    const fill = buildBackfill(s, 'c2', 'chhaya', '2026-06-02', prior, dateFor('2026-06-04'));
+    assert(!!fill && fill.event.day === '2026-06-02', 'event lands on the target day');
+    assert(fill.isLiveWeek === true, 'same week uses the live ledger');
+    assert(fill.checkNow === false, 'past daily does not flip today\'s checkbox');
+    approx(fill.entry.chhayaPoints, 12, 'backfilled points credited');
+    approx(fill.entry.adityaPoints, 1, 'existing points preserved');
+    assert(fill.entry.done === 2, 'done count includes the backfill');
+
+    const merged = mergeHistoryEntry(s.dailyHistory, fill.entry);
+    approx(merged.find(h => h.day === '2026-06-02').chhayaPoints, 12, 'history entry rewritten');
+
+    // weekly task backfilled within the current week also checks the live box
+    const wfill = buildBackfill(s, 'a9', 'aditya', '2026-06-02', prior, dateFor('2026-06-04'));
+    assert(wfill.checkNow === true, 'current-week weekly flips the live checkbox');
+
+    // ...but not when the day belongs to a previous week
+    const oldFill = buildBackfill(s, 'a9', 'aditya', '2026-05-28', [], dateFor('2026-06-04'));
+    assert(oldFill.isLiveWeek === false && oldFill.checkNow === false, 'previous-week weekly stays archive-only');
+
+    // duplicate guard: task already done that day
+    assert(buildBackfill(s, 'a1', 'chhaya', '2026-06-02', prior, dateFor('2026-06-04')) === null, 'no double-logging');
+
+    // cycle guard: a weekly already checked this week can't be backfilled
+    // onto an earlier day of the same week (would double-count the cycle)
+    let sw = check(s, 'a9', 'aditya', '2026-06-04');
+    assert(buildBackfill(sw, 'a9', 'aditya', '2026-06-02', prior, dateFor('2026-06-04')) === null, 'checked weekly blocked in-week');
+    assert(buildBackfill(sw, 'a9', 'aditya', '2026-05-28', [], dateFor('2026-06-04')) !== null, 'previous week still fine');
+    // a daily checked today never blocks a past-day backfill
+    let sd = check(s, 'a1', 'aditya', '2026-06-04');
+    assert(buildBackfill(sd, 'a1', 'aditya', '2026-06-03', [], dateFor('2026-06-04')) !== null, 'checked daily does not block');
+
+    // never-closed day inserts a fresh entry in order
+    const insFill = buildBackfill(s, 'a1', 'aditya', '2026-06-03', [], dateFor('2026-06-04'));
+    const merged2 = mergeHistoryEntry(merged, insFill.entry);
+    assert(merged2.map(h => h.day).join(',').includes('2026-06-02,2026-06-03'), 'inserted entry sorted into place');
+
+    // travel flag survives the rewrite
+    const sTravel = { ...s, dailyHistory: s.dailyHistory.map(h => h.day === '2026-06-02' ? { ...h, travel: true } : h) };
+    const tFill = buildBackfill(sTravel, 'c2', 'both', '2026-06-02', prior, dateFor('2026-06-04'));
+    assert(tFill.entry.travel === true, 'travel flag preserved');
+    approx(tFill.entry.adityaPoints, 7, 'shared backfill splits points');
+}
+
+// ---------------------------------------------------------------
+section('travel: paused-task rules');
+{
+    const dailyA = { cadence: 'daily', owner: 'aditya' };
+    const dailyC = { cadence: 'daily', owner: 'chhaya' };
+    const dailyEither = { cadence: 'daily', owner: null };
+    const weeklyA = { cadence: 'weekly', owner: 'aditya' };
+    const aTravels = { aditya: true, chhaya: false };
+    const bothTravel = { aditya: true, chhaya: true };
+    assert(isTaskPausedForTravel(dailyA, aTravels) === true, 'traveler-owned daily pauses');
+    assert(isTaskPausedForTravel(dailyC, aTravels) === false, 'home-owned daily stays');
+    assert(isTaskPausedForTravel(dailyEither, aTravels) === false, 'either-owned stays while one is home');
+    assert(isTaskPausedForTravel(dailyEither, bothTravel) === true, 'either-owned pauses when both travel');
+    assert(isTaskPausedForTravel(weeklyA, aTravels) === false, 'weeklies never pause');
+    assert(travelActive({ travel: aTravels }) === true, 'travelActive on');
+    assert(travelActive({ travel: { aditya: false, chhaya: false } }) === false, 'travelActive off');
+
+    const s = buildDefaultState(dateFor('2026-06-02'));
+    const defs = getMergedDefs(s);
+    const dailies = defaultCycleIds(defs, 'daily');
+    const filtered = filterTravelPaused(defs, dailies, aTravels);
+    assert(filtered.length < dailies.length, 'travel filter drops traveler dailies');
+    assert(filtered.every(id => defs.byId[id].owner !== 'aditya'), 'no aditya-owned dailies survive filter');
+    assert(filterTravelPaused(defs, dailies, { aditya: false, chhaya: false }).length === dailies.length, 'no travel, no filtering');
+}
+
+// ---------------------------------------------------------------
+section('travel: daily streak freezes instead of resetting');
+{
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    s.streak = 5;
+    s.bestStreak = 8;
+    s.travel = { aditya: true, chhaya: false };
+    s.travelSince = '2026-06-01';
+    s.lastTravelDay = '2026-06-02';
+    const r = applyResetRules(s, dateFor('2026-06-03'));
+    assert(r.state.streak === 5, `streak frozen during travel (got ${r.state.streak})`);
+    assert(r.state.lastTravelDay === '2026-06-03', 'travel window extended through today');
+    const entry = r.state.dailyHistory.find(h => h.day === '2026-06-02');
+    assert(entry && entry.travel === true, 'closed travel day stamped');
+
+    // control: same day, no travel -> streak resets
+    let c = buildDefaultState(dateFor('2026-06-02'));
+    c.streak = 5;
+    assert(applyResetRules(c, dateFor('2026-06-03')).state.streak === 0, 'without travel the empty day resets');
+}
+
+// ---------------------------------------------------------------
+section('travel: window keeps protecting days closed after return');
+{
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    s.streak = 4;
+    s.travel = { aditya: false, chhaya: false }; // already back home
+    s.travelSince = '2026-06-01';
+    s.lastTravelDay = '2026-06-02';
+    let r = applyResetRules(s, dateFor('2026-06-03'));
+    assert(r.state.streak === 4, 'day inside past window still frozen');
+    r = applyResetRules(r.state, dateFor('2026-06-04'));
+    assert(r.state.streak === 0, 'first fully-home empty day resets again');
+}
+
+// ---------------------------------------------------------------
+section('travel: weekly streak freezes for a travel-touched week');
+{
+    let s = buildDefaultState(dateFor('2026-06-02')); // week of 06-01
+    s.weeklyStreak = 3;
+    s.bestWeeklyStreak = 3;
+    s.travel = { aditya: false, chhaya: false };
+    s.travelSince = '2026-06-03';
+    s.lastTravelDay = '2026-06-05';
+    const r = applyResetRules(s, dateFor('2026-06-08')); // Monday rollover
+    assert(r.state.weeklyStreak === 3, `weekly streak frozen (got ${r.state.weeklyStreak})`);
+
+    // control: window entirely in an older week -> normal evaluation
+    let c = buildDefaultState(dateFor('2026-06-02'));
+    c.weeklyStreak = 3;
+    c.travelSince = '2026-05-20';
+    c.lastTravelDay = '2026-05-25';
+    assert(applyResetRules(c, dateFor('2026-06-08')).state.weeklyStreak === 0, 'old window does not freeze this week');
+}
+
+// ---------------------------------------------------------------
+section('travel: golden month ignores travel days');
+{
+    let s = buildDefaultState(dateFor('2026-05-31'));
+    s.lastDailyReset = '2026-05-31';
+    s.lastWeeklyReset = '2026-05-25';
+    s.travel = { aditya: false, chhaya: false };
+    s.travelSince = '2026-05-25';
+    s.lastTravelDay = '2026-05-31';
+    s.dailyHistory = [];
+    for (let d = 5; d <= 24; d++) {
+        const day = `2026-05-${String(d).padStart(2, '0')}`;
+        s.dailyHistory.push({ day, done: 12, total: 13, points: 26, totalPoints: 28.33, adityaPoints: 14, chhayaPoints: 12, byKind: null });
+    }
+    for (let d = 25; d <= 30; d++) {
+        const day = `2026-05-${String(d).padStart(2, '0')}`;
+        s.dailyHistory.push({ day, done: 0, total: 13, points: 0, totalPoints: 28.33, adityaPoints: 0, chhayaPoints: 0, byKind: null, travel: true });
+    }
+    const r = applyResetRules(s, dateFor('2026-06-01'));
+    assert(r.state.goldenMonths === 1, `golden month earned despite travel zeros (got ${r.state.goldenMonths})`);
+}
+
+// ---------------------------------------------------------------
+section('travel: state fields normalize + round-trip');
+{
+    const n = normalizeState({
+        travel: { aditya: true, chhaya: 'nonsense' },
+        travelSince: '2026-06-01',
+        lastTravelDay: '2026-06-05',
+        dailyHistory: [
+            { day: '2026-06-02', done: 1, total: 13, points: 2, totalPoints: 28, adityaPoints: 2, chhayaPoints: 0, travel: true },
+            { day: '2026-06-03', done: 1, total: 13, points: 2, totalPoints: 28, adityaPoints: 0, chhayaPoints: 2 }
+        ]
+    });
+    assert(n.travel.aditya === true && n.travel.chhaya === false, 'travel booleans sanitized');
+    assert(n.travelSince === '2026-06-01' && n.lastTravelDay === '2026-06-05', 'window fields kept');
+    assert(n.dailyHistory[0].travel === true, 'history travel flag kept');
+    assert(!('travel' in n.dailyHistory[1]), 'absent flag stays absent');
+    const legacy = normalizeState({ tasks: {} });
+    assert(legacy.travel.aditya === false && legacy.travelSince === '' && legacy.lastTravelDay === '', 'legacy docs default travel off');
 }
 
 // ---------------------------------------------------------------

@@ -18,7 +18,13 @@
             <button class="user-tab" type="button" role="tab" data-user="aditya" aria-selected="true">aditya</button>
             <button class="user-tab" type="button" role="tab" data-user="chhaya" aria-selected="false">chhaya</button>
         </div>
+        <button class="together-toggle" type="button" id="together-toggle" aria-pressed="false" title="Together mode — check-offs credit both of you, points split 50/50">🤝 together</button>
     </div>
+
+    <section class="day-history" aria-label="Chore history">
+        <div class="day-strip" id="day-strip" role="tablist" aria-label="This week"></div>
+        <div class="day-detail" id="day-detail" hidden></div>
+    </section>
 
     <section class="love-notes" id="love-notes" aria-label="Kudos">
         <button type="button" class="love-notes-header" id="ln-toggle" aria-expanded="false">
@@ -52,18 +58,22 @@
 
     <div class="card" data-user="aditya">
         <div class="card-header header-aditya">
-            <h2 data-tag="// user_01">Aditya</h2>
+            <h2>Aditya</h2>
+            <button type="button" class="travel-toggle" data-travel-toggle="aditya" aria-pressed="false" title="Travel mode — pause dailies, freeze streaks">✈</button>
             <span class="progress-pill" data-progress-pill>0 / 0</span>
         </div>
+        <div class="travel-note" data-travel-note hidden>✈ traveling — dailies paused, streaks frozen</div>
         <div class="board" data-board></div>
         <div class="card-footer" data-card-footer></div>
     </div>
 
     <div class="card" data-user="chhaya">
         <div class="card-header header-chhaya">
-            <h2 data-tag="// user_02">Chhaya</h2>
+            <h2>Chhaya</h2>
+            <button type="button" class="travel-toggle" data-travel-toggle="chhaya" aria-pressed="false" title="Travel mode — pause dailies, freeze streaks">✈</button>
             <span class="progress-pill" data-progress-pill>0 / 0</span>
         </div>
+        <div class="travel-note" data-travel-note hidden>✈ traveling — dailies paused, streaks frozen</div>
         <div class="board" data-board></div>
         <div class="card-footer" data-card-footer></div>
     </div>
