@@ -131,7 +131,7 @@ section('one-time task survives its completion day');
 }
 
 // ---------------------------------------------------------------
-section('daily streak: >=80% + both acted');
+section('daily streak: >=50% of tasks + both acted, 1 free pass per week');
 {
     let s = buildDefaultState(dateFor('2026-06-02'));
     const defs = getMergedDefs(s);
@@ -140,12 +140,51 @@ section('daily streak: >=80% + both acted');
     dailies.forEach(id => { s = check(s, id, defs.byId[id].owner, '2026-06-02'); });
     let r = applyResetRules(s, dateFor('2026-06-03'));
     assert(r.state.streak === 1, `streak 1 after full co-op day (got ${r.state.streak})`);
-    // next day only aditya acts -> streak resets
+    // next day only aditya acts -> free pass freezes instead of resetting
     let s2 = r.state;
     dailies.filter(id => defs.byId[id].owner === 'aditya').forEach(id => { s2 = check(s2, id, 'aditya', '2026-06-03'); });
     r = applyResetRules(s2, dateFor('2026-06-04'));
-    assert(r.state.streak === 0, 'streak resets when only one acted / below threshold');
+    assert(r.state.streak === 1, `first miss of the week freezes via free pass (got ${r.state.streak})`);
+    assert(r.state.streakShieldWeek === '2026-06-01', `shield stamped with the missed week (got ${r.state.streakShieldWeek})`);
+    // second miss the same week -> reset
+    r = applyResetRules(r.state, dateFor('2026-06-05'));
+    assert(r.state.streak === 0, 'second miss in the week resets');
     assert(r.state.bestStreak === 1, 'best streak kept');
+}
+
+// ---------------------------------------------------------------
+section('daily streak: task count, not points, clears the bar');
+{
+    // 7 of 13 tasks but only ~8 of 28 points (no 12-pt Cooking) — under the
+    // old points rule this day scored 28%; by task count it qualifies.
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    ['a_cat1', 'a_cat2', 'a_cat3', 'a1', 'a2', 'a3'].forEach(id => { s = check(s, id, 'aditya', '2026-06-02'); });
+    s = check(s, 'c1', 'chhaya', '2026-06-02');
+    const r = applyResetRules(s, dateFor('2026-06-03'));
+    assert(r.state.streak === 1, `small-chore day still earns the streak (got ${r.state.streak})`);
+}
+
+// ---------------------------------------------------------------
+section('daily streak: free pass covers a fully skipped day');
+{
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    const defs = getMergedDefs(s);
+    s.streak = 3;
+    defaultCycleIds(defs, 'daily').forEach(id => { s = check(s, id, defs.byId[id].owner, '2026-06-02'); });
+    // nobody opens the app on 06-03; rules run again on 06-04
+    let r = applyResetRules(s, dateFor('2026-06-04'));
+    assert(r.state.streak === 3, `one skipped day frozen by the free pass (got ${r.state.streak})`);
+    assert(r.state.streakShieldWeek === '2026-06-01', 'shield spent on the skipped day\'s week');
+    // next empty day same week: shield already spent -> reset
+    r = applyResetRules(r.state, dateFor('2026-06-05'));
+    assert(r.state.streak === 0, 'no second free pass in the same week');
+    // a fresh week recharges the pass
+    let s3 = buildDefaultState(dateFor('2026-06-09'));
+    s3.streak = 2;
+    s3.streakShieldWeek = '2026-06-01';
+    const r3 = applyResetRules(s3, dateFor('2026-06-10'));
+    assert(r3.state.streak === 2, `new week, new pass (got ${r3.state.streak})`);
+    assert(r3.state.streakShieldWeek === '2026-06-08', 'shield restamped to the new week');
 }
 
 // ---------------------------------------------------------------
@@ -167,6 +206,23 @@ section('weekly streak across week rollover');
     // skipped week -> reset
     const r2 = applyResetRules(r.state, dateFor('2026-06-22'));
     assert(r2.state.weeklyStreak === 0, 'weekly streak resets after a skipped week');
+}
+
+// ---------------------------------------------------------------
+section('weekly streak: half the deep-clean points is enough');
+{
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    const defs = getMergedDefs(s);
+    // chhaya's weeklies (~16.3 pts) + grocery run (4) ≈ 59% of the 34.3-pt board
+    defaultCycleIds(defs, 'weekly').filter(id => defs.byId[id].owner === 'chhaya')
+        .forEach(id => { s = check(s, id, 'chhaya', '2026-06-02'); });
+    s = check(s, 'a18', 'aditya', '2026-06-02');
+    const r = applyResetRules(s, dateFor('2026-06-08'));
+    assert(r.state.weeklyStreak === 1, `>=50% weekly pts + both acted earns it (got ${r.state.weeklyStreak})`);
+    // but one person alone doesn't, even at 100%
+    let solo = buildDefaultState(dateFor('2026-06-02'));
+    defaultCycleIds(defs, 'weekly').forEach(id => { solo = check(solo, id, 'chhaya', '2026-06-02'); });
+    assert(applyResetRules(solo, dateFor('2026-06-08')).state.weeklyStreak === 0, 'co-op still required weekly');
 }
 
 // ---------------------------------------------------------------
@@ -461,10 +517,13 @@ section('travel: daily streak freezes instead of resetting');
     const entry = r.state.dailyHistory.find(h => h.day === '2026-06-02');
     assert(entry && entry.travel === true, 'closed travel day stamped');
 
-    // control: same day, no travel -> streak resets
+    // control: same day, no travel, free pass already spent -> streak resets
     let c = buildDefaultState(dateFor('2026-06-02'));
     c.streak = 5;
+    c.streakShieldWeek = '2026-06-01';
     assert(applyResetRules(c, dateFor('2026-06-03')).state.streak === 0, 'without travel the empty day resets');
+    // travel freeze does NOT spend the free pass
+    assert(r.state.streakShieldWeek === '', 'travel day leaves the shield untouched');
 }
 
 // ---------------------------------------------------------------
@@ -472,6 +531,7 @@ section('travel: window keeps protecting days closed after return');
 {
     let s = buildDefaultState(dateFor('2026-06-02'));
     s.streak = 4;
+    s.streakShieldWeek = '2026-06-01'; // pass already spent this week
     s.travel = { aditya: false, chhaya: false }; // already back home
     s.travelSince = '2026-06-01';
     s.lastTravelDay = '2026-06-02';
@@ -541,6 +601,8 @@ section('travel: state fields normalize + round-trip');
     assert(!('travel' in n.dailyHistory[1]), 'absent flag stays absent');
     const legacy = normalizeState({ tasks: {} });
     assert(legacy.travel.aditya === false && legacy.travelSince === '' && legacy.lastTravelDay === '', 'legacy docs default travel off');
+    assert(legacy.streakShieldWeek === '', 'legacy docs default shield unspent');
+    assert(normalizeState({ tasks: {}, streakShieldWeek: '2026-06-01' }).streakShieldWeek === '2026-06-01', 'shield week round-trips');
 }
 
 // ---------------------------------------------------------------

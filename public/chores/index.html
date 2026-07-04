@@ -213,6 +213,39 @@ body[data-active-user="chhaya"] .user-tab[data-user="chhaya"] {
 /* while together mode is on, the single-user tabs step back */
 body[data-together="true"] .user-tabs { opacity: 0.45; }
 
+/* --- Hide-done toggle --- */
+
+.hide-done-toggle {
+    appearance: none;
+    -webkit-appearance: none;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    letter-spacing: 0.02em;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+
+.hide-done-toggle:hover { color: var(--text-secondary); }
+
+.hide-done-toggle[aria-pressed="true"] {
+    background: var(--surface-subtle);
+    border-color: var(--border-strong);
+    color: var(--text);
+    font-weight: 700;
+}
+
+body.hide-done [data-board] .task-item.is-done,
+body.hide-done #extras-list .task-item.is-one-time-done {
+    display: none;
+}
+
 /* --- Day history strip --- */
 
 .day-history {
@@ -356,6 +389,12 @@ body.history-view .travel-toggle {
 
 body.history-view [data-board] .checkbox:disabled {
     cursor: default;
+}
+
+/* the overview box shows the picked day too — match the snapshot look */
+body.history-view .stats-panel {
+    border-style: dashed;
+    border-color: var(--border-strong);
 }
 
 /* --- Travel mode --- */
@@ -668,6 +707,79 @@ body.history-view [data-board] .checkbox:disabled {
 
 .checkbox:checked ~ .badge { opacity: 0.5; }
 
+/* Streak badges — recently earned + next tier to chase */
+.streak-badges {
+    flex-basis: 100%;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.badge-strip-label {
+    font-family: var(--mono);
+    font-size: 0.625rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.badge-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.badge-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 11px;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--text-secondary);
+    cursor: help;
+}
+
+.badge-chip.is-earned {
+    background: var(--accent-success-bg);
+    border-color: var(--accent-success-border);
+    color: var(--accent-success);
+}
+
+.badge-chip-icon { font-size: 0.85rem; line-height: 1; }
+
+.badge-chip-name {
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+}
+
+.badge-chip-check { font-weight: 700; }
+
+.badge-chip-progress {
+    color: var(--text-muted);
+    font-variant-numeric: tabular-nums;
+}
+
+.badge-chip-bar {
+    width: 40px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--surface-subtle);
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.badge-chip-fill {
+    display: block;
+    height: 100%;
+    background: var(--text-secondary);
+    transition: width 0.3s ease;
+}
+
 /* Stats panel */
 .stats-panel {
     flex-basis: 100%;
@@ -764,6 +876,14 @@ body.history-view [data-board] .checkbox:disabled {
 
 .history-bar.is-today .history-bar-fill {
     background: var(--accent-success);
+}
+
+.history-bar.is-selected {
+    border-color: var(--text-secondary);
+}
+
+.history-bar.is-selected .history-bar-fill {
+    background: var(--text);
 }
 
 .history-bar.is-empty { opacity: 0.5; }
@@ -1585,6 +1705,7 @@ body.history-view [data-board] .checkbox:disabled {
             "actor  actor  notes"
             "days   days   days"
             "figs   first  second"
+            "badges first  second"
             "stats  first  second";
         gap: 20px;
         row-gap: 16px;
@@ -1597,6 +1718,7 @@ body.history-view [data-board] .checkbox:disabled {
     .love-notes   { grid-area: notes;  max-width: none; margin: 0; align-self: center; }
     .day-history  { grid-area: days;   max-width: none; margin: 0; }
     .load-balance { grid-area: figs;   max-width: none; margin: 0; --fig-scale: 1.45; }
+    .streak-badges { grid-area: badges; max-width: none; margin: 0; }
     .stats-panel  { grid-area: stats;  max-width: none; margin: 0; }
     /* active "checking as" user owns the first card column */
     .card[data-user="aditya"] { grid-area: first; max-width: none; }
@@ -1635,9 +1757,13 @@ body.history-view [data-board] .checkbox:disabled {
         padding: 6px 8px;
         border-radius: 8px;
         border: 1px solid var(--border);
+        flex-wrap: wrap;
     }
 
     .user-tabs { flex: 1; }
+
+    .together-toggle,
+    .hide-done-toggle { padding: 8px 10px; }
 
     .user-tab {
         flex: 1;
@@ -2344,6 +2470,7 @@ body.history-view [data-board] .checkbox:disabled {
             <button class="user-tab" type="button" role="tab" data-user="chhaya" aria-selected="false">chhaya</button>
         </div>
         <button class="together-toggle" type="button" id="together-toggle" aria-pressed="false" title="Together mode — check-offs credit both of you, points split 50/50">🤝 together</button>
+        <button class="hide-done-toggle" type="button" id="hide-done-toggle" aria-pressed="false" title="Hide chores that are already checked off">🙈 hide done</button>
     </div>
 
     <section class="day-history" aria-label="Chore history">
@@ -2380,6 +2507,8 @@ body.history-view [data-board] .checkbox:disabled {
             <div class="load-label">chhaya</div>
         </div>
     </section>
+
+    <section class="streak-badges" aria-label="Streak badges" data-streak-badges></section>
 
     <div class="card" data-user="aditya">
         <div class="card-header header-aditya">
@@ -2437,7 +2566,7 @@ body.history-view [data-board] .checkbox:disabled {
     <section class="stats-panel" aria-label="Stats">
         <div class="stats-grid">
             <div class="stat">
-                <div class="stat-label">today</div>
+                <div class="stat-label" data-stat="today-label">today</div>
                 <div class="stat-value" data-stat="today-count">0 / 0</div>
                 <div class="stat-meta" data-stat="today-pts">0 pts</div>
             </div>
@@ -2447,12 +2576,12 @@ body.history-view [data-board] .checkbox:disabled {
                 <div class="stat-meta" data-stat="weekly-pts">0 pts</div>
             </div>
             <div class="stat">
-                <div class="stat-label">streak</div>
+                <div class="stat-label" data-stat="streak-label">streak</div>
                 <div class="stat-value" data-stat="streak-days">0</div>
                 <div class="stat-meta">
                     <span data-stat="streak-meta">days</span><span class="stat-faded" data-stat="streak-best"></span>
                 </div>
-                <div class="stat-rule">≥80% daily · co-op</div>
+                <div class="stat-rule" data-stat="streak-rule">≥50% tasks · both act · 1 skip/wk</div>
             </div>
             <div class="stat">
                 <div class="stat-label">last 7 days</div>
@@ -2461,7 +2590,7 @@ body.history-view [data-board] .checkbox:disabled {
             </div>
         </div>
         <div class="stats-gauge">
-            <div class="gauge-label">weekly progress · daily + deep clean</div>
+            <div class="gauge-label" data-stat="gauge-label">weekly progress · daily + deep clean</div>
             <div class="gauge-bar">
                 <div class="gauge-segment gauge-segment-daily" data-stat="gauge-daily"></div>
                 <div class="gauge-segment gauge-segment-weekly" data-stat="gauge-weekly"></div>
@@ -2498,14 +2627,19 @@ const COLLECTION_NAME = 'dashboards';
 const DOCUMENT_ID = 'hidden-chores-tasklist';
 const RESET_INFO = 'daily resets nightly · weekly mon';
 const HISTORY_CAP = 35;
-const STREAK_THRESHOLD = 0.80;
-const WEEKLY_STREAK_THRESHOLD = 0.80;
+// Daily streak: measured on TASK COUNT (done/total), not points — the
+// 12-pt Cooking chore is ~44% of the daily board's points, which made a
+// points-based bar mathematically unreachable on non-cooking days.
+// Retuned July 2026 from 0.80 (points) after real data showed 1 qualifying
+// day in the first 13 tracked.
+const STREAK_THRESHOLD = 0.50;
+const WEEKLY_STREAK_THRESHOLD = 0.50;
 const MONTHLY_THRESHOLD = 0.85;
 const MONTHLY_MIN_DAYS = 15;
 
 const KUDOS_CAP = 50;
 const EVENTS_CAP = 400;
-const CHANGELOG_CAP = 100;
+const CHANGELOG_CAP = 250;
 
 const LOAD_DECAY = 0.5;
 const LOAD_WEEK_CAP = 4;
@@ -2725,6 +2859,12 @@ function getWeekKey(date = new Date()) {
     return formatDateKey(zoned.getUTCFullYear(), zoned.getUTCMonth() + 1, zoned.getUTCDate());
 }
 
+function addDaysToDayKey(dayKey, n) {
+    const [y, m, d] = dayKey.split('-').map(Number);
+    const dt = new Date(Date.UTC(y, m - 1, d + n, 12));
+    return formatDateKey(dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate());
+}
+
 function daysBetween(fromKey, toKey) {
     if (!fromKey || !toKey) return 0;
     const [y1, m1, d1] = fromKey.split('-').map(Number);
@@ -2854,6 +2994,7 @@ function buildDefaultState(date = new Date()) {
         lastTravelDay: '',
         streak: 0,
         bestStreak: 0,
+        streakShieldWeek: '',
         weeklyStreak: 0,
         bestWeeklyStreak: 0,
         goldenMonths: 0,
@@ -3028,6 +3169,7 @@ function normalizeState(rawState) {
         lastTravelDay: typeof rawState.lastTravelDay === 'string' ? rawState.lastTravelDay : '',
         streak: nonNegInt(rawState.streak),
         bestStreak: nonNegInt(rawState.bestStreak),
+        streakShieldWeek: typeof rawState.streakShieldWeek === 'string' ? rawState.streakShieldWeek : '',
         weeklyStreak: nonNegInt(rawState.weeklyStreak),
         bestWeeklyStreak: nonNegInt(rawState.bestWeeklyStreak),
         goldenMonths: nonNegInt(rawState.goldenMonths),
@@ -3120,17 +3262,28 @@ function applyResetRules(sourceState, date = new Date()) {
             next.dailyHistory = next.dailyHistory.slice(-HISTORY_CAP);
         }
 
-        // streak from the day that just closed — frozen on travel days
+        // streak from the day that just closed — frozen on travel days.
+        // A day qualifies at >=STREAK_THRESHOLD of daily TASKS (count, not
+        // points) with both partners logging something. One miss per week —
+        // a sub-par day or a fully skipped one — spends the free pass and
+        // freezes the streak instead of resetting it.
         if (!isTravelDay(next.lastDailyReset)) {
             const closing = next.dailyHistory.find(h => h.day === next.lastDailyReset)
                 || aggregateDayEntry(defs, next.lastDailyReset, next.events);
             const daysPassed = daysBetween(next.lastDailyReset, todayKey);
-            const pctDone = closing.totalPoints > 0 ? closing.points / closing.totalPoints : 0;
-            const earned = daysPassed === 1 && pctDone >= STREAK_THRESHOLD
+            const ratioDone = closing.total > 0 ? closing.done / closing.total : 0;
+            const dayQualifies = ratioDone >= STREAK_THRESHOLD
                 && closing.adityaPoints > 0 && closing.chhayaPoints > 0;
-            if (earned) {
+            const misses = (daysPassed - 1) + (dayQualifies ? 0 : 1);
+            const missedDay = dayQualifies
+                ? addDaysToDayKey(next.lastDailyReset, 1)
+                : next.lastDailyReset;
+            const shieldWeek = getWeekKeyFromDayKey(missedDay);
+            if (misses === 0) {
                 next.streak += 1;
                 if (next.streak > next.bestStreak) next.bestStreak = next.streak;
+            } else if (misses === 1 && next.streak > 0 && next.streakShieldWeek !== shieldWeek) {
+                next.streakShieldWeek = shieldWeek; // free pass: freeze, don't reset
             } else {
                 next.streak = 0;
             }
@@ -3604,6 +3757,7 @@ function fullDocPayload(s) {
         lastTravelDay: s.lastTravelDay || '',
         streak: s.streak,
         bestStreak: s.bestStreak,
+        streakShieldWeek: s.streakShieldWeek || '',
         weeklyStreak: s.weeklyStreak || 0,
         bestWeeklyStreak: s.bestWeeklyStreak || 0,
         goldenMonths: s.goldenMonths || 0,
@@ -3712,7 +3866,7 @@ async function deleteOneTimeTaskInCloud(taskId, logEntry, removedEvent) {
 // still inside the current week (older days live solely in the archive),
 // rewrite dailyHistory, optionally flip the current checkbox for weeklies,
 // and refresh the day's archive doc.
-async function backfillCompletionInCloud({ event, appendToLive, checkNow, historyRewrite, archiveDay }) {
+async function backfillCompletionInCloud({ event, appendToLive, checkNow, historyRewrite, archiveDay, logEntry }) {
     if (!firestoreApi || !docRef) return;
     const update = { dailyHistory: historyRewrite };
     if (appendToLive) update.events = firestoreApi.arrayUnion(event);
@@ -3720,11 +3874,12 @@ async function backfillCompletionInCloud({ event, appendToLive, checkNow, histor
         update[`tasks.${event.taskId}`] = true;
         update[`taskActor.${event.taskId}`] = event.who;
     }
+    if (logEntry) update.changeLog = firestoreApi.arrayUnion(logEntry);
     await firestoreApi.updateDoc(docRef, stamp(update));
     if (archiveDay) await archiveDayToSubcollection(archiveDay.day, archiveDay);
 }
 
-async function retroUncheckInCloud({ event, removeFromLive, uncheckNow, historyRewrite, archiveDay }) {
+async function retroUncheckInCloud({ event, removeFromLive, uncheckNow, historyRewrite, archiveDay, logEntry }) {
     if (!firestoreApi || !docRef) return;
     const update = { dailyHistory: historyRewrite };
     if (removeFromLive) update.events = firestoreApi.arrayRemove(event);
@@ -3732,6 +3887,7 @@ async function retroUncheckInCloud({ event, removeFromLive, uncheckNow, historyR
         update[`tasks.${event.taskId}`] = false;
         update[`taskActor.${event.taskId}`] = firestoreApi.deleteField();
     }
+    if (logEntry) update.changeLog = firestoreApi.arrayUnion(logEntry);
     await firestoreApi.updateDoc(docRef, stamp(update));
     if (archiveDay) await archiveDayToSubcollection(archiveDay.day, archiveDay);
 }
@@ -4341,6 +4497,24 @@ function setupTogetherToggle() {
     });
 }
 
+// Hide-done: tuck away already-checked chores to see only what's left.
+const HIDE_DONE_KEY = 'choreDashboardHideDone';
+
+function setupHideDoneToggle() {
+    const btn = document.getElementById('hide-done-toggle');
+    if (!btn) return;
+    const apply = on => {
+        document.body.classList.toggle('hide-done', on);
+        btn.setAttribute('aria-pressed', String(on));
+    };
+    apply(localStorage.getItem(HIDE_DONE_KEY) === '1');
+    btn.addEventListener('click', () => {
+        const on = !document.body.classList.contains('hide-done');
+        apply(on);
+        localStorage.setItem(HIDE_DONE_KEY, on ? '1' : '0');
+    });
+}
+
 function buildTaskRow(def) {
     const li = document.createElement('li');
     li.className = 'task-item';
@@ -4402,20 +4576,31 @@ function buildSection(user, secId, label, secDefs) {
     const content = document.createElement('div');
     content.className = 'section-content';
 
+    // Cluster by room (case-insensitive, first-appearance order) so a custom
+    // chore typed as "kitchen" joins the existing Kitchen group instead of
+    // spawning a duplicate header at the bottom of the section.
+    const roomKeyOf = d => (d.room || '').trim().toLowerCase();
+    const roomOrder = [];
+    secDefs.forEach(d => {
+        const k = roomKeyOf(d);
+        if (!roomOrder.includes(k)) roomOrder.push(k);
+    });
+    const ordered = roomOrder.flatMap(k => secDefs.filter(d => roomKeyOf(d) === k));
+
     let currentRoom;
     let currentList = null;
-    secDefs.forEach(def => {
-        const room = def.room || '';
-        if (!currentList || room !== currentRoom) {
-            currentRoom = room;
+    ordered.forEach(def => {
+        const roomKey = roomKeyOf(def);
+        if (!currentList || roomKey !== currentRoom) {
+            currentRoom = roomKey;
             currentList = document.createElement('ul');
             currentList.className = 'task-list';
-            if (room) {
+            if (roomKey) {
                 const group = document.createElement('div');
                 group.className = 'room-group';
                 const h = document.createElement('h4');
                 h.className = 'room-label';
-                h.textContent = room;
+                h.textContent = def.room; // first-seen casing labels the cluster
                 group.appendChild(h);
                 group.appendChild(currentList);
                 content.appendChild(group);
@@ -4465,12 +4650,14 @@ function syncCheckboxes() {
             cb.checked = doneIds.has(cb.id);
             // both directions editable: check to backfill, uncheck a mistake
             cb.disabled = !ready;
+            cb.closest('.task-item').classList.toggle('is-done', cb.checked);
         });
         return;
     }
     document.querySelectorAll('[data-board] .checkbox').forEach(cb => {
         cb.checked = Boolean(state.tasks[cb.id]);
         cb.disabled = false;
+        cb.closest('.task-item').classList.toggle('is-done', cb.checked);
     });
 }
 
@@ -4574,6 +4761,7 @@ function refreshBoardsView() {
     renderTaskDecorations();
     renderOneTimeTasks();
     renderDayHistory();
+    updateStats();
 }
 
 function renderDayHistory() {
@@ -4683,9 +4871,83 @@ function updateProgress() {
     });
 }
 
+const STREAK_RULE_TEXT = `≥${Math.round(STREAK_THRESHOLD * 100)}% tasks · both act · 1 skip/wk`;
+
+// The strip under the stick figures: recently earned streak badges plus the
+// next tier with progress — something to look forward to while checking off.
+function renderStreakBadges() {
+    const container = document.querySelector('[data-streak-badges]');
+    if (!container || !state) return;
+    const earnedMap = state.achievements || {};
+    container.innerHTML = '';
+
+    const label = document.createElement('div');
+    label.className = 'badge-strip-label';
+    label.textContent = 'streak badges · next up';
+    container.appendChild(label);
+
+    const row = document.createElement('div');
+    row.className = 'badge-chips';
+    [
+        { group: 'daily', current: state.streak || 0, key: 'streak', unit: 'd' },
+        { group: 'weekly', current: state.weeklyStreak || 0, key: 'weeks', unit: 'w' }
+    ].forEach(({ group, current, key, unit }) => {
+        const tiers = ACHIEVEMENT_DEFS.filter(d => d.group === group);
+        const isDone = d => Boolean(isAchievementEarned(earnedMap, d)) || current >= d[key];
+        const earned = tiers.filter(isDone);
+        const next = tiers.find(d => !isDone(d));
+        earned.slice(-2).forEach(d => row.appendChild(buildBadgeChip(d, { earned: true })));
+        if (next) row.appendChild(buildBadgeChip(next, { current, target: next[key], unit }));
+    });
+    container.appendChild(row);
+}
+
+function buildBadgeChip(def, opts) {
+    const chip = document.createElement('div');
+    chip.className = 'badge-chip' + (opts.earned ? ' is-earned' : '');
+    chip.title = `${def.name} — ${def.hint}`;
+
+    const icon = document.createElement('span');
+    icon.className = 'badge-chip-icon';
+    icon.textContent = def.icon;
+    chip.appendChild(icon);
+
+    const name = document.createElement('span');
+    name.className = 'badge-chip-name';
+    name.textContent = def.name.toLowerCase();
+    chip.appendChild(name);
+
+    if (opts.earned) {
+        const check = document.createElement('span');
+        check.className = 'badge-chip-check';
+        check.textContent = '✓';
+        chip.appendChild(check);
+    } else {
+        const progress = document.createElement('span');
+        progress.className = 'badge-chip-progress';
+        progress.textContent = `${opts.current}/${opts.target}${opts.unit}`;
+        chip.appendChild(progress);
+
+        const bar = document.createElement('span');
+        bar.className = 'badge-chip-bar';
+        const fill = document.createElement('span');
+        fill.className = 'badge-chip-fill';
+        fill.style.width = `${Math.min(100, (opts.current / opts.target) * 100)}%`;
+        bar.appendChild(fill);
+        chip.appendChild(bar);
+    }
+    return chip;
+}
+
 function updateStats() {
     if (!state) return;
     const defs = getMergedDefs(state);
+    renderStreakBadges(); // always live — the badges track the real streak
+    if (isHistoryView()) {
+        updateStatsForHistoryDay(defs);
+        renderLoadFigures();
+        return;
+    }
     const tasks = state.tasks;
     const dailyIds = filterTravelPaused(defs, dailyIdsOf(defs), state.travel);
     const weeklyIds = weeklyIdsOf(defs);
@@ -4698,32 +4960,78 @@ function updateStats() {
     const weeklyPts = pointsForChecked(defs, weeklyIds, tasks);
     const weeklyTotalPts = pointsFor(defs, weeklyIds);
 
+    setText('today-label', 'today');
     setText('today-count', `${dailyDone} / ${dailyIds.length}`);
     setText('today-pts', `${fmtPts(dailyPts)} / ${fmtPts(dailyTotalPts)} pts`);
-    setText('weekly-count', `${weeklyDone} / ${weeklyIds.length}`);
     setText('weekly-pts', `${fmtPts(weeklyPts)} / ${fmtPts(weeklyTotalPts)} pts`);
+    setText('weekly-count', `${weeklyDone} / ${weeklyIds.length}`);
 
     const streak = state.streak ?? 0;
     const best = state.bestStreak ?? 0;
+    const shieldUsed = state.streakShieldWeek === getWeekKey();
+    setText('streak-label', 'streak');
     setText('streak-days', String(streak));
-    setText('streak-meta', (streak === 1 ? 'day' : 'days') + (travelActive(state) ? ' · ✈ frozen' : ''));
+    setText('streak-meta', (streak === 1 ? 'day' : 'days')
+        + (travelActive(state) ? ' · ✈ frozen' : shieldUsed ? ' · 🛡 pass used' : ''));
     setText('streak-best', best > 0 ? ` · best ${best}d` : '');
+    setText('streak-rule', STREAK_RULE_TEXT);
 
     const totalBoardPts = dailyTotalPts + weeklyTotalPts;
     const totalBoardDonePts = dailyPts + weeklyPts;
     const boardPctTotal = totalBoardPts > 0 ? (totalBoardDonePts / totalBoardPts) * 100 : 0;
 
+    setText('gauge-label', 'weekly progress · daily + deep clean');
     setWidth('gauge-daily', totalBoardPts > 0 ? `${(dailyPts / totalBoardPts) * 100}%` : '0%');
     setWidth('gauge-weekly', totalBoardPts > 0 ? `${(weeklyPts / totalBoardPts) * 100}%` : '0%');
     setText('gauge-total', `${fmtPts(totalBoardDonePts)} / ${fmtPts(totalBoardPts)} pts · ${Math.round(boardPctTotal)}%`);
     setText('gauge-daily-pts', `daily ${fmtPts(dailyPts)} / ${fmtPts(dailyTotalPts)}`);
     setText('gauge-weekly-pts', `weekly ${fmtPts(weeklyPts)} / ${fmtPts(weeklyTotalPts)}`);
 
-    renderHistory();
+    renderHistory(getDayKey());
     renderLoadFigures();
 }
 
-function renderHistory() {
+// Snapshot flavor of the overview box: every tile shows the selected day.
+// The streak tile becomes a "day score" (streaks are only known live).
+function updateStatsForHistoryDay(defs) {
+    const dayKey = selectedHistoryDay;
+    const { status, events } = dayEventsStatus(dayKey);
+    const entry = (state.dailyHistory || []).find(h => h.day === dayKey)
+        || aggregateDayEntry(defs, dayKey, events);
+    const loading = status !== 'ready';
+
+    setText('today-label', dayKeyLabel(dayKey, 'short'));
+    setText('today-count', `${entry.done} / ${entry.total}`);
+    setText('today-pts', `${fmtPts(entry.points)} / ${fmtPts(entry.totalPoints)} pts`);
+
+    const weeklyEvents = events.filter(e => e.kind === 'weekly');
+    const weeklyPts = weeklyEvents.length > 0
+        ? weeklyEvents.reduce((s, e) => s + (e.pts || 0), 0)
+        : (entry.byKind ? entry.byKind.weekly || 0 : 0);
+    setText('weekly-count', loading ? '…' : String(weeklyEvents.length));
+    setText('weekly-pts', loading ? 'fetching that day' : `${fmtPts(weeklyPts)} pts that day`);
+
+    const ratio = entry.total > 0 ? entry.done / entry.total : 0;
+    const qualified = ratio >= STREAK_THRESHOLD && entry.adityaPoints > 0 && entry.chhayaPoints > 0;
+    setText('streak-label', 'day score');
+    setText('streak-days', `${Math.round(ratio * 100)}%`);
+    setText('streak-meta', `${fmtPts(entry.adityaPoints)} a · ${fmtPts(entry.chhayaPoints)} c`);
+    setText('streak-best', '');
+    setText('streak-rule', qualified ? '✓ streak-worthy day' : 'not a streak day');
+
+    const totalBoardPts = entry.totalPoints + pointsFor(defs, weeklyIdsOf(defs));
+    const donePts = entry.points + weeklyPts;
+    setText('gauge-label', `${dayKeyLabel(dayKey, 'short')} · daily + deep clean`);
+    setWidth('gauge-daily', totalBoardPts > 0 ? `${(entry.points / totalBoardPts) * 100}%` : '0%');
+    setWidth('gauge-weekly', totalBoardPts > 0 ? `${(weeklyPts / totalBoardPts) * 100}%` : '0%');
+    setText('gauge-total', `${fmtPts(donePts)} / ${fmtPts(totalBoardPts)} pts · ${totalBoardPts > 0 ? Math.round((donePts / totalBoardPts) * 100) : 0}%`);
+    setText('gauge-daily-pts', `daily ${fmtPts(entry.points)} / ${fmtPts(entry.totalPoints)}`);
+    setText('gauge-weekly-pts', `weekly ${fmtPts(weeklyPts)} that day`);
+
+    renderHistory(dayKey);
+}
+
+function renderHistory(endDayKey) {
     const container = document.querySelector('[data-stat="history-bars"]');
     if (!container) return;
     container.innerHTML = '';
@@ -4731,11 +5039,8 @@ function renderHistory() {
     const defs = getMergedDefs(state);
     const todayKey = getDayKey();
     const days = [];
-    const today = new Date();
     for (let i = 6; i >= 0; i--) {
-        const d = new Date(today);
-        d.setDate(d.getDate() - i);
-        days.push(getDayKey(d));
+        days.push(addDaysToKey(endDayKey, -i));
     }
 
     const histByDay = Object.fromEntries((state.dailyHistory ?? []).map(h => [h.day, h]));
@@ -4750,6 +5055,7 @@ function renderHistory() {
     days.forEach(day => {
         const bar = document.createElement('div');
         bar.className = 'history-bar';
+        if (isHistoryView() && day === endDayKey) bar.classList.add('is-selected');
 
         const h = histByDay[day];
         if (h && (h.totalPoints || 0) > 0) {
@@ -5179,7 +5485,7 @@ async function applyDefChange(taskId, override, logEntry) {
     const next = { ...state, taskDefs: { ...(state.taskDefs || {}) } };
     if (override) next.taskDefs[taskId] = override;
     else delete next.taskDefs[taskId];
-    if (logEntry) next.changeLog = [...(state.changeLog || []), logEntry].slice(-100);
+    if (logEntry) next.changeLog = [...(state.changeLog || []), logEntry].slice(-CHANGELOG_CAP);
     applyStateToDom(normalizeState(next));
     if (isFirebaseReady()) {
         try { await updateTaskDefInCloud(taskId, override, logEntry); }
@@ -5345,6 +5651,10 @@ function openEditPanel(taskItem, taskId) {
 
         closeEditPanel();
         if (diffs.length === 0) return;
+        // renames already carry the name; every other edit needs it for the log
+        const logDetail = diffs.some(d => d.startsWith('renamed'))
+            ? diffs.join(' · ')
+            : `"${def.name}": ${diffs.join(' · ')}`;
 
         let override;
         if (isCustom) {
@@ -5372,7 +5682,7 @@ function openEditPanel(taskItem, taskId) {
             if (Object.keys(override).length === 0) override = null;
         }
         await applyDefChange(taskId, override,
-            logEntryFor('edit', taskId, diffs.join(' · ')));
+            logEntryFor('edit', taskId, logDetail));
     });
 
     if (!isCustom && state.taskDefs?.[taskId]) {
@@ -5519,7 +5829,14 @@ function setupCardFooters() {
             if (!name) return;
             const points = parseFloat(form.querySelector('[data-chore-size] .is-active').dataset.points);
             const cadence = form.querySelector('[data-chore-cadence] .is-active').dataset.cadence;
-            const room = roomInput.value.trim();
+            let room = roomInput.value.trim();
+            if (room) {
+                // adopt an existing room's casing so the data stays tidy
+                const existing = getMergedDefs(state).list
+                    .map(d => d.room).filter(Boolean)
+                    .find(r => r.toLowerCase() === room.toLowerCase());
+                if (existing) room = existing;
+            }
             const id = 'x_' + crypto.randomUUID().slice(0, 8);
             const override = { name, points, owner: user, cadence, custom: true };
             if (room) override.room = room;
@@ -5584,9 +5901,12 @@ async function handleBackfillToggle(taskId, cb) {
     const fill = buildBackfill(current, taskId, getActiveActor(), dayKey, dayEvents);
     if (!fill) { refreshBoardsView(); return; }
 
+    const logEntry = logEntryFor('backfill', taskId,
+        `logged "${fill.event.name}" onto ${dayKeyLabel(dayKey, 'short')}`);
     const next = {
         ...current,
-        dailyHistory: mergeHistoryEntry(current.dailyHistory, fill.entry)
+        dailyHistory: mergeHistoryEntry(current.dailyHistory, fill.entry),
+        changeLog: [...(current.changeLog || []), logEntry].slice(-CHANGELOG_CAP)
     };
     if (fill.isLiveWeek) next.events = [...(current.events || []), fill.event];
     else archivedDayCache[dayKey] = fill.dayEvents;
@@ -5610,7 +5930,8 @@ async function handleBackfillToggle(taskId, cb) {
                 ...fill.entry,
                 weekKey: getWeekKeyFromDayKey(dayKey),
                 events: fill.dayEvents
-            }
+            },
+            logEntry
         });
     } catch {
         setStatus(`saved locally · ${RESET_INFO}`, 'warning');
@@ -5627,9 +5948,12 @@ async function handleRetroUncheckToggle(taskId) {
     const un = buildRetroUncheck(current, taskId, dayKey, dayEvents);
     if (!un) { refreshBoardsView(); return; }
 
+    const logEntry = logEntryFor('uncheck', taskId,
+        `removed "${un.event.name}" from ${dayKeyLabel(dayKey, 'short')}`);
     const next = {
         ...current,
-        dailyHistory: mergeHistoryEntry(current.dailyHistory, un.entry)
+        dailyHistory: mergeHistoryEntry(current.dailyHistory, un.entry),
+        changeLog: [...(current.changeLog || []), logEntry].slice(-CHANGELOG_CAP)
     };
     if (un.isLiveWeek) next.events = (current.events || []).filter(e => e.id !== un.event.id);
     else archivedDayCache[dayKey] = un.dayEvents;
@@ -5655,7 +5979,8 @@ async function handleRetroUncheckToggle(taskId) {
                 ...un.entry,
                 weekKey: getWeekKeyFromDayKey(dayKey),
                 events: un.dayEvents
-            }
+            },
+            logEntry
         });
     } catch {
         setStatus(`saved locally · ${RESET_INFO}`, 'warning');
@@ -5894,7 +6219,7 @@ async function deleteOneTime(id, t) {
     };
     delete next.oneTimeTasks[id];
     const logEntry = logEntryFor('delete', id, `removed one-time "${t.name}"`);
-    next.changeLog = [...(state.changeLog || []), logEntry].slice(-100);
+    next.changeLog = [...(state.changeLog || []), logEntry].slice(-CHANGELOG_CAP);
     applyStateToDom(next);
     if (isFirebaseReady()) {
         try { await deleteOneTimeTaskInCloud(id, logEntry, removedEvent); }
@@ -5948,7 +6273,7 @@ function setupAddTaskForm() {
         const next = {
             ...state,
             oneTimeTasks: { ...(state.oneTimeTasks || {}), [id]: task },
-            changeLog: [...(state.changeLog || []), logEntry].slice(-100)
+            changeLog: [...(state.changeLog || []), logEntry].slice(-CHANGELOG_CAP)
         };
         applyStateToDom(next);
         nameInput.value = '';
@@ -6007,8 +6332,7 @@ function applyStateToDom(next) {
     state = next;
     saveLocalState(next);
     renderBoards();
-    updateStats();
-    refreshBoardsView();
+    refreshBoardsView(); // includes updateStats
     renderLoveNotes();
 }
 
@@ -6043,6 +6367,7 @@ async function handleSnapshot(snapshot) {
 async function initializeDashboard() {
     setupUserTabs();
     setupTogetherToggle();
+    setupHideDoneToggle();
     setupTravelToggles();
     initFigures();
     setupAddTaskForm();

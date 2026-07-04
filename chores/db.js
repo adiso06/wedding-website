@@ -19,14 +19,19 @@ export const COLLECTION_NAME = 'dashboards';
 export const DOCUMENT_ID = 'hidden-chores-tasklist';
 export const RESET_INFO = 'daily resets nightly · weekly mon';
 export const HISTORY_CAP = 35;
-export const STREAK_THRESHOLD = 0.80;
-export const WEEKLY_STREAK_THRESHOLD = 0.80;
+// Daily streak: measured on TASK COUNT (done/total), not points — the
+// 12-pt Cooking chore is ~44% of the daily board's points, which made a
+// points-based bar mathematically unreachable on non-cooking days.
+// Retuned July 2026 from 0.80 (points) after real data showed 1 qualifying
+// day in the first 13 tracked.
+export const STREAK_THRESHOLD = 0.50;
+export const WEEKLY_STREAK_THRESHOLD = 0.50;
 export const MONTHLY_THRESHOLD = 0.85;
 export const MONTHLY_MIN_DAYS = 15;
 
 export const KUDOS_CAP = 50;
 export const EVENTS_CAP = 400;
-export const CHANGELOG_CAP = 100;
+export const CHANGELOG_CAP = 250;
 
 export const LOAD_DECAY = 0.5;
 export const LOAD_WEEK_CAP = 4;
@@ -246,6 +251,12 @@ export function getWeekKey(date = new Date()) {
     return formatDateKey(zoned.getUTCFullYear(), zoned.getUTCMonth() + 1, zoned.getUTCDate());
 }
 
+export function addDaysToDayKey(dayKey, n) {
+    const [y, m, d] = dayKey.split('-').map(Number);
+    const dt = new Date(Date.UTC(y, m - 1, d + n, 12));
+    return formatDateKey(dt.getUTCFullYear(), dt.getUTCMonth() + 1, dt.getUTCDate());
+}
+
 export function daysBetween(fromKey, toKey) {
     if (!fromKey || !toKey) return 0;
     const [y1, m1, d1] = fromKey.split('-').map(Number);
@@ -375,6 +386,7 @@ export function buildDefaultState(date = new Date()) {
         lastTravelDay: '',
         streak: 0,
         bestStreak: 0,
+        streakShieldWeek: '',
         weeklyStreak: 0,
         bestWeeklyStreak: 0,
         goldenMonths: 0,
@@ -549,6 +561,7 @@ export function normalizeState(rawState) {
         lastTravelDay: typeof rawState.lastTravelDay === 'string' ? rawState.lastTravelDay : '',
         streak: nonNegInt(rawState.streak),
         bestStreak: nonNegInt(rawState.bestStreak),
+        streakShieldWeek: typeof rawState.streakShieldWeek === 'string' ? rawState.streakShieldWeek : '',
         weeklyStreak: nonNegInt(rawState.weeklyStreak),
         bestWeeklyStreak: nonNegInt(rawState.bestWeeklyStreak),
         goldenMonths: nonNegInt(rawState.goldenMonths),
@@ -641,17 +654,28 @@ export function applyResetRules(sourceState, date = new Date()) {
             next.dailyHistory = next.dailyHistory.slice(-HISTORY_CAP);
         }
 
-        // streak from the day that just closed — frozen on travel days
+        // streak from the day that just closed — frozen on travel days.
+        // A day qualifies at >=STREAK_THRESHOLD of daily TASKS (count, not
+        // points) with both partners logging something. One miss per week —
+        // a sub-par day or a fully skipped one — spends the free pass and
+        // freezes the streak instead of resetting it.
         if (!isTravelDay(next.lastDailyReset)) {
             const closing = next.dailyHistory.find(h => h.day === next.lastDailyReset)
                 || aggregateDayEntry(defs, next.lastDailyReset, next.events);
             const daysPassed = daysBetween(next.lastDailyReset, todayKey);
-            const pctDone = closing.totalPoints > 0 ? closing.points / closing.totalPoints : 0;
-            const earned = daysPassed === 1 && pctDone >= STREAK_THRESHOLD
+            const ratioDone = closing.total > 0 ? closing.done / closing.total : 0;
+            const dayQualifies = ratioDone >= STREAK_THRESHOLD
                 && closing.adityaPoints > 0 && closing.chhayaPoints > 0;
-            if (earned) {
+            const misses = (daysPassed - 1) + (dayQualifies ? 0 : 1);
+            const missedDay = dayQualifies
+                ? addDaysToDayKey(next.lastDailyReset, 1)
+                : next.lastDailyReset;
+            const shieldWeek = getWeekKeyFromDayKey(missedDay);
+            if (misses === 0) {
                 next.streak += 1;
                 if (next.streak > next.bestStreak) next.bestStreak = next.streak;
+            } else if (misses === 1 && next.streak > 0 && next.streakShieldWeek !== shieldWeek) {
+                next.streakShieldWeek = shieldWeek; // free pass: freeze, don't reset
             } else {
                 next.streak = 0;
             }
@@ -1125,6 +1149,7 @@ function fullDocPayload(s) {
         lastTravelDay: s.lastTravelDay || '',
         streak: s.streak,
         bestStreak: s.bestStreak,
+        streakShieldWeek: s.streakShieldWeek || '',
         weeklyStreak: s.weeklyStreak || 0,
         bestWeeklyStreak: s.bestWeeklyStreak || 0,
         goldenMonths: s.goldenMonths || 0,
@@ -1233,7 +1258,7 @@ export async function deleteOneTimeTaskInCloud(taskId, logEntry, removedEvent) {
 // still inside the current week (older days live solely in the archive),
 // rewrite dailyHistory, optionally flip the current checkbox for weeklies,
 // and refresh the day's archive doc.
-export async function backfillCompletionInCloud({ event, appendToLive, checkNow, historyRewrite, archiveDay }) {
+export async function backfillCompletionInCloud({ event, appendToLive, checkNow, historyRewrite, archiveDay, logEntry }) {
     if (!firestoreApi || !docRef) return;
     const update = { dailyHistory: historyRewrite };
     if (appendToLive) update.events = firestoreApi.arrayUnion(event);
@@ -1241,11 +1266,12 @@ export async function backfillCompletionInCloud({ event, appendToLive, checkNow,
         update[`tasks.${event.taskId}`] = true;
         update[`taskActor.${event.taskId}`] = event.who;
     }
+    if (logEntry) update.changeLog = firestoreApi.arrayUnion(logEntry);
     await firestoreApi.updateDoc(docRef, stamp(update));
     if (archiveDay) await archiveDayToSubcollection(archiveDay.day, archiveDay);
 }
 
-export async function retroUncheckInCloud({ event, removeFromLive, uncheckNow, historyRewrite, archiveDay }) {
+export async function retroUncheckInCloud({ event, removeFromLive, uncheckNow, historyRewrite, archiveDay, logEntry }) {
     if (!firestoreApi || !docRef) return;
     const update = { dailyHistory: historyRewrite };
     if (removeFromLive) update.events = firestoreApi.arrayRemove(event);
@@ -1253,6 +1279,7 @@ export async function retroUncheckInCloud({ event, removeFromLive, uncheckNow, h
         update[`tasks.${event.taskId}`] = false;
         update[`taskActor.${event.taskId}`] = firestoreApi.deleteField();
     }
+    if (logEntry) update.changeLog = firestoreApi.arrayUnion(logEntry);
     await firestoreApi.updateDoc(docRef, stamp(update));
     if (archiveDay) await archiveDayToSubcollection(archiveDay.day, archiveDay);
 }

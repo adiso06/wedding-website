@@ -19,6 +19,7 @@
             <button class="user-tab" type="button" role="tab" data-user="chhaya" aria-selected="false">chhaya</button>
         </div>
         <button class="together-toggle" type="button" id="together-toggle" aria-pressed="false" title="Together mode — check-offs credit both of you, points split 50/50">🤝 together</button>
+        <button class="hide-done-toggle" type="button" id="hide-done-toggle" aria-pressed="false" title="Hide chores that are already checked off">🙈 hide done</button>
     </div>
 
     <section class="day-history" aria-label="Chore history">
@@ -55,6 +56,8 @@
             <div class="load-label">chhaya</div>
         </div>
     </section>
+
+    <section class="streak-badges" aria-label="Streak badges" data-streak-badges></section>
 
     <div class="card" data-user="aditya">
         <div class="card-header header-aditya">
@@ -112,7 +115,7 @@
     <section class="stats-panel" aria-label="Stats">
         <div class="stats-grid">
             <div class="stat">
-                <div class="stat-label">today</div>
+                <div class="stat-label" data-stat="today-label">today</div>
                 <div class="stat-value" data-stat="today-count">0 / 0</div>
                 <div class="stat-meta" data-stat="today-pts">0 pts</div>
             </div>
@@ -122,12 +125,12 @@
                 <div class="stat-meta" data-stat="weekly-pts">0 pts</div>
             </div>
             <div class="stat">
-                <div class="stat-label">streak</div>
+                <div class="stat-label" data-stat="streak-label">streak</div>
                 <div class="stat-value" data-stat="streak-days">0</div>
                 <div class="stat-meta">
                     <span data-stat="streak-meta">days</span><span class="stat-faded" data-stat="streak-best"></span>
                 </div>
-                <div class="stat-rule">≥80% daily · co-op</div>
+                <div class="stat-rule" data-stat="streak-rule">≥50% tasks · both act · 1 skip/wk</div>
             </div>
             <div class="stat">
                 <div class="stat-label">last 7 days</div>
@@ -136,7 +139,7 @@
             </div>
         </div>
         <div class="stats-gauge">
-            <div class="gauge-label">weekly progress · daily + deep clean</div>
+            <div class="gauge-label" data-stat="gauge-label">weekly progress · daily + deep clean</div>
             <div class="gauge-bar">
                 <div class="gauge-segment gauge-segment-daily" data-stat="gauge-daily"></div>
                 <div class="gauge-segment gauge-segment-weekly" data-stat="gauge-weekly"></div>

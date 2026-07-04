@@ -476,6 +476,28 @@ body {
     min-width: 0;
 }
 
+.changelog-more {
+    appearance: none;
+    -webkit-appearance: none;
+    align-self: flex-start;
+    margin-top: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 14px;
+    font-family: var(--mono);
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.changelog-more:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+    background: var(--surface-subtle);
+}
+
 @media (max-width: 768px) {
     .achievement-group-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -504,8 +526,8 @@ body {
         --text: #fafaf9;
         --text-secondary: #a8a29e;
         --text-muted: #78716c;
-        --accent-aditya: #93c5fd;
-        --accent-chhaya: #fda4af;
+        --accent-aditya: #3b82f6;
+        --accent-chhaya: #f43f5e;
     }
 
     body {
@@ -516,5 +538,28 @@ body {
     .range-btn.active {
         color: var(--bg);
         background: var(--text);
+    }
+
+    /* rough-viz never sets a fill on axis/label/legend text (SVG text
+       defaults to black) and hardcodes white tooltips — retheme both.
+       !important is needed to beat the library's inline styles. */
+    .chart-container svg text {
+        fill: var(--text-secondary) !important;
+    }
+
+    .chart-container svg .labelText,
+    .chart-container svg .title {
+        fill: var(--text) !important;
+    }
+
+    .chart-container svg path.domain,
+    .chart-container svg .tick line {
+        stroke: var(--border-strong) !important;
+    }
+
+    .chart-container div.tooltip {
+        background-color: var(--surface-subtle) !important;
+        color: var(--text) !important;
+        border-color: var(--border-strong) !important;
     }
 }

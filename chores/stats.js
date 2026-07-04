@@ -53,11 +53,13 @@ let archiveCache = {};         // rangeKey -> merged day entries
 let blobUrls = [];
 
 const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+// Dark series colors validated against the #1c1917 chart surface (the old
+// pastel pair washed out); axis/tick/tooltip theming lives in stats.css.
 const COLORS = {
     stroke: isDark ? '#fafaf9' : '#1c1917',
     bg: isDark ? '#1c1917' : '#ffffff',
-    aditya: isDark ? '#93c5fd' : '#3b82f6',
-    chhaya: isDark ? '#fda4af' : '#e11d48'
+    aditya: '#3b82f6',
+    chhaya: isDark ? '#f43f5e' : '#e11d48'
 };
 
 function formatDay(dayKey) {
@@ -406,24 +408,49 @@ function renderAchievements() {
 
 // --- Change history ---
 
+let changelogShown = 12;
+
+// Older entries didn't put the chore name in the detail text ("size 1 → 2
+// pts") — resolve it from the taskId so every row names its chore.
+function changelogTaskName(c) {
+    if (!c.taskId || (c.detail || '').includes('"')) return null;
+    const defs = getMergedDefs(state);
+    if (defs.allById[c.taskId]) return defs.allById[c.taskId].name;
+    const ot = state.oneTimeTasks && state.oneTimeTasks[c.taskId];
+    return ot ? ot.name : null;
+}
+
 function renderChangeLog() {
     const container = document.getElementById('changelog-list');
     if (!container || !state) return;
-    const log = (state.changeLog || []).slice().reverse().slice(0, 30);
-    if (log.length === 0) {
+    const all = (state.changeLog || []).slice().reverse();
+    if (all.length === 0) {
         container.innerHTML = '<p class="no-data">no edits yet — the board is in its original form</p>';
         return;
     }
     container.innerHTML = '';
-    log.forEach(c => {
+    all.slice(0, changelogShown).forEach(c => {
         const row = document.createElement('div');
         row.className = 'changelog-row';
         const when = c.ts ? formatDay(getDayKey(new Date(c.ts))) : '';
+        const name = changelogTaskName(c);
+        const detail = (name ? `"${name}": ` : '') + (c.detail || c.action);
         row.innerHTML = `<span class="changelog-when">${when}</span>`
             + `<span class="changelog-who">${c.who}</span>`
-            + `<span class="changelog-detail">${escapeHtml(c.detail || c.action)}</span>`;
+            + `<span class="changelog-detail">${escapeHtml(detail)}</span>`;
         container.appendChild(row);
     });
+    if (all.length > changelogShown) {
+        const more = document.createElement('button');
+        more.type = 'button';
+        more.className = 'changelog-more';
+        more.textContent = `see more (${all.length - changelogShown} older)`;
+        more.addEventListener('click', () => {
+            changelogShown += 25;
+            renderChangeLog();
+        });
+        container.appendChild(more);
+    }
 }
 
 // --- Page assembly ---
