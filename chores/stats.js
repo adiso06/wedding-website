@@ -2,6 +2,7 @@ import {
     connectFirebase, isFirebaseReady, loadLocalState,
     subscribeToSharedState, getSnapshotData, fetchHistoryRange,
     getMergedDefs, getDayKey, getWeekKeyFromDayKey, monthKeyOf,
+    aggregateDayEntry,
     ACHIEVEMENT_DEFS, isAchievementEarned
 } from './db.js';
 
@@ -51,6 +52,7 @@ let state = null;
 let currentRange = 7;          // 7 | 30 | 90 | 0 (all)
 let archiveCache = {};         // rangeKey -> merged day entries
 let blobUrls = [];
+let chartResizeListeners = [];
 
 const isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 // Dark series colors validated against the #1c1917 chart surface (the old
@@ -72,11 +74,48 @@ function dayKeyDaysAgo(n) {
 }
 
 function clearCharts() {
-    blobUrls.forEach(url => URL.revokeObjectURL(url));
-    blobUrls = [];
-    document.querySelectorAll('.chart-container').forEach(el => {
-        el.innerHTML = '';
+    chartResizeListeners.forEach(({ listener, options }) => {
+        window.removeEventListener('resize', listener, options);
     });
+    chartResizeListeners = [];
+    document.querySelectorAll('.chart-container').forEach(el => {
+        el.replaceChildren();
+    });
+}
+
+// rough-viz registers a new anonymous resize listener for every chart and
+// offers no destroy API. Capture those listeners while constructing charts
+// so the next render can remove them before replacing the containers.
+function withTrackedChartListeners(build) {
+    const add = window.addEventListener;
+    window.addEventListener = function (type, listener, options) {
+        if (type === 'resize') chartResizeListeners.push({ listener, options });
+        return add.call(window, type, listener, options);
+    };
+    try {
+        return build();
+    } finally {
+        window.addEventListener = add;
+    }
+}
+
+// rough-viz renders asynchronously. Give every render fresh container nodes
+// and selectors so a superseded chart can only finish inside its detached
+// node, never on top of the current chart.
+const CHART_IDS = ['chart-line', 'chart-stacked', 'chart-bar', 'chart-donut', 'chart-monthly'];
+function prepareChartTargets(seq) {
+    const targets = {};
+    CHART_IDS.forEach(base => {
+        const current = document.querySelector(`[data-chart-target="${base}"]`)
+            || document.getElementById(base);
+        if (!current) return;
+        const fresh = current.cloneNode(false);
+        fresh.dataset.chartTarget = base;
+        fresh.id = `${base}-${seq}`;
+        current.replaceWith(fresh);
+        targets[base] = `#${fresh.id}`;
+    });
+    return targets;
 }
 
 // --- History assembly ---
@@ -91,7 +130,16 @@ function mergeHistories(archived, live) {
 }
 
 async function getHistoryForRange(range) {
-    const live = state.dailyHistory || [];
+    const live = [...(state.dailyHistory || [])];
+    const today = getDayKey();
+    const hasTodayActivity = (state.events || []).some(e => e.day === today && e.kind !== 'skip');
+    if (hasTodayActivity) {
+        const todayEntry = aggregateDayEntry(getMergedDefs(state), today, state.events || []);
+        const existing = live.findIndex(h => h.day === today);
+        if (existing >= 0) live[existing] = todayEntry;
+        else live.push(todayEntry);
+        live.sort((a, b) => a.day < b.day ? -1 : 1);
+    }
     if (range > 0 && range <= 35) {
         return live.slice(-range);
     }
@@ -193,11 +241,11 @@ function renderFunStats(history) {
 
 // --- Charts ---
 
-function renderLineChart(history) {
+function renderLineChart(history, element) {
     if (history.length < 2) return;
     const csvUrl = historyToCsvUrl(history);
     new roughViz.Line({
-        element: '#chart-line',
+        element,
         data: csvUrl,
         y1: 'aditya',
         y2: 'chhaya',
@@ -220,7 +268,7 @@ function renderLineChart(history) {
     });
 }
 
-function renderStackedBar(history) {
+function renderStackedBar(history, element) {
     if (history.length === 0) return;
     const data = history.map(h => ({
         day: formatDay(h.day),
@@ -228,7 +276,7 @@ function renderStackedBar(history) {
         chhaya: h.chhayaPoints || 0
     }));
     new roughViz.StackedBar({
-        element: '#chart-stacked',
+        element,
         data,
         labels: 'day',
         title: '',
@@ -247,7 +295,7 @@ function renderStackedBar(history) {
     });
 }
 
-function renderBarChart(history) {
+function renderBarChart(history, element) {
     if (history.length === 0) return;
     const labels = history.map(h => formatDay(h.day));
     const values = history.map(h => {
@@ -255,7 +303,7 @@ function renderBarChart(history) {
         return Math.round((h.points / h.totalPoints) * 100);
     });
     new roughViz.Bar({
-        element: '#chart-bar',
+        element,
         data: { labels, values },
         title: '',
         roughness: 1.5,
@@ -273,12 +321,12 @@ function renderBarChart(history) {
     });
 }
 
-function renderDonutChart(history) {
+function renderDonutChart(history, element) {
     const adityaPts = history.reduce((s, h) => s + (h.adityaPoints || 0), 0);
     const chhayaPts = history.reduce((s, h) => s + (h.chhayaPoints || 0), 0);
     if (adityaPts === 0 && chhayaPts === 0) return;
     new roughViz.Donut({
-        element: '#chart-donut',
+        element,
         data: {
             labels: [`aditya (${Math.round(adityaPts)} pts)`, `chhaya (${Math.round(chhayaPts)} pts)`],
             values: [adityaPts, chhayaPts]
@@ -299,7 +347,7 @@ function renderDonutChart(history) {
     });
 }
 
-function renderMonthlyChart(history) {
+function renderMonthlyChart(history, element) {
     const section = document.getElementById('monthly-section');
     if (!section) return;
     const months = aggregateByMonth(history);
@@ -312,7 +360,7 @@ function renderMonthlyChart(history) {
         chhaya: m.chhayaPoints
     }));
     new roughViz.StackedBar({
-        element: '#chart-monthly',
+        element,
         data,
         labels: 'month',
         title: '',
@@ -470,6 +518,7 @@ async function renderAll() {
     if (seq !== renderSeq) return; // a newer render superseded this one
 
     clearCharts();
+    const chartTargets = prepareChartTargets(seq);
     renderFunStats(rawHistory);
     renderKudosFeed();
     renderAchievements();
@@ -494,11 +543,16 @@ async function renderAll() {
         ? aggregateByWeek(rawHistory)
         : rawHistory;
 
-    safely(() => renderLineChart(chartHistory));
-    safely(() => renderStackedBar(chartHistory));
-    safely(() => renderBarChart(chartHistory));
-    safely(() => renderDonutChart(rawHistory));
-    safely(() => renderMonthlyChart(rawHistory));
+    safely(() => withTrackedChartListeners(
+        () => renderLineChart(chartHistory, chartTargets['chart-line'])));
+    safely(() => withTrackedChartListeners(
+        () => renderStackedBar(chartHistory, chartTargets['chart-stacked'])));
+    safely(() => withTrackedChartListeners(
+        () => renderBarChart(chartHistory, chartTargets['chart-bar'])));
+    safely(() => withTrackedChartListeners(
+        () => renderDonutChart(rawHistory, chartTargets['chart-donut'])));
+    safely(() => withTrackedChartListeners(
+        () => renderMonthlyChart(rawHistory, chartTargets['chart-monthly'])));
 }
 
 function setupRangeToggle() {
@@ -536,3 +590,7 @@ async function init() {
 }
 
 init();
+
+window.addEventListener('beforeunload', () => {
+    blobUrls.forEach(url => URL.revokeObjectURL(url));
+});

@@ -22,9 +22,9 @@ export const HISTORY_CAP = 35;
 // Daily streak: measured on TASK COUNT (done/total), not points — the
 // 12-pt Cooking chore is ~44% of the daily board's points, which made a
 // points-based bar mathematically unreachable on non-cooking days.
-// Retuned July 2026 from 0.80 (points) after real data showed 1 qualifying
-// day in the first 13 tracked.
-export const STREAK_THRESHOLD = 0.50;
+// Retuned July 2026 from a points-based rule to task count so one large
+// chore cannot dominate the result. A 65% bar currently means 9/13 tasks.
+export const STREAK_THRESHOLD = 0.65;
 export const WEEKLY_STREAK_THRESHOLD = 0.50;
 export const MONTHLY_THRESHOLD = 0.85;
 export const MONTHLY_MIN_DAYS = 15;
@@ -327,9 +327,10 @@ export function buildEvent(def, who, dayKey, kind) {
     };
 }
 
+// Latest COMPLETION event for a task — skip markers don't count.
 export function findEventForTask(events, taskId) {
     for (let i = events.length - 1; i >= 0; i--) {
-        if (events[i].taskId === taskId) return events[i];
+        if (events[i].taskId === taskId && events[i].kind !== 'skip') return events[i];
     }
     return null;
 }
@@ -343,24 +344,41 @@ function sumEventPts(events, who) {
 }
 
 // Aggregate one day's events into a history entry. The completion %
-// denominator stays the default-cycle daily set so streaks keep meaning.
+// denominator stays the default-cycle daily set so streaks keep meaning —
+// except tasks skipped that day ("nobody needed it"), which leave the
+// denominator entirely: no points for anyone, no drag on the streak.
 export function aggregateDayEntry(defs, dayKey, events) {
     const dayEvents = events.filter(e => e.day === dayKey);
     const dailyIds = new Set(defaultCycleIds(defs, 'daily'));
-    const cycleDaily = dayEvents.filter(e => e.kind === 'daily' && dailyIds.has(e.taskId));
-    const byKind = { daily: 0, weekly: 0, extra: 0 };
+    // A recurring checkbox represents one completion per cycle. Concurrent
+    // clients can still submit two distinct event ids before either snapshot
+    // arrives, so collapse same-task completions here as a final safety net.
+    // Map.set keeps the latest event, matching the rest of the UI.
+    const actsByTask = new Map();
     dayEvents.forEach(e => {
+        if (e.kind !== 'skip') actsByTask.set(e.taskId, e);
+    });
+    const acts = [...actsByTask.values()];
+    const cycleDaily = acts.filter(e => e.kind === 'daily' && dailyIds.has(e.taskId));
+    // a completion beats a stray skip of the same task on the same day
+    const completedIds = new Set(cycleDaily.map(e => e.taskId));
+    const skippedIds = new Set(dayEvents
+        .filter(e => e.kind === 'skip' && dailyIds.has(e.taskId) && !completedIds.has(e.taskId))
+        .map(e => e.taskId));
+    const countedIds = [...dailyIds].filter(id => !skippedIds.has(id));
+    const byKind = { daily: 0, weekly: 0, extra: 0 };
+    acts.forEach(e => {
         byKind[byKind[e.kind] !== undefined ? e.kind : 'extra'] += e.pts || 0;
     });
     return {
         day: dayKey,
         done: cycleDaily.length,
-        acts: dayEvents.length,
-        total: dailyIds.size,
+        acts: acts.length,
+        total: countedIds.length,
         points: sumEventPts(cycleDaily),
-        totalPoints: pointsFor(defs, [...dailyIds]),
-        adityaPoints: sumEventPts(dayEvents, 'aditya'),
-        chhayaPoints: sumEventPts(dayEvents, 'chhaya'),
+        totalPoints: pointsFor(defs, countedIds),
+        adityaPoints: sumEventPts(acts, 'aditya'),
+        chhayaPoints: sumEventPts(acts, 'chhaya'),
         byKind
     };
 }
@@ -372,6 +390,7 @@ export function buildDefaultState(date = new Date()) {
         taskDefs: {},
         tasks: Object.fromEntries(DEFAULT_TASK_DEFS.map(d => [d.id, false])),
         taskActor: {},
+        taskSkips: {},
         oneTimeTasks: {},
         events: [],
         kudos: [],
@@ -424,11 +443,14 @@ export function normalizeState(rawState) {
 
     const rawTasks = (typeof rawState.tasks === 'object' && rawState.tasks !== null) ? rawState.tasks : {};
     const rawActor = (typeof rawState.taskActor === 'object' && rawState.taskActor !== null) ? rawState.taskActor : {};
+    const rawSkips = (typeof rawState.taskSkips === 'object' && rawState.taskSkips !== null) ? rawState.taskSkips : {};
     const tasks = {};
     const taskActor = {};
+    const taskSkips = {};
     merged.list.forEach(d => {
         tasks[d.id] = Boolean(rawTasks[d.id]);
         if (tasks[d.id] && isActor(rawActor[d.id])) taskActor[d.id] = rawActor[d.id];
+        if (!tasks[d.id] && typeof rawSkips[d.id] === 'string') taskSkips[d.id] = rawSkips[d.id];
     });
 
     const lastDailyReset = typeof rawState.lastDailyReset === 'string' ? rawState.lastDailyReset : def.lastDailyReset;
@@ -448,7 +470,7 @@ export function normalizeState(rawState) {
                 who: e.who,
                 owner: isUser(e.owner) ? e.owner : null,
                 day: e.day,
-                kind: (e.kind === 'daily' || e.kind === 'weekly' || e.kind === 'extra') ? e.kind : 'daily'
+                kind: (e.kind === 'daily' || e.kind === 'weekly' || e.kind === 'extra' || e.kind === 'skip') ? e.kind : 'daily'
             }))
             .slice(-EVENTS_CAP);
     } else {
@@ -547,6 +569,7 @@ export function normalizeState(rawState) {
         taskDefs,
         tasks,
         taskActor,
+        taskSkips,
         oneTimeTasks,
         events,
         kudos,
@@ -602,6 +625,7 @@ export function applyResetRules(sourceState, date = new Date()) {
         taskDefs: { ...(sourceState.taskDefs || {}) },
         tasks: { ...sourceState.tasks },
         taskActor: { ...(sourceState.taskActor || {}) },
+        taskSkips: { ...(sourceState.taskSkips || {}) },
         oneTimeTasks: { ...(sourceState.oneTimeTasks || {}) },
         events: [...(sourceState.events || [])],
         kudos: (sourceState.kudos || []).slice(-KUDOS_CAP),
@@ -625,10 +649,18 @@ export function applyResetRules(sourceState, date = new Date()) {
     const isTravelDay = d => Boolean(next.travelSince && travelEnd
         && d >= next.travelSince && d <= travelEnd);
 
-    // 1. Daily rollover: close every past day that has events or was the open day
+    // 1. Daily rollover: close and evaluate every elapsed calendar day. This
+    // matters when a sleeping/offline browser misses one or more midnights.
     if (next.lastDailyReset !== todayKey) {
         const historyDays = new Set(next.dailyHistory.map(h => h.day));
-        const daysToClose = new Set([next.lastDailyReset]);
+        const elapsedDays = daysBetween(next.lastDailyReset, todayKey);
+        const rolloverDays = [];
+        if (Number.isFinite(elapsedDays) && elapsedDays > 0) {
+            for (let i = 0; i < elapsedDays; i++) {
+                rolloverDays.push(addDaysToDayKey(next.lastDailyReset, i));
+            }
+        }
+        const daysToClose = new Set(rolloverDays);
         next.events.forEach(e => {
             if (e.day < todayKey) daysToClose.add(e.day);
         });
@@ -639,47 +671,50 @@ export function applyResetRules(sourceState, date = new Date()) {
                 const entry = aggregateDayEntry(defs, d, next.events);
                 if (isTravelDay(d)) entry.travel = true;
                 next.dailyHistory.push(entry);
+                const uniqueDayEvents = new Map();
+                next.events.filter(e => e.day === d).forEach(e => {
+                    const type = e.kind === 'skip' ? 'skip' : 'completion';
+                    uniqueDayEvents.set(`${e.taskId}:${type}`, e);
+                });
+                const archivedEvents = [...uniqueDayEvents.values()];
                 archivedDays.push({
                     ...entry,
                     weekKey: getWeekKeyFromDayKey(d),
-                    events: next.events.filter(e => e.day === d)
+                    events: archivedEvents
                 });
-                next.lifetime.tasks += next.events.filter(e => e.day === d).length;
+                const dayActs = archivedEvents.filter(e => e.kind !== 'skip');
+                next.lifetime.tasks += dayActs.length;
                 next.lifetime.adityaPoints += entry.adityaPoints;
                 next.lifetime.chhayaPoints += entry.chhayaPoints;
-                next.lifetime.crossHelps += next.events.filter(e => e.day === d && e.owner && e.who !== e.owner).length;
+                next.lifetime.crossHelps += dayActs.filter(e => e.owner && e.who !== e.owner).length;
             });
         next.dailyHistory.sort((a, b) => a.day < b.day ? -1 : 1);
         if (next.dailyHistory.length > HISTORY_CAP) {
             next.dailyHistory = next.dailyHistory.slice(-HISTORY_CAP);
         }
 
-        // streak from the day that just closed — frozen on travel days.
-        // A day qualifies at >=STREAK_THRESHOLD of daily TASKS (count, not
-        // points) with both partners logging something. One miss per week —
-        // a sub-par day or a fully skipped one — spends the free pass and
-        // freezes the streak instead of resetting it.
-        if (!isTravelDay(next.lastDailyReset)) {
-            const closing = next.dailyHistory.find(h => h.day === next.lastDailyReset)
-                || aggregateDayEntry(defs, next.lastDailyReset, next.events);
-            const daysPassed = daysBetween(next.lastDailyReset, todayKey);
+        // Evaluate each elapsed day in order. Travel days freeze; the first
+        // miss in a week spends the shield; later qualifying days can begin
+        // rebuilding a streak even after an earlier missed day.
+        rolloverDays.forEach(dayKey => {
+            if (isTravelDay(dayKey)) return;
+            const closing = next.dailyHistory.find(h => h.day === dayKey)
+                || aggregateDayEntry(defs, dayKey, next.events);
             const ratioDone = closing.total > 0 ? closing.done / closing.total : 0;
             const dayQualifies = ratioDone >= STREAK_THRESHOLD
                 && closing.adityaPoints > 0 && closing.chhayaPoints > 0;
-            const misses = (daysPassed - 1) + (dayQualifies ? 0 : 1);
-            const missedDay = dayQualifies
-                ? addDaysToDayKey(next.lastDailyReset, 1)
-                : next.lastDailyReset;
-            const shieldWeek = getWeekKeyFromDayKey(missedDay);
-            if (misses === 0) {
+            if (dayQualifies) {
                 next.streak += 1;
                 if (next.streak > next.bestStreak) next.bestStreak = next.streak;
-            } else if (misses === 1 && next.streak > 0 && next.streakShieldWeek !== shieldWeek) {
+                return;
+            }
+            const shieldWeek = getWeekKeyFromDayKey(dayKey);
+            if (next.streak > 0 && next.streakShieldWeek !== shieldWeek) {
                 next.streakShieldWeek = shieldWeek; // free pass: freeze, don't reset
             } else {
                 next.streak = 0;
             }
-        }
+        });
 
         // monthly evaluation when the calendar month rolled over
         const closedMonth = monthKeyOf(next.lastDailyReset);
@@ -695,6 +730,7 @@ export function applyResetRules(sourceState, date = new Date()) {
         cycleDailyIds.forEach(id => {
             next.tasks[id] = false;
             delete next.taskActor[id];
+            delete next.taskSkips[id];
         });
         next.lastDailyReset = todayKey;
         changed = true;
@@ -706,9 +742,11 @@ export function applyResetRules(sourceState, date = new Date()) {
         const travelWeek = Boolean(next.travelSince && travelEnd
             && next.travelSince < weekKey && travelEnd >= next.lastWeeklyReset);
         if (!travelWeek) {
-            const wTotal = pointsFor(defs, cycleWeeklyIds);
-            const wDone = pointsForChecked(defs, cycleWeeklyIds, next.tasks);
-            const weekEvents = next.events.filter(e => e.day >= next.lastWeeklyReset && e.day < weekKey);
+            // weeklies skipped this week ("nobody needed it") leave the denominator
+            const countedWeeklyIds = cycleWeeklyIds.filter(id => !next.taskSkips[id]);
+            const wTotal = pointsFor(defs, countedWeeklyIds);
+            const wDone = pointsForChecked(defs, countedWeeklyIds, next.tasks);
+            const weekEvents = next.events.filter(e => e.day >= next.lastWeeklyReset && e.day < weekKey && e.kind !== 'skip');
             const weeksPassed = weeksApart(weekKey, next.lastWeeklyReset);
             const acted = who => weekEvents.some(e => e.who === who || e.who === 'both');
             const earned = weeksPassed === 1
@@ -725,6 +763,7 @@ export function applyResetRules(sourceState, date = new Date()) {
         cycleWeeklyIds.forEach(id => {
             next.tasks[id] = false;
             delete next.taskActor[id];
+            delete next.taskSkips[id];
         });
         next.lastWeeklyReset = weekKey;
         next.events = next.events.filter(e => e.day >= weekKey);
@@ -738,6 +777,7 @@ export function applyResetRules(sourceState, date = new Date()) {
         if (daysBetween(lastReset, todayKey) >= d.interval) {
             next.tasks[d.id] = false;
             delete next.taskActor[d.id];
+            delete next.taskSkips[d.id];
             next.taskDefs[d.id] = { ...(next.taskDefs[d.id] || {}), lastReset: todayKey };
             changed = true;
         }
@@ -789,7 +829,7 @@ export function buildBackfill(state, taskId, who, dayKey, priorDayEvents, today 
     const def = defs.byId[taskId];
     if (!def) return null;
     const prior = (priorDayEvents || []).filter(e => e.day === dayKey);
-    if (prior.some(e => e.taskId === taskId)) return null;
+    if (prior.some(e => e.taskId === taskId && e.kind !== 'skip')) return null;
     const isLiveWeek = dayKey >= getWeekKey(today);
     // a weekly/custom-interval task already checked spans multiple days —
     // backfilling it inside the same cycle would double-count it
@@ -812,7 +852,7 @@ export function buildRetroUncheck(state, taskId, dayKey, priorDayEvents, today =
     const def = defs.byId[taskId];
     if (!def) return null;
     const prior = (priorDayEvents || []).filter(e => e.day === dayKey);
-    const event = [...prior].reverse().find(e => e.taskId === taskId);
+    const event = [...prior].reverse().find(e => e.taskId === taskId && e.kind !== 'skip');
     if (!event) return null;
     const dayEvents = prior.filter(e => e.id !== event.id);
     const entry = aggregateDayEntry(defs, dayKey, dayEvents);
@@ -846,11 +886,15 @@ export function mergeHistoryEntry(dailyHistory, entry) {
 
 export function removeCompletion(state, taskId) {
     const event = findEventForTask(state.events || [], taskId);
+    // Remove any same-day duplicates left by older concurrent writes.
+    const remainingEvents = event
+        ? (state.events || []).filter(e => !(e.taskId === taskId && e.day === event.day && e.kind !== 'skip'))
+        : [...(state.events || [])];
     const next = {
         ...state,
         tasks: { ...state.tasks, [taskId]: false },
         taskActor: { ...(state.taskActor || {}) },
-        events: event ? (state.events || []).filter(e => e.id !== event.id) : [...(state.events || [])]
+        events: remainingEvents
     };
     delete next.taskActor[taskId];
 
@@ -1135,6 +1179,7 @@ function fullDocPayload(s) {
         taskDefs: s.taskDefs || {},
         tasks: s.tasks,
         taskActor: s.taskActor,
+        taskSkips: s.taskSkips || {},
         oneTimeTasks: s.oneTimeTasks || {},
         events: s.events || [],
         kudos: s.kudos || [],
@@ -1188,20 +1233,51 @@ export async function syncResetsToCloud(currentState) {
 // field-updated.
 export async function updateTaskInCloud({ taskId, checked, actor, event, historyRewrite, currentState }) {
     if (!firestoreApi || !docRef) return;
+    const transact = () => firestoreApi.runTransaction(firestoreApi.db, async transaction => {
+        const snapshot = await transaction.get(docRef);
+        if (!snapshot.exists()) throw new Error('dashboard document missing');
+        const remote = snapshot.data();
+        const remoteEvents = Array.isArray(remote.events) ? remote.events : [];
+        const duplicate = checked && event
+            ? remoteEvents.find(e => e && e.taskId === taskId
+                && e.day === event.day && e.kind !== 'skip')
+            : null;
+        const update = {
+            [`tasks.${taskId}`]: checked,
+            [`taskActor.${taskId}`]: checked ? (duplicate?.who || actor) : firestoreApi.deleteField()
+        };
+        if (event && checked && !duplicate) {
+            update.events = firestoreApi.arrayUnion(event);
+        } else if (event && !checked) {
+            // Clear all same-day duplicates atomically while preserving every
+            // unrelated completion that another client may have just added.
+            update.events = remoteEvents.filter(e => !(e && e.taskId === taskId
+                && e.day === event.day && e.kind !== 'skip'));
+        }
+        if (historyRewrite) update.dailyHistory = historyRewrite;
+        transaction.update(docRef, stamp(update));
+    });
+    try {
+        await transact();
+    } catch {
+        // doc likely missing: create it safely via the reset transaction, retry once
+        await syncResetsToCloud(currentState || null);
+        await transact();
+    }
+}
+
+// Skip/unskip a task for its current cycle: field-level write of the skip
+// marker plus the pts-0 ledger event (removed again on unskip).
+export async function updateTaskSkipInCloud({ taskId, dayKey, event, removedEvent, currentState }) {
+    if (!firestoreApi || !docRef) return;
     const update = {
-        [`tasks.${taskId}`]: checked,
-        [`taskActor.${taskId}`]: checked ? actor : firestoreApi.deleteField()
+        [`taskSkips.${taskId}`]: dayKey || firestoreApi.deleteField()
     };
-    if (event) {
-        update.events = checked ? firestoreApi.arrayUnion(event) : firestoreApi.arrayRemove(event);
-    }
-    if (historyRewrite) {
-        update.dailyHistory = historyRewrite;
-    }
+    if (event) update.events = firestoreApi.arrayUnion(event);
+    if (removedEvent) update.events = firestoreApi.arrayRemove(removedEvent);
     try {
         await firestoreApi.updateDoc(docRef, stamp(update));
     } catch {
-        // doc likely missing: create it safely via the reset transaction, retry once
         await syncResetsToCloud(currentState || null);
         await firestoreApi.updateDoc(docRef, stamp({ ...update }));
     }
@@ -1312,11 +1388,6 @@ export async function saveAchievementsToCloud(achievements) {
         update[`achievements.${id}`] = achievements[id];
     });
     await firestoreApi.updateDoc(docRef, stamp(update));
-}
-
-export async function resetCloudState() {
-    if (!firestoreApi || !docRef) return;
-    await firestoreApi.setDoc(docRef, fullDocPayload(buildDefaultState()));
 }
 
 export function teardown() {

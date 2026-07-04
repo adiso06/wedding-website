@@ -440,6 +440,42 @@ body.history-view .stats-panel {
     font-size: 0.6875rem;
 }
 
+/* skipped ("nobody needed it") — out of every count, visibly not pending */
+.task-item.is-skipped {
+    opacity: 0.38;
+}
+
+.task-item.is-skipped .task-name {
+    font-style: italic;
+}
+
+.task-item.is-skipped .task-name::after {
+    content: "skipped";
+    margin-left: 8px;
+    font-family: var(--mono);
+    font-size: 0.575rem;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 1px 5px;
+    border: 1px solid var(--border-strong);
+    border-radius: 3px;
+    color: var(--text-muted);
+    vertical-align: 1px;
+}
+
+.task-item.is-skipped .badge { opacity: 0.4; }
+
+body.hide-done [data-board] .task-item.is-skipped { display: none; }
+
+/* mid-swipe: the row follows the finger */
+.task-item.is-swiping {
+    transition: none;
+    user-select: none;
+    -webkit-user-select: none;
+    background-color: var(--surface-subtle);
+}
+
 .card {
     background-color: var(--surface);
     border-radius: 10px;
@@ -608,8 +644,9 @@ body.history-view .stats-panel {
     align-items: center;
     padding: 10px 20px;
     border-bottom: 1px solid var(--border);
-    transition: background-color 0.12s ease;
+    transition: background-color 0.12s ease, transform 0.18s ease;
     position: relative;
+    touch-action: pan-y; /* horizontal drags belong to swipe-to-skip */
 }
 
 .task-item:last-child { border-bottom: none; }
@@ -742,7 +779,21 @@ body.history-view .stats-panel {
     color: var(--accent-success);
 }
 
-.badge-chip-icon { font-size: 0.85rem; line-height: 1; }
+.badge-chip-tier {
+    font-size: 0.575rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    padding: 1px 5px;
+    border: 1px solid var(--border-strong);
+    border-radius: 3px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+.badge-chip.is-earned .badge-chip-tier {
+    border-color: var(--accent-success-border);
+    color: var(--accent-success);
+}
 
 .badge-chip-name {
     font-weight: 600;
@@ -1700,6 +1751,9 @@ body.history-view .stats-panel {
             "figs   first  second"
             "badges first  second"
             "stats  first  second";
+        /* the tall cards span rows 4-6; give all their slack to the last row
+           so badges hug the figures and the stats panel hugs the badges */
+        grid-template-rows: auto auto auto auto auto 1fr;
         gap: 20px;
         row-gap: 16px;
         justify-content: center;

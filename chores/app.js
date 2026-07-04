@@ -12,11 +12,11 @@ import {
     saveLocalState, loadLocalState,
     computeWeightedLoad, getLoadStage, getLighterPose,
     checkAchievements, isAchievementEarned,
-    connectFirebase, isFirebaseReady, syncResetsToCloud, updateTaskInCloud,
+    connectFirebase, isFirebaseReady, syncResetsToCloud, updateTaskInCloud, updateTaskSkipInCloud,
     updateTaskDefInCloud, addOneTimeTaskInCloud, updateOneTimeTaskInCloud,
     deleteOneTimeTaskInCloud, sendKudosToCloud, markKudosSeenInCloud,
     saveAchievementsToCloud, archiveDayToSubcollection, fetchArchivedDay,
-    subscribeToSharedState, getSnapshotData, teardown, resetCloudState
+    subscribeToSharedState, getSnapshotData, teardown
 } from './db.js';
 
 const statusStrip = document.querySelector('.status-strip');
@@ -26,6 +26,18 @@ const DEFAULTS_BY_ID = Object.fromEntries(DEFAULT_TASK_DEFS.map(d => [d.id, d]))
 
 let state = null;
 let resetInterval = null;
+const taskCloudQueues = new Map();
+
+// Preserve per-task intent order when someone checks and immediately
+// unchecks before the first network round-trip has finished.
+function queueTaskCloudMutation(taskId, mutate) {
+    const previous = taskCloudQueues.get(taskId) || Promise.resolve();
+    const queued = previous.catch(() => {}).then(mutate);
+    taskCloudQueues.set(taskId, queued);
+    return queued.finally(() => {
+        if (taskCloudQueues.get(taskId) === queued) taskCloudQueues.delete(taskId);
+    });
+}
 
 // --- Stick-figure rig + director ---
 // One jointed SVG per figure; poses are CSS custom-property sets on the
@@ -732,19 +744,26 @@ function syncCheckboxes() {
     if (isHistoryView()) {
         const { status, events } = dayEventsStatus(selectedHistoryDay);
         const ready = status === 'ready';
-        const doneIds = new Set(events.map(e => e.taskId));
+        const doneIds = new Set(events.filter(e => e.kind !== 'skip').map(e => e.taskId));
+        const skippedIds = new Set(events.filter(e => e.kind === 'skip').map(e => e.taskId));
         document.querySelectorAll('[data-board] .checkbox').forEach(cb => {
             cb.checked = doneIds.has(cb.id);
             // both directions editable: check to backfill, uncheck a mistake
             cb.disabled = !ready;
-            cb.closest('.task-item').classList.toggle('is-done', cb.checked);
+            const item = cb.closest('.task-item');
+            item.classList.toggle('is-done', cb.checked);
+            item.classList.toggle('is-skipped', !cb.checked && skippedIds.has(cb.id));
         });
         return;
     }
+    const skips = state.taskSkips || {};
     document.querySelectorAll('[data-board] .checkbox').forEach(cb => {
+        const skipped = !state.tasks[cb.id] && Boolean(skips[cb.id]);
         cb.checked = Boolean(state.tasks[cb.id]);
-        cb.disabled = false;
-        cb.closest('.task-item').classList.toggle('is-done', cb.checked);
+        cb.disabled = skipped; // swipe back to un-skip before checking
+        const item = cb.closest('.task-item');
+        item.classList.toggle('is-done', cb.checked);
+        item.classList.toggle('is-skipped', skipped);
     });
 }
 
@@ -886,7 +905,9 @@ function renderDayBanner(detail) {
         return;
     }
     const dayKey = selectedHistoryDay;
-    const { status, events } = dayEventsStatus(dayKey);
+    const { status, events: allEvents } = dayEventsStatus(dayKey);
+    const events = allEvents.filter(e => e.kind !== 'skip');
+    const skipCount = allEvents.length - events.length;
     detail.hidden = false;
     detail.innerHTML = '';
 
@@ -895,18 +916,19 @@ function renderDayBanner(detail) {
 
     const text = document.createElement('span');
     text.className = 'day-detail-header';
+    const skipNote = skipCount > 0 ? ` · ${skipCount} skipped` : '';
     if (status === 'loading') {
         text.textContent = `${dayKeyLabel(dayKey)} · fetching…`;
     } else if (status === 'offline') {
         text.textContent = `${dayKeyLabel(dayKey)} · archive needs a connection`;
     } else if (events.length === 0) {
-        text.textContent = `${dayKeyLabel(dayKey)} · nothing was checked off`;
+        text.textContent = `${dayKeyLabel(dayKey)} · nothing was checked off${skipNote}`;
     } else {
         // shared ('both') completions credit half to each side
         const sum = who => events.reduce((s, e) =>
             s + (e.who === who ? (e.pts || 0) : e.who === 'both' ? (e.pts || 0) / 2 : 0), 0);
         text.textContent = `${dayKeyLabel(dayKey)} · ${events.length} ${events.length === 1 ? 'chore' : 'chores'}`
-            + ` · aditya ${fmtPts(sum('aditya'))} · chhaya ${fmtPts(sum('chhaya'))} pts`;
+            + ` · aditya ${fmtPts(sum('aditya'))} · chhaya ${fmtPts(sum('chhaya'))} pts${skipNote}`;
     }
     banner.appendChild(text);
 
@@ -940,10 +962,11 @@ function setWidth(key, value) {
 }
 
 function updateProgress() {
-    // travel-paused rows sit out of the counts
+    // travel-paused and skipped rows sit out of the counts
+    const countable = '.task-item:not(.is-travel-paused):not(.is-skipped) .checkbox';
     document.querySelectorAll('.card[data-user]').forEach(card => {
-        const total = card.querySelectorAll('.task-item:not(.is-travel-paused) .checkbox').length;
-        const done = card.querySelectorAll('.task-item:not(.is-travel-paused) .checkbox:checked').length;
+        const total = card.querySelectorAll(countable).length;
+        const done = card.querySelectorAll(countable + ':checked').length;
         const pill = card.querySelector('[data-progress-pill]');
         if (pill) {
             pill.textContent = `${done} / ${total}`;
@@ -951,14 +974,18 @@ function updateProgress() {
         }
     });
     document.querySelectorAll('.section').forEach(section => {
-        const total = section.querySelectorAll('.task-item:not(.is-travel-paused) .checkbox').length;
-        const done = section.querySelectorAll('.task-item:not(.is-travel-paused) .checkbox:checked').length;
+        const total = section.querySelectorAll(countable).length;
+        const done = section.querySelectorAll(countable + ':checked').length;
         const progress = section.querySelector('[data-section-progress]');
         if (progress) progress.textContent = `${done}/${total}`;
     });
 }
 
 const STREAK_RULE_TEXT = `≥${Math.round(STREAK_THRESHOLD * 100)}% tasks · both act · 1 skip/wk`;
+
+// Hover copy: what a streak actually is, in plain words.
+const DAILY_STREAK_EXPLAINER = `A streak day = finish at least ${Math.round(STREAK_THRESHOLD * 100)}% of the daily board (counted by tasks, not points) with both of you logging at least one chore. The first sub-par or skipped day each week is forgiven; travel days freeze the streak.`;
+const WEEKLY_STREAK_EXPLAINER = 'A deep-clean week = at least 50% of the weekly board\'s points done by Sunday with both of you contributing during the week. Travel weeks freeze the streak.';
 
 // The strip under the stick figures: recently earned streak badges plus the
 // next tier with progress — something to look forward to while checking off.
@@ -971,20 +998,22 @@ function renderStreakBadges() {
     const label = document.createElement('div');
     label.className = 'badge-strip-label';
     label.textContent = 'streak badges · next up';
+    label.title = `Daily: ${DAILY_STREAK_EXPLAINER}\n\nDeep clean: ${WEEKLY_STREAK_EXPLAINER}`;
     container.appendChild(label);
 
     const row = document.createElement('div');
     row.className = 'badge-chips';
     [
-        { group: 'daily', current: state.streak || 0, key: 'streak', unit: 'd' },
-        { group: 'weekly', current: state.weeklyStreak || 0, key: 'weeks', unit: 'w' }
-    ].forEach(({ group, current, key, unit }) => {
+        { group: 'daily', current: state.streak || 0, key: 'streak', unit: 'd', explainer: DAILY_STREAK_EXPLAINER, what: 'day streak' },
+        { group: 'weekly', current: state.weeklyStreak || 0, key: 'weeks', unit: 'w', explainer: WEEKLY_STREAK_EXPLAINER, what: 'deep-clean-week streak' }
+    ].forEach(({ group, current, key, unit, explainer, what }) => {
         const tiers = ACHIEVEMENT_DEFS.filter(d => d.group === group);
         const isDone = d => Boolean(isAchievementEarned(earnedMap, d)) || current >= d[key];
         const earned = tiers.filter(isDone);
         const next = tiers.find(d => !isDone(d));
-        earned.slice(-2).forEach(d => row.appendChild(buildBadgeChip(d, { earned: true })));
-        if (next) row.appendChild(buildBadgeChip(next, { current, target: next[key], unit }));
+        earned.slice(-2).forEach(d => row.appendChild(
+            buildBadgeChip(d, { earned: true, unit, key, explainer, what })));
+        if (next) row.appendChild(buildBadgeChip(next, { current, target: next[key], unit, key, explainer, what }));
     });
     container.appendChild(row);
 }
@@ -992,12 +1021,15 @@ function renderStreakBadges() {
 function buildBadgeChip(def, opts) {
     const chip = document.createElement('div');
     chip.className = 'badge-chip' + (opts.earned ? ' is-earned' : '');
-    chip.title = `${def.name} — ${def.hint}`;
+    const goal = `"${def.name}" = a ${def[opts.key]}-${opts.unit === 'd' ? 'day' : 'week'} ${opts.what}`;
+    chip.title = opts.earned
+        ? `${goal} — earned! ${opts.explainer}`
+        : `${goal} — ${opts.target - opts.current}${opts.unit} to go. ${opts.explainer}`;
 
-    const icon = document.createElement('span');
-    icon.className = 'badge-chip-icon';
-    icon.textContent = def.icon;
-    chip.appendChild(icon);
+    const tier = document.createElement('span');
+    tier.className = 'badge-chip-tier';
+    tier.textContent = `${def[opts.key]}${opts.unit}`;
+    chip.appendChild(tier);
 
     const name = document.createElement('span');
     name.className = 'badge-chip-name';
@@ -1036,8 +1068,11 @@ function updateStats() {
         return;
     }
     const tasks = state.tasks;
-    const dailyIds = filterTravelPaused(defs, dailyIdsOf(defs), state.travel);
-    const weeklyIds = weeklyIdsOf(defs);
+    // skipped ("nobody needed it") tasks leave every denominator
+    const skips = state.taskSkips || {};
+    const counted = id => tasks[id] || !skips[id];
+    const dailyIds = filterTravelPaused(defs, dailyIdsOf(defs), state.travel).filter(counted);
+    const weeklyIds = weeklyIdsOf(defs).filter(counted);
 
     const dailyDone = countChecked(dailyIds, tasks);
     const dailyPts = pointsForChecked(defs, dailyIds, tasks);
@@ -1155,7 +1190,9 @@ function renderHistory(endDayKey) {
             sumPct += pct;
             countDays++;
         } else if (day === todayKey) {
-            const dailyIds = filterTravelPaused(defs, dailyIdsOf(defs), state.travel);
+            const skips = state.taskSkips || {};
+            const dailyIds = filterTravelPaused(defs, dailyIdsOf(defs), state.travel)
+                .filter(id => state.tasks[id] || !skips[id]);
             const dailyPtsNow = pointsForChecked(defs, dailyIds, state.tasks);
             const totalNow = pointsFor(defs, dailyIds);
             const pct = totalNow > 0 ? (dailyPtsNow / totalNow) * 100 : 0;
@@ -1183,7 +1220,8 @@ function renderTaskDecorations() {
     const history = isHistoryView();
     // in history view the actor comes from that day's ledger, not live state
     const actor = history
-        ? Object.fromEntries(dayEventsStatus(selectedHistoryDay).events.map(e => [e.taskId, e.who]))
+        ? Object.fromEntries(dayEventsStatus(selectedHistoryDay).events
+            .filter(e => e.kind !== 'skip').map(e => [e.taskId, e.who]))
         : (state.taskActor || {});
     document.querySelectorAll('[data-board] .task-item').forEach(item => {
         const id = item.dataset.taskId;
@@ -1801,11 +1839,21 @@ function attachRowInteractions(item, cb, editBtn) {
     let pressX = 0;
     let pressY = 0;
     let pressing = false;
+    let swiping = false;
+    let swipeDx = 0;
+    let swipeCommitted = false;
 
     const cancelPress = () => {
         clearTimeout(longPressTimer);
         pressing = false;
         item.classList.remove('is-long-press');
+    };
+
+    const endSwipe = () => {
+        swiping = false;
+        swipeDx = 0;
+        item.classList.remove('is-swiping');
+        item.style.transform = '';
     };
 
     item.addEventListener('pointerdown', (e) => {
@@ -1815,6 +1863,7 @@ function attachRowInteractions(item, cb, editBtn) {
         pressX = e.clientX;
         pressY = e.clientY;
         longPressTriggered = false;
+        swipeCommitted = false;
         clearTimeout(longPressTimer);
         longPressTimer = setTimeout(() => {
             longPressTriggered = true;
@@ -1825,11 +1874,39 @@ function attachRowInteractions(item, cb, editBtn) {
 
     item.addEventListener('pointermove', (e) => {
         if (!pressing) return;
-        if (Math.hypot(e.clientX - pressX, e.clientY - pressY) > 8) cancelPress();
+        const dx = e.clientX - pressX;
+        const dy = e.clientY - pressY;
+        // a decisively horizontal drag becomes a skip swipe (live view only)
+        if (!swiping && !longPressTriggered && !isHistoryView() && !cb.checked
+            && Math.abs(dx) > 14 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+            swiping = true;
+            clearTimeout(longPressTimer);
+            item.classList.add('is-swiping');
+            try { item.setPointerCapture(e.pointerId); } catch { /* fine */ }
+        }
+        if (swiping) {
+            swipeDx = Math.max(-96, Math.min(96, dx));
+            item.style.transform = `translateX(${swipeDx}px)`;
+            return;
+        }
+        if (Math.hypot(dx, dy) > 8) cancelPress();
     });
 
-    item.addEventListener('pointerup', cancelPress);
+    item.addEventListener('pointerup', () => {
+        if (swiping) {
+            const commit = Math.abs(swipeDx) >= 56;
+            endSwipe();
+            cancelPress();
+            if (commit) {
+                swipeCommitted = true;
+                toggleTaskSkip(item.dataset.taskId);
+            }
+            return;
+        }
+        cancelPress();
+    });
     item.addEventListener('pointercancel', () => {
+        endSwipe();
         cancelPress();
         longPressTriggered = false;
     });
@@ -1839,10 +1916,11 @@ function attachRowInteractions(item, cb, editBtn) {
     });
 
     cb.addEventListener('click', (e) => {
-        if (longPressTriggered) {
+        if (longPressTriggered || swipeCommitted) {
             e.preventDefault();
             e.stopPropagation();
             longPressTriggered = false;
+            swipeCommitted = false;
         }
     }, true);
 
@@ -2074,6 +2152,58 @@ async function handleRetroUncheckToggle(taskId) {
     }
 }
 
+// Swipe a chore sideways to mark it "nobody needed this today": it leaves
+// every denominator for the cycle (no points, no streak drag) and renders
+// as non-pending. Swiping again restores it. Ledger gets a pts-0 'skip'
+// event so closed days aggregate correctly.
+async function toggleTaskSkip(taskId) {
+    if (isHistoryView()) return; // snapshots don't take new skips
+    const current = state || buildDefaultState();
+    const defs = getMergedDefs(current);
+    const def = defs.byId[taskId];
+    if (!def) return;
+    if (current.tasks[taskId]) return; // a done chore has nothing to skip
+
+    const skips = { ...(current.taskSkips || {}) };
+    const today = getDayKey();
+    let event = null;
+    let removedEvent = null;
+    if (skips[taskId]) {
+        delete skips[taskId];
+        removedEvent = [...(current.events || [])].reverse()
+            .find(e => e.taskId === taskId && e.kind === 'skip') || null;
+    } else {
+        skips[taskId] = today;
+        event = { ...buildEvent(def, getActiveActor(), today, 'skip'), pts: 0 };
+    }
+    const next = {
+        ...current,
+        taskSkips: skips,
+        events: event
+            ? [...(current.events || []), event]
+            : removedEvent
+                ? (current.events || []).filter(e => e.id !== removedEvent.id)
+                : current.events
+    };
+    applyStateToDom(next);
+
+    if (!isFirebaseReady()) {
+        setStatus(`saved locally · ${RESET_INFO}`, 'warning');
+        return;
+    }
+    try {
+        await updateTaskSkipInCloud({
+            taskId,
+            dayKey: skips[taskId] || null,
+            event,
+            removedEvent,
+            currentState: state
+        });
+    } catch {
+        setStatus(`saved locally · ${RESET_INFO}`, 'warning');
+    }
+}
+
 async function handleRecurringToggle(taskId, cb) {
     if (isHistoryView()) {
         if (cb.checked) await handleBackfillToggle(taskId, cb);
@@ -2100,8 +2230,10 @@ async function handleRecurringToggle(taskId, cb) {
             setStatus(`saved locally · ${RESET_INFO}`, 'warning');
         } else {
             try {
-                await syncResetsToCloud(state);
-                await updateTaskInCloud({ taskId, checked: true, actor, event, currentState: state });
+                await queueTaskCloudMutation(taskId, async () => {
+                    await syncResetsToCloud(state);
+                    await updateTaskInCloud({ taskId, checked: true, actor, event, currentState: state });
+                });
             } catch {
                 setStatus(`saved locally · ${RESET_INFO}`, 'warning');
             }
@@ -2113,12 +2245,14 @@ async function handleRecurringToggle(taskId, cb) {
             setStatus(`saved locally · ${RESET_INFO}`, 'warning');
         } else {
             try {
-                await updateTaskInCloud({
-                    taskId,
-                    checked: false,
-                    event: removedEvent,
-                    historyRewrite: rearchivedEntry ? next.dailyHistory : undefined,
-                    currentState: state
+                await queueTaskCloudMutation(taskId, async () => {
+                    await updateTaskInCloud({
+                        taskId,
+                        checked: false,
+                        event: removedEvent,
+                        historyRewrite: rearchivedEntry ? next.dailyHistory : undefined,
+                        currentState: state
+                    });
                 });
                 if (rearchivedEntry) {
                     await archiveDayToSubcollection(rearchivedEntry.day, {
@@ -2505,16 +2639,4 @@ document.addEventListener('click', (e) => {
     }
 });
 
-if (new URLSearchParams(window.location.search).has('reset')) {
-    localStorage.removeItem(LOCAL_STORAGE_KEY);
-    localStorage.removeItem(ACTIVE_USER_KEY);
-    localStorage.removeItem(COLLAPSED_SECTIONS_KEY);
-    window.history.replaceState({}, '', window.location.pathname);
-    (async () => {
-        await connectFirebase();
-        await resetCloudState();
-        location.reload();
-    })();
-} else {
-    initializeDashboard();
-}
+initializeDashboard();

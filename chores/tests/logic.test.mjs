@@ -131,7 +131,7 @@ section('one-time task survives its completion day');
 }
 
 // ---------------------------------------------------------------
-section('daily streak: >=50% of tasks + both acted, 1 free pass per week');
+section('daily streak: >=65% of tasks + both acted, 1 free pass per week');
 {
     let s = buildDefaultState(dateFor('2026-06-02'));
     const defs = getMergedDefs(s);
@@ -155,13 +155,91 @@ section('daily streak: >=50% of tasks + both acted, 1 free pass per week');
 // ---------------------------------------------------------------
 section('daily streak: task count, not points, clears the bar');
 {
-    // 7 of 13 tasks but only ~8 of 28 points (no 12-pt Cooking) — under the
-    // old points rule this day scored 28%; by task count it qualifies.
+    // 9 of 13 tasks without 12-pt Cooking clears the task-count bar even
+    // though its point percentage is much lower.
     let s = buildDefaultState(dateFor('2026-06-02'));
-    ['a_cat1', 'a_cat2', 'a_cat3', 'a1', 'a2', 'a3'].forEach(id => { s = check(s, id, 'aditya', '2026-06-02'); });
+    ['a_cat1', 'a_cat2', 'a_cat3', 'a1', 'a2', 'a3', 'a4', 'a5'].forEach(id => { s = check(s, id, 'aditya', '2026-06-02'); });
     s = check(s, 'c1', 'chhaya', '2026-06-02');
     const r = applyResetRules(s, dateFor('2026-06-03'));
-    assert(r.state.streak === 1, `small-chore day still earns the streak (got ${r.state.streak})`);
+    assert(r.state.streak === 1, `9/13 task day earns the streak (got ${r.state.streak})`);
+    // one task fewer (8/13 = 62%) falls under the 65% bar
+    let s2 = buildDefaultState(dateFor('2026-06-02'));
+    ['a_cat1', 'a_cat2', 'a_cat3', 'a1', 'a2', 'a3', 'a4'].forEach(id => { s2 = check(s2, id, 'aditya', '2026-06-02'); });
+    s2 = check(s2, 'c1', 'chhaya', '2026-06-02');
+    s2.streakShieldWeek = '2026-06-01'; // pass spent, so the miss shows as a reset
+    assert(applyResetRules(s2, dateFor('2026-06-03')).state.streak === 0, '8/13 misses the 65% bar');
+}
+
+// ---------------------------------------------------------------
+section('skip: a skipped chore leaves every denominator');
+{
+    // Skip Cooking (12 pts) and do 8 of the remaining 12: above 65%.
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    const defs = getMergedDefs(s);
+    s.taskSkips = { c2: '2026-06-02' };
+    s.events = [...s.events, { id: 'e_skip1', taskId: 'c2', name: 'Cooking', pts: 0, who: 'chhaya', owner: 'chhaya', day: '2026-06-02', kind: 'skip' }];
+    ['a_cat1', 'a_cat2', 'a_cat3', 'a1', 'a2', 'a3', 'a4'].forEach(id => { s = check(s, id, 'aditya', '2026-06-02'); });
+    s = check(s, 'c1', 'chhaya', '2026-06-02');
+
+    const entry = aggregateDayEntry(defs, '2026-06-02', s.events);
+    assert(entry.total === 12, `skipped task out of the count denominator (got ${entry.total})`);
+    approx(entry.totalPoints, 16.33, 'skipped task pts out of the pts denominator');
+    approx(entry.chhayaPoints, 1, 'nobody gets points for a skip');
+    assert(entry.acts === 8, 'skip is not an act');
+
+    const r = applyResetRules(s, dateFor('2026-06-03'));
+    assert(r.state.streak === 1, `skip does not drag the streak (got ${r.state.streak})`);
+    assert(!('c2' in r.state.taskSkips), 'daily skip cleared at daily rollover');
+    assert(r.state.lifetime.tasks === 8, `lifetime counts exclude skips (got ${r.state.lifetime.tasks})`);
+
+    // a completion beats a stray skip of the same task on the same day
+    const both = aggregateDayEntry(defs, '2026-06-02', [...s.events,
+        { id: 'e_c2', taskId: 'c2', name: 'Cooking', pts: 12, who: 'chhaya', owner: 'chhaya', day: '2026-06-02', kind: 'daily' }]);
+    assert(both.total === 13 && both.done === 9, 'completion overrides the skip');
+}
+
+// ---------------------------------------------------------------
+section('skip: weekly skips shrink the deep-clean week and reset weekly');
+{
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    const defs = getMergedDefs(s);
+    // skip the 4-pt grocery run; chhaya does her weeklies, aditya one weekly
+    s.taskSkips = { a18: '2026-06-02' };
+    s.events = [...s.events, { id: 'e_skip2', taskId: 'a18', name: 'Grocery run', pts: 0, who: 'aditya', owner: 'aditya', day: '2026-06-02', kind: 'skip' }];
+    defaultCycleIds(defs, 'weekly').filter(id => defs.byId[id].owner === 'chhaya')
+        .forEach(id => { s = check(s, id, 'chhaya', '2026-06-02'); });
+    s = check(s, 'a9', 'aditya', '2026-06-03');
+
+    // mid-week daily rollover keeps the weekly skip alive
+    s = applyResetRules(s, dateFor('2026-06-03')).state;
+    assert(s.taskSkips.a18 === '2026-06-02', 'weekly skip survives the daily rollover');
+
+    const r = applyResetRules(s, dateFor('2026-06-08'));
+    assert(r.state.weeklyStreak === 1, `~58% of the shrunk weekly board earns it (got ${r.state.weeklyStreak})`);
+    assert(!('a18' in r.state.taskSkips), 'weekly skip cleared at weekly rollover');
+
+    // a skip alone is not "acting" for the co-op requirement
+    let solo = buildDefaultState(dateFor('2026-06-02'));
+    solo.taskSkips = { a18: '2026-06-02' };
+    solo.events = [{ id: 'e_skip3', taskId: 'a18', name: 'Grocery run', pts: 0, who: 'aditya', owner: 'aditya', day: '2026-06-02', kind: 'skip' }];
+    defaultCycleIds(defs, 'weekly').filter(id => defs.byId[id].owner === 'chhaya')
+        .forEach(id => { solo = check(solo, id, 'chhaya', '2026-06-02'); });
+    assert(applyResetRules(solo, dateFor('2026-06-08')).state.weeklyStreak === 0, 'skipping is not contributing');
+}
+
+// ---------------------------------------------------------------
+section('skip: state round-trips and stays consistent');
+{
+    const n = normalizeState({
+        tasks: { a1: true },
+        taskActor: { a1: 'aditya' },
+        taskSkips: { a1: '2026-06-02', a2: '2026-06-02', ghost: '2026-06-02', a3: 42 },
+        events: [{ id: 'e_s', taskId: 'a2', name: 'Pick up socks', pts: 0, who: 'aditya', owner: 'aditya', day: '2026-06-02', kind: 'skip' }]
+    });
+    assert(n.taskSkips.a2 === '2026-06-02', 'skip kept');
+    assert(!('a1' in n.taskSkips), 'checked task cannot also be skipped');
+    assert(!('ghost' in n.taskSkips) && !('a3' in n.taskSkips), 'unknown/garbage skips dropped');
+    assert(n.events[0].kind === 'skip', 'skip event kind survives normalize');
 }
 
 // ---------------------------------------------------------------
@@ -173,7 +251,7 @@ section('daily streak: free pass covers a fully skipped day');
     defaultCycleIds(defs, 'daily').forEach(id => { s = check(s, id, defs.byId[id].owner, '2026-06-02'); });
     // nobody opens the app on 06-03; rules run again on 06-04
     let r = applyResetRules(s, dateFor('2026-06-04'));
-    assert(r.state.streak === 3, `one skipped day frozen by the free pass (got ${r.state.streak})`);
+    assert(r.state.streak === 4, `qualifying day advances, skipped day then freezes (got ${r.state.streak})`);
     assert(r.state.streakShieldWeek === '2026-06-01', 'shield spent on the skipped day\'s week');
     // next empty day same week: shield already spent -> reset
     r = applyResetRules(r.state, dateFor('2026-06-05'));
@@ -185,6 +263,44 @@ section('daily streak: free pass covers a fully skipped day');
     const r3 = applyResetRules(s3, dateFor('2026-06-10'));
     assert(r3.state.streak === 2, `new week, new pass (got ${r3.state.streak})`);
     assert(r3.state.streakShieldWeek === '2026-06-08', 'shield restamped to the new week');
+}
+
+// ---------------------------------------------------------------
+section('daily streak: delayed rollover evaluates every elapsed day');
+{
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    s.streak = 2;
+    s.bestStreak = 2;
+    const defs = getMergedDefs(s);
+    const dailies = defaultCycleIds(defs, 'daily');
+    ['2026-06-02', '2026-06-03', '2026-06-04'].forEach(day => {
+        dailies.forEach(id => { s = check(s, id, defs.byId[id].owner, day); });
+    });
+    const r = applyResetRules(s, dateFor('2026-06-05'));
+    assert(r.archivedDays.length === 3, `all three elapsed days archived (got ${r.archivedDays.length})`);
+    assert(r.archivedDays.every(h => h.done === 13), 'each delayed day keeps its completions');
+    assert(r.state.streak === 5, `three qualifying days advance streak to 5 (got ${r.state.streak})`);
+    assert(r.state.bestStreak === 5, 'best streak advances during catch-up');
+}
+
+// ---------------------------------------------------------------
+section('duplicate completion events count once and clean up together');
+{
+    let s = buildDefaultState(dateFor('2026-06-02'));
+    const defs = getMergedDefs(s);
+    const first = buildEvent(defs.byId.a1, 'aditya', '2026-06-02');
+    const duplicate = buildEvent(defs.byId.a1, 'chhaya', '2026-06-02');
+    s.tasks.a1 = true;
+    s.taskActor.a1 = 'chhaya';
+    s.events = [first, duplicate];
+    const entry = aggregateDayEntry(defs, '2026-06-02', s.events);
+    assert(entry.done === 1 && entry.acts === 1, 'duplicate recurring completion counts once');
+    approx(entry.points, 1, 'duplicate recurring completion awards points once');
+    const removed = removeCompletion(s, 'a1').state;
+    assert(removed.events.every(e => e.taskId !== 'a1'), 'uncheck removes same-day duplicates');
+    const rolled = applyResetRules(s, dateFor('2026-06-03'));
+    assert(rolled.state.lifetime.tasks === 1, 'duplicate completion increments lifetime once');
+    assert(rolled.archivedDays[0].events.length === 1, 'archive stores one canonical completion');
 }
 
 // ---------------------------------------------------------------
