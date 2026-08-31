@@ -696,28 +696,72 @@
       .map(link => document.querySelector(link.getAttribute('href')))
       .filter(Boolean);
 
+    const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let currentId = null;
+
+    // Keep the active pill visible by scrolling the nav's own horizontal axis.
+    // scrollIntoView() would also scroll every scrollable ancestor, including
+    // the document, which fights the user's scroll and stalls the page.
+    const revealInNav = link => {
+      const overflow = nav.scrollWidth - nav.clientWidth;
+      if (overflow <= 0) return;
+      const navBox = nav.getBoundingClientRect();
+      const linkBox = link.getBoundingClientRect();
+      const delta = (linkBox.left + linkBox.width / 2) - (navBox.left + navBox.width / 2);
+      const left = Math.max(0, Math.min(nav.scrollLeft + delta, overflow));
+      if (Math.abs(left - nav.scrollLeft) < 1) return;
+      nav.scrollTo({ left, behavior: reduceMotion ? 'auto' : 'smooth' });
+    };
+
     const setCurrent = id => {
+      if (id === currentId) return;
+      currentId = id;
       links.forEach(link => {
         const current = link.getAttribute('href') === `#${id}`;
         if (current) {
           link.setAttribute('aria-current', 'true');
-          link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+          revealInNav(link);
         } else {
           link.removeAttribute('aria-current');
         }
       });
     };
 
-    const observer = new IntersectionObserver(entries => {
-      const visible = entries
-        .filter(entry => entry.isIntersecting)
-        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible) setCurrent(visible.target.id);
-    }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, .1, .25, .5] });
+    // The section whose heading has most recently passed the reading line.
+    // IntersectionObserver only reports sections whose visibility *changed*, so
+    // comparing ratios between them left the pill a section behind; this reads
+    // position directly and is always right.
+    const activeId = () => {
+      const line = innerHeight * 0.28;
+      let id = sections[0].id;
+      for (const section of sections) {
+        if (section.getBoundingClientRect().top <= line) id = section.id;
+      }
+      // The last section is short enough that it may never cross the line.
+      const atBottom = innerHeight + scrollY >= document.documentElement.scrollHeight - 2;
+      return atBottom ? sections[sections.length - 1].id : id;
+    };
 
-    sections.forEach(section => observer.observe(section));
-    links.forEach(link => link.addEventListener('click', () => setCurrent(link.hash.slice(1))));
-    setCurrent(location.hash.slice(1) || 'fri');
+    let ticking = false;
+    let lockUntil = 0;
+
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        if (Date.now() < lockUntil) return;
+        setCurrent(activeId());
+      });
+    };
+
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll, { passive: true });
+    links.forEach(link => link.addEventListener('click', () => {
+      lockUntil = Date.now() + 900;  // let the smooth scroll land before tracking resumes
+      setCurrent(link.hash.slice(1));
+    }));
+    setCurrent(location.hash.slice(1) || activeId());
   })();
 </script>
 
