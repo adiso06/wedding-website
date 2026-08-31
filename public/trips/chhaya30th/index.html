@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>html{color-scheme:light dark;} body{margin:0;} img{max-width:100%;}</style>
+<title>Chhaya's Birthday Weekend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&amp;family=IBM+Plex+Mono:wght@500;600&amp;family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&amp;display=swap">
+
+<style>
+  :root{
+    color-scheme:light dark;
+    --ground:#F8F4F7;--surface:#FFFDFE;--surface-2:#F0EAF0;
+    --ink:#20151F;--ink-2:#51434F;--muted:#786A76;
+    --rule:#DED3DC;--rule-soft:#ECE5EB;
+    --accent:#B40F59;--accent-soft:#F7DDE9;--accent-ink:#750633;
+    --ok:#176650;--ok-soft:#E1F0EA;
+    --wait:#8A5300;--wait-soft:#F9ECD8;
+    --free:#57485B;--free-soft:#EEE7F0;
+    --shadow:0 18px 50px -36px rgba(65,30,51,.48),0 2px 8px rgba(65,30,51,.05);
+    --radius:18px;
+    --ease-out:cubic-bezier(.23,1,.32,1);
+    --ease-in-out:cubic-bezier(.77,0,.175,1);
+  }
+  @media (prefers-color-scheme:dark){
+    :root:not([data-theme="light"]){
+      --ground:#140F15;--surface:#1D171E;--surface-2:#292129;
+      --ink:#F7F0F5;--ink-2:#D7CBD4;--muted:#AA9BA7;
+      --rule:#3B3039;--rule-soft:#30262F;
+      --accent:#FF70AF;--accent-soft:#421329;--accent-ink:#FFD2E6;
+      --ok:#72D4B6;--ok-soft:#12352C;
+      --wait:#E7B466;--wait-soft:#3A290F;
+      --free:#CDBED0;--free-soft:#2B232D;
+      --shadow:0 22px 54px -34px rgba(0,0,0,.85),0 2px 10px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#140F15;--surface:#1D171E;--surface-2:#292129;
+    --ink:#F7F0F5;--ink-2:#D7CBD4;--muted:#AA9BA7;
+    --rule:#3B3039;--rule-soft:#30262F;
+    --accent:#FF70AF;--accent-soft:#421329;--accent-ink:#FFD2E6;
+    --ok:#72D4B6;--ok-soft:#12352C;
+    --wait:#E7B466;--wait-soft:#3A290F;
+    --free:#CDBED0;--free-soft:#2B232D;
+    --shadow:0 22px 54px -34px rgba(0,0,0,.85),0 2px 10px rgba(0,0,0,.25);
+  }
+
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;scroll-padding-top:94px;}
+  body{
+    margin:0;background:var(--ground);color:var(--ink);
+    font-family:"IBM Plex Sans",ui-sans-serif,system-ui,-apple-system,sans-serif;
+    font-size:16px;line-height:1.58;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+  }
+  ::selection{background:var(--accent-soft);color:var(--accent-ink);}
+  .page{width:min(100% - 40px,1160px);margin:0 auto;padding:0 0 96px;}
+
+  .daynav{
+    position:sticky;top:12px;z-index:20;display:flex;align-items:center;gap:4px;
+    width:max-content;max-width:100%;margin:12px auto 0;padding:6px;
+    overflow-x:auto;scrollbar-width:none;border:1px solid color-mix(in srgb,var(--rule) 80%,transparent);
+    border-radius:999px;background:color-mix(in srgb,var(--surface) 90%,transparent);
+    box-shadow:var(--shadow);backdrop-filter:blur(16px) saturate(140%);
+    -webkit-overflow-scrolling:touch;overscroll-behavior-inline:contain;
+  }
+  .daynav::-webkit-scrollbar{display:none;}
+  .daynav a{
+    flex:0 0 auto;min-height:38px;display:inline-flex;align-items:center;justify-content:center;
+    padding:8px 14px;border-radius:999px;color:var(--muted);text-decoration:none;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+    letter-spacing:.08em;text-transform:uppercase;
+    transition:background-color 160ms ease,color 160ms ease,transform 140ms var(--ease-out);
+  }
+  .daynav a[aria-current="true"]{background:var(--accent);color:var(--surface);}
+  .daynav a:active{transform:scale(.97);}
+  .daynav a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+  .masthead{
+    display:grid;grid-template-columns:minmax(0,1fr) minmax(340px,.88fr);gap:clamp(32px,6vw,80px);
+    align-items:center;min-height:min(660px,82dvh);padding:70px 0 56px;border-bottom:1px solid var(--rule);
+  }
+  .hero-copy{display:flex;flex-direction:column;align-items:flex-start;gap:20px;}
+  .eyebrow{
+    margin:0;color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;
+  }
+  h1{
+    max-width:10ch;margin:0;font-family:"Archivo",sans-serif;font-size:clamp(52px,7vw,86px);
+    font-weight:800;letter-spacing:-.055em;line-height:.94;text-wrap:balance;
+  }
+  .lede{max-width:49ch;margin:0;color:var(--ink-2);font-size:clamp(17px,1.6vw,20px);line-height:1.5;text-wrap:pretty;}
+  .hero-art{
+    position:relative;margin:0;overflow:hidden;border:1px solid var(--rule);border-radius:var(--radius);
+    aspect-ratio:4/5;background:var(--surface-2);box-shadow:var(--shadow);
+  }
+  .hero-art::after{content:"";position:absolute;inset:0;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);pointer-events:none;}
+  .hero-art img{width:100%;height:100%;display:block;object-fit:cover;object-position:59% 50%;}
+
+  .brief{
+    display:grid;grid-template-columns:1.35fr .72fr .72fr 1.55fr;gap:1px;margin:30px 0 72px;
+    overflow:hidden;border:1px solid var(--rule);border-radius:var(--radius);background:var(--rule);box-shadow:var(--shadow);
+  }
+  .brief-cell{min-height:136px;padding:22px;background:var(--surface);display:flex;flex-direction:column;gap:8px;justify-content:space-between;}
+  .brief-cell.wide{grid-column:auto;}
+  .brief-k{color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;}
+  .brief-v{font-family:"Archivo",sans-serif;font-size:19px;font-weight:700;letter-spacing:-.018em;line-height:1.25;}
+  .brief-v .sub{display:block;margin-top:8px;color:var(--ink-2);font-family:"IBM Plex Sans",sans-serif;font-size:13.5px;font-weight:400;line-height:1.45;letter-spacing:0;}
+  .brief-cell.flag{background:var(--accent-soft);}
+  .brief-cell.flag .brief-k{color:var(--accent-ink);}
+  .brief-cell.flag .brief-v{color:var(--accent-ink);}
+
+  .pack{
+    display:grid;grid-template-columns:310px minmax(0,1fr);margin-bottom:88px;overflow:hidden;
+    border:1px solid var(--rule);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);
+  }
+  .wx{display:grid;grid-template-rows:repeat(2,1fr);gap:1px;background:var(--rule);}
+  .wx-cell{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;min-height:106px;padding:22px 26px;background:var(--surface-2);text-align:left;}
+  .wx-n{display:block;font-family:"Archivo",sans-serif;font-size:32px;font-weight:800;letter-spacing:-.035em;line-height:1.05;font-variant-numeric:tabular-nums;}
+  .wx-l{display:block;margin-top:6px;color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;}
+  .pack-body{padding:30px 34px;}
+  .pack-body > p.wx-note{max-width:72ch;margin:0 0 22px;padding-bottom:22px;border-bottom:1px solid var(--rule);color:var(--ink-2);font-size:15px;}
+  .pack-body h4{margin:0 0 12px;color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;}
+  .pack-body ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 28px;margin:0;padding-left:18px;}
+  .pack-body li{padding-right:8px;color:var(--ink-2);font-size:14px;line-height:1.47;}
+  .pack-body li b{color:var(--ink);font-weight:600;}
+
+  .day{display:grid;grid-template-columns:220px minmax(0,1fr);gap:clamp(34px,5vw,72px);margin-bottom:104px;scroll-margin-top:94px;}
+  .day-head{position:sticky;top:92px;align-self:start;padding-top:10px;border-top:3px solid var(--accent);}
+  .day-top{display:flex;flex-direction:column;align-items:flex-start;gap:4px;}
+  .day-name{margin:0;font-family:"Archivo",sans-serif;font-size:clamp(38px,4.5vw,54px);font-weight:800;letter-spacing:-.045em;line-height:1;}
+  .day-date{color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;}
+  .day-shape{margin:15px 0 0;color:var(--ink-2);font-size:14.5px;line-height:1.52;}
+  .wxday{display:flex;flex-wrap:wrap;gap:6px;margin-top:18px;}
+  .wxtag{padding:5px 8px;border:1px solid var(--rule);border-radius:6px;background:var(--surface);color:var(--ink-2);font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;font-variant-numeric:tabular-nums;}
+  .wxtag.rain-hi{border-color:transparent;background:var(--accent-soft);color:var(--accent-ink);}
+  .wxtag.rain-lo{background:transparent;color:var(--muted);border-style:dashed;}
+  .day-body{min-width:0;border-top:1px solid var(--ink);}
+
+  .slot{display:grid;grid-template-columns:108px minmax(0,1fr);gap:0 28px;padding:26px 0;border-bottom:1px solid var(--rule);}
+  .slot:last-child{border-bottom:none;}
+  .slot-time{padding-top:3px;color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:12px;font-weight:600;line-height:1.45;white-space:nowrap;font-variant-numeric:tabular-nums;}
+  .slot-body{min-width:0;}
+  .slot-title{display:flex;flex-wrap:wrap;align-items:center;gap:9px;margin:0 0 6px;font-family:"Archivo",sans-serif;font-size:21px;font-weight:700;letter-spacing:-.022em;line-height:1.2;}
+  .slot-what{max-width:66ch;margin:0 0 12px;color:var(--ink-2);font-size:15px;text-wrap:pretty;}
+  .slot-meta{display:flex;flex-direction:column;gap:6px;}
+  .meta-line{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:10px;align-items:start;color:var(--muted);font-size:13.5px;line-height:1.5;}
+  .meta-line > span{min-width:0;}
+  .meta-line.compact{display:flex;align-items:baseline;gap:10px;white-space:nowrap;}
+  .meta-line > b:first-child{color:var(--ink-2);font-weight:600;}
+  .meta-line b{color:var(--ink-2);font-weight:600;}
+  a.map{color:inherit;text-decoration-color:color-mix(in srgb,var(--accent) 35%,var(--rule));text-decoration-thickness:1px;text-underline-offset:3px;transition:color 140ms ease,text-decoration-color 140ms ease,transform 140ms var(--ease-out);}
+  a.map:active{transform:translateY(1px);}
+  a.map:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:3px;}
+  .chip{padding:4px 8px;border-radius:6px;font-family:"IBM Plex Mono",monospace;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;}
+  .chip.ok{background:var(--ok-soft);color:var(--ok);}
+  .chip.wait{background:var(--wait-soft);color:var(--wait);}
+  .chip.idea{border:1px dashed var(--rule);background:transparent;color:var(--muted);}
+  .slot.soft{opacity:.84;}
+  .slot.soft .slot-title{font-size:19px;font-weight:600;}
+  .slot.soft .slot-time{color:var(--muted);}
+  .slot.free{margin:16px 0;padding:22px 24px;border:1px solid var(--rule);border-radius:var(--radius);background:var(--free-soft);}
+  .slot.free .slot-time{color:var(--free);}
+  .slot.free .slot-title{font-size:20px;}
+  .heads-up{max-width:68ch;margin-top:14px;padding:13px 15px;border-left:3px solid var(--accent);border-radius:0 10px 10px 0;background:var(--accent-soft);color:var(--ink);font-size:13.5px;line-height:1.5;}
+  .heads-up b{color:var(--accent-ink);font-weight:600;}
+
+  .adv{margin:26px 0 30px;overflow:hidden;border:1px solid var(--rule);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);}
+  .adv-head{padding:28px 30px 24px;border-bottom:1px solid var(--rule);}
+  .adv-head h3{margin:0 0 8px;font-family:"Archivo",sans-serif;font-size:clamp(27px,3vw,36px);font-weight:800;letter-spacing:-.035em;line-height:1.08;}
+  .adv-head p{max-width:72ch;margin:0;color:var(--ink-2);font-size:14.5px;}
+  .adv-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;padding:1px;background:var(--rule);}
+  .cat{min-width:0;padding:24px;background:var(--surface);}
+  .cat:nth-child(2),.cat:nth-child(3){background:var(--surface-2);}
+  .cat-k{margin:0 0 12px;color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;}
+  .cat-k .where{color:var(--muted);letter-spacing:.05em;}
+  .cat ul{display:flex;flex-direction:column;gap:9px;margin:0;padding-left:17px;}
+  .cat li{color:var(--ink-2);font-size:14px;line-height:1.48;}
+  .cat li b{color:var(--ink);font-weight:600;}
+  .cat li .note{color:var(--muted);font-size:13px;}
+  .missions{padding:28px 30px 30px;border-top:1px solid var(--rule);background:color-mix(in srgb,var(--accent-soft) 44%,var(--surface));}
+  .missions h4{margin:0 0 5px;font-family:"Archivo",sans-serif;font-size:22px;font-weight:800;letter-spacing:-.025em;}
+  .missions .rule{margin:0 0 20px;color:var(--ink-2);font-size:14px;}
+  .mlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:19px 30px;}
+  .m{display:flex;gap:12px;}
+  .m-n{flex:0 0 auto;display:flex;align-items:center;justify-content:center;width:26px;height:26px;margin-top:1px;border:1px solid color-mix(in srgb,var(--accent) 45%,transparent);border-radius:8px;background:var(--surface);color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;}
+  .m-t{min-width:0;}
+  .m-t b{display:block;margin-bottom:3px;font-family:"Archivo",sans-serif;font-size:14.5px;font-weight:700;}
+  .m-t span{color:var(--ink-2);font-size:13.5px;line-height:1.47;}
+
+  #anytime,#know{scroll-margin-top:94px;}
+  #anytime{margin:0 0 72px;}
+  .sec-h{margin:0 0 7px;font-family:"Archivo",sans-serif;font-size:clamp(36px,4.5vw,52px);font-weight:800;letter-spacing:-.045em;line-height:1;}
+  .sec-sub{margin:0 0 24px;color:var(--ink-2);font-size:15px;}
+  .anytime{display:grid;grid-template-columns:1.25fr .75fr;gap:1px;overflow:hidden;border:1px solid var(--rule);border-radius:var(--radius);background:var(--rule);box-shadow:var(--shadow);}
+  .at-cell{padding:25px 27px;background:var(--surface);}
+  .at-cell:nth-child(2){background:var(--surface-2);}
+  .at-cell h4{margin:0 0 12px;color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;}
+  .at-cell ul{display:flex;flex-direction:column;gap:8px;margin:0;padding-left:17px;}
+  .at-cell li{color:var(--ink-2);font-size:14px;}
+  .at-cell li b{color:var(--ink);font-weight:600;}
+  .notes{padding:34px;border:1px solid var(--rule);border-radius:var(--radius);background:var(--surface-2);}
+  .notes h2{margin:0 0 22px;font-family:"Archivo",sans-serif;font-size:30px;font-weight:800;letter-spacing:-.035em;}
+  .notes ul{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 34px;margin:0;padding:0;list-style:none;}
+  .notes li{padding-top:14px;border-top:1px solid var(--rule);color:var(--ink-2);font-size:14px;line-height:1.5;}
+  .notes b{color:var(--ink);font-weight:600;}
+  .sig{margin:52px 0 0;text-align:center;color:var(--accent);font-family:"Archivo",sans-serif;font-size:19px;font-weight:700;letter-spacing:-.01em;}
+
+  @media (hover:hover) and (pointer:fine){
+    .daynav a:not([aria-current="true"]):hover{background:var(--accent-soft);color:var(--accent-ink);}
+    a.map:hover{color:var(--accent);text-decoration-color:var(--accent);}
+  }
+
+  @media (max-width:900px){
+    .masthead{grid-template-columns:minmax(0,1fr) minmax(280px,.78fr);gap:34px;min-height:auto;padding:62px 0 46px;}
+    h1{font-size:clamp(48px,7vw,68px);}
+    .brief{grid-template-columns:repeat(2,minmax(0,1fr));}
+    .brief-cell.wide{grid-column:auto;}
+    .brief-cell.flag{grid-column:1/-1;min-height:auto;}
+    .pack{grid-template-columns:1fr;}
+    .wx{grid-template-columns:repeat(2,1fr);grid-template-rows:auto;}
+    .wx-cell{min-height:100px;align-items:center;padding:18px 12px;text-align:center;}
+    .pack-body ul{grid-template-columns:1fr;}
+    .day{grid-template-columns:180px minmax(0,1fr);gap:34px;}
+    .slot{grid-template-columns:92px minmax(0,1fr);gap:22px;}
+  }
+
+  @media (max-width:700px){
+    .page{width:min(100% - 28px,620px);padding-bottom:64px;}
+    .daynav{top:8px;width:100%;justify-content:flex-start;margin-top:8px;padding:5px;}
+    .daynav a{min-height:36px;padding:7px 12px;}
+    .masthead{display:flex;flex-direction:column;align-items:stretch;gap:30px;padding:48px 0 34px;}
+    .hero-copy{gap:15px;}
+    h1{max-width:11ch;font-size:clamp(45px,13vw,62px);line-height:.96;}
+    .lede{font-size:17px;}
+    .hero-art{aspect-ratio:16/10;}
+    .hero-art img{object-position:58% 53%;}
+    .brief{grid-template-columns:1fr 1fr;margin:20px 0 54px;}
+    .brief-cell{min-height:auto;padding:18px;}
+    .brief-cell:first-child,.brief-cell.flag{grid-column:1/-1;}
+    .brief-v{font-size:17px;}
+    .pack{margin-bottom:66px;}
+    .wx-n{font-size:24px;}
+    .pack-body{padding:24px 20px;}
+    .day{display:block;margin-bottom:74px;scroll-margin-top:78px;}
+    .day-head{position:static;padding:10px 0 20px;}
+    .day-top{gap:5px;}
+    .day-name{font-size:43px;}
+    .day-shape{max-width:42ch;}
+    .day-body{border-top:1px solid var(--ink);}
+    .slot{grid-template-columns:1fr;gap:7px;padding:22px 0;}
+    .slot-time{padding:0;font-size:11px;letter-spacing:.04em;text-transform:uppercase;}
+    .slot-title{font-size:20px;}
+    .slot.soft .slot-title{font-size:18px;}
+    .slot.free{padding:20px;margin:14px 0;}
+    .meta-line{grid-template-columns:78px minmax(0,1fr);gap:8px;}
+    .adv{margin:22px 0 26px;}
+    .adv-head{padding:24px 20px 20px;}
+    .adv-body{grid-template-columns:1fr;}
+    .cat,.missions{padding:22px 20px;}
+    .cat:nth-child(odd),.cat:nth-child(even){background:var(--surface);}
+    .cat:nth-child(2),.cat:nth-child(4){background:var(--surface-2);}
+    .mlist{grid-template-columns:1fr;gap:17px;}
+    .anytime{grid-template-columns:1fr;}
+    .notes{padding:26px 20px;}
+    .notes ul{grid-template-columns:1fr;gap:12px;}
+  }
+
+  @media (max-width:420px){
+    .page{width:min(100% - 22px,400px);}
+    .daynav a{padding:7px 10px;font-size:10px;}
+    .brief{grid-template-columns:1fr;}
+    .brief-cell:first-child,.brief-cell.flag{grid-column:auto;}
+    .wx{grid-template-columns:1fr;}
+    .wx-cell{min-height:78px;align-items:flex-start;padding:16px 20px;text-align:left;}
+    .pack-body{padding:22px 18px;}
+    .meta-line{display:block;}
+    .meta-line > b:first-child{display:block;margin-bottom:2px;}
+    .chip{font-size:8.5px;}
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto;}
+    .daynav a,a.map{transition:background-color 100ms linear,color 100ms linear,text-decoration-color 100ms linear;}
+    .daynav a:active,a.map:active{transform:none;}
+  }
+</style>
+</head>
+<body>
+
+
+<div class="page">
+
+  <nav class="daynav" aria-label="Weekend itinerary">
+    <a href="#fri">Fri</a><a href="#sat">Sat</a><a href="#sun">Sun</a><a href="#mon">Mon</a>
+    <a href="#anytime">Anytime</a><a href="#know">Know</a>
+  </nav>
+
+  <header class="masthead">
+    <div class="hero-copy">
+      <p class="eyebrow">Mexico City / Sep 4-7, 2026 / 13 of us</p>
+      <h1>Chhaya's Birthday Weekend</h1>
+      <p class="lede">Canals, cocktails, one dress-up dinner, and plenty of room to explore. Optional stops are always your call.</p>
+    </div>
+    <figure class="hero-art">
+      <img src="assets/cdmx-birthday-editorial.webp" width="1536" height="1024" decoding="async" fetchpriority="high" alt="Editorial collage of Mexico City architecture, flowers, citrus, a cocktail, and a trajinera">
+    </figure>
+  </header>
+
+  <div class="brief">
+    <div class="brief-cell wide">
+      <span class="brief-k">The house</span>
+      <span class="brief-v">
+        <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Saltillo%20110%2C%20Condesa%2C%20Ciudad%20de%20M%C3%A9xico">Saltillo 110, Condesa</a>
+        <span class="sub">Casona with a big patio. Self check-in with a smart lock.</span>
+      </span>
+    </div>
+    <div class="brief-cell"><span class="brief-k">Check in</span><span class="brief-v">Fri Sep 4, 5:00 PM</span></div>
+    <div class="brief-cell"><span class="brief-k">Check out</span><span class="brief-v">Mon Sep 7, 11:00 AM</span></div>
+    <div class="brief-cell flag wide">
+      <span class="brief-k">One thing to do now</span>
+      <span class="brief-v">Send Aditya a photo of your passport ID page
+        <span class="sub">The host needs an ID for all 13 of us before arrival. Please send yours by Sep 2 so the door codes and Wi-Fi can be released Wednesday.</span>
+      </span>
+    </div>
+  </div>
+
+  <div class="pack">
+    <div class="wx">
+      <div class="wx-cell"><span class="wx-n">64-77°</span><span class="wx-l">Days</span></div>
+      <div class="wx-cell"><span class="wx-n">55-57°</span><span class="wx-l">Nights</span></div>
+    </div>
+    <div class="pack-body">
+      <p class="wx-note">Rain is possible throughout the weekend, with the heaviest showers currently expected Friday and <b>Saturday</b>. Saturday includes four hours on an open boat, so rain gear is essential. Storms often arrive as a hard afternoon or evening burst and clear quickly; mornings are usually brighter. Forecast checked Aug 30 and likely to shift before we fly.</p>
+      <h4>Bring</h4>
+      <ul>
+        <li><b>A rain layer.</b> Bring a packable jacket or a small umbrella, especially for Saturday on the canals.</li>
+        <li><b>Layers.</b> It's a 20-degree swing between the afternoon and 1 AM, and we're out late two nights running.</li>
+        <li><b>Sunscreen and a hat.</b> Chinampas means four hours on open water with little shade, at altitude.</li>
+        <li><b>Bug spray</b> for the canals.</li>
+        <li><b>Real walking shoes.</b> Roma and Condesa sidewalks are uneven, and Sunday afternoon is a lot of ground.</li>
+        <li><b>One polished look.</b> For the private-chef dinner and dancing afterward.</li>
+        <li><b>1,000-3,000 pesos ($60-$180).</b> Exchange the cash before leaving your hometown so you have it ready for bazaar purchases, tips, the dock, and smaller local spots.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ================= FRIDAY ================= -->
+  <section class="day" id="fri">
+    <div class="day-head">
+      <div class="day-top"><h2 class="day-name">Friday</h2><span class="day-date">Sep 4</span></div>
+      <p class="day-shape">Arrive, settle in, and let the first evening stay easy.</p>
+      <div class="wxday"><span class="wxtag">77° / 57°</span><span class="wxtag rain-hi">Heavy showers possible</span></div>
+    </div>
+
+    <div class="day-body">
+
+    <div class="slot">
+      <div class="slot-time">5:00 PM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Check in <span class="chip ok">Confirmed</span></h3>
+        <p class="slot-what">Drop your bags, choose a bed, and make yourself at home.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Where</b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Saltillo%20110%2C%20Condesa%2C%20Ciudad%20de%20M%C3%A9xico">Saltillo 110, Condesa</a></div>
+          <div class="meta-line"><b>Early?</b>Landing before 5:00? You can leave bags at the house first. Tell Aditya so he can coordinate with the host.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot soft">
+      <div class="slot-time">Evening</div>
+      <div class="slot-body">
+        <h3 class="slot-title">First night, no plans <span class="chip idea">Idea</span></h3>
+        <p class="slot-what">Aditya lands at 10:20 PM. If you're in earlier, wander into Condesa or Roma for dinner; both are easy from the house.</p>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ================= SATURDAY ================= -->
+  <section class="day" id="sat">
+    <div class="day-head">
+      <div class="day-top"><h2 class="day-name">Saturday</h2><span class="day-date">Sep 5 · The big one</span></div>
+      <p class="day-shape">Canals in the morning, a proper reset in the afternoon, then dress up for dinner and a night out.</p>
+      <div class="wxday"><span class="wxtag">72° / 55°</span><span class="wxtag rain-hi">Heavier showers possible</span></div>
+    </div>
+
+    <div class="day-body">
+
+    <div class="slot">
+      <div class="slot-time">7:30 AM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Pastries at the house</h3>
+        <p class="slot-what"><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Panader%C3%ADa%20Rosetta%2C%20Colima%20179%2C%20Roma%20Norte%2C%20Ciudad%20de%20M%C3%A9xico">Panadería Rosetta</a> and <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Odette%20Panader%C3%ADa%2C%20Ciudad%20de%20M%C3%A9xico">Odette</a>, ordered in. Coffee and something sweet before the drive.</p>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="slot-time">8:00 AM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Ubers to Xochimilco</h3>
+        <p class="slot-what">Allow 45-60 minutes depending on traffic. Please be ready at 8:00 so we reach the boat before its 9:00 departure.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Search</b>Type <b>HUMEDALIA EXPERIENCIAS</b> into Uber. That is the exact pin.</div>
+          <div class="meta-line"><b>Map</b><a class="map" href="https://maps.app.goo.gl/23ZnBQsreBPPz2ug6">Directions to the dock</a></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="slot-time">9:00 AM<br>- 1:00 PM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Chinampas <span class="chip ok">Confirmed</span></h3>
+        <p class="slot-what">Four hours with Humedalia: a canal ride, floating farms, and farm-to-table brunch on the water. This is the quieter side of Xochimilco, not the party-boat version.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Cost</b>Covered by Aditya &amp; Chhaya</div>
+          <div class="meta-line"><b>Bring</b>Sunscreen, a hat, rain protection, and a layer. We will be on open water for four hours.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot free">
+      <div class="slot-time">2:00 PM<br>- 5:00 PM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Afternoon reset</h3>
+        <p class="slot-what">Take the afternoon to nap, shower, and eat before a late night. If you still want to wander, <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Parque%20M%C3%A9xico%2C%20Condesa%2C%20Ciudad%20de%20M%C3%A9xico">Parque México</a> and <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Avenida%20Amsterdam%2C%20Condesa%2C%20Ciudad%20de%20M%C3%A9xico">Avenida Amsterdam</a> are a few minutes from the house.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Shopping?</b><span><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Bazar%20S%C3%A1bado%2C%20Plaza%20San%20Jacinto%2011%2C%20San%20%C3%81ngel%2C%20Ciudad%20de%20M%C3%A9xico">Bazar Sábado</a> in San Ángel is Saturday-only and closes at 7. Go <b>straight from the boat</b> if it is a priority; it is on the way home and saves roughly an hour in the car.</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="slot-time">5:00 PM<br>- 6:30 PM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Chhaya's birthday dinner <span class="chip ok">Confirmed</span></h3>
+        <p class="slot-what">Chef Rodrigo is cooking a vegan-friendly private dinner and birthday dessert at the house. This is our formal-ish moment: cocktail attire or a polished going-out look.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Where</b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Saltillo%20110%2C%20Condesa%2C%20Ciudad%20de%20M%C3%A9xico">At the house, Saltillo 110</a></div>
+          <div class="meta-line"><b>Cost</b>Covered by Aditya &amp; Chhaya</div>
+          <div class="meta-line"><b>Dress</b>Cocktail attire or your favorite polished night-out look; choose shoes you can walk and dance in.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="slot-time">9:00 PM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Café Tacobar <span class="chip ok">Confirmed</span></h3>
+        <p class="slot-what">Our first drinks after dinner, with cocktails and tacos for anyone who somehow still has room.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Where</b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Caf%C3%A9%20Tacobar%2C%20Av%20Oaxaca%2012%2C%20Roma%20Norte%2C%20Ciudad%20de%20M%C3%A9xico">Av. Oaxaca 12, Roma Norte</a></div>
+          <div class="meta-line compact"><b>Ask for</b><span><b>Chhaya, Aditya, or Nitish</b></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="slot-time">10:00 PM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Ahorita Cantina <span class="chip ok">Confirmed</span></h3>
+        <p class="slot-what">A modern cantina from the Handshake Speakeasy team, with serious cocktails in a looser room. There is a DJ and space to dance.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Where</b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Ahorita%20Cantina%2C%20Paseo%20de%20la%20Reforma%20390%2C%20Ju%C3%A1rez%2C%20Ciudad%20de%20M%C3%A9xico">Reforma 390, Juárez</a>, a seven-minute walk from Tacobar</div>
+          <div class="meta-line"><b>Ask for</b>Chhaya Arora</div>
+          <div class="meta-line"><b>Open</b>Until 1:30 AM</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot soft">
+      <div class="slot-time">Late</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Keep dancing <span class="chip idea">Ideas</span></h3>
+        <p class="slot-what">If the group wants another stop, these lean into salsa, cumbia, son, bachata, reggaetón, and Latin pop rather than house music.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Club%20San%20Luis%2C%20San%20Luis%20Potos%C3%AD%2026%2C%20Roma%20Norte%2C%20Ciudad%20de%20M%C3%A9xico">Club San Luis</a></b><span><b>Best fit.</b> An old-school Mexican cabaret with live orchestras playing salsa, cumbia, merengue, and boleros. Open until 4:00 AM; bring cash and expect a cover.</span></div>
+          <div class="meta-line"><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Mama%20Rumba%2C%20Quer%C3%A9taro%20230%2C%20Roma%20Norte%2C%20Ciudad%20de%20M%C3%A9xico">Mama Rumba</a></b><span>Live Cuban salsa, son and bachata in Roma Norte. Open Saturday until about 3:00 AM; energetic, friendly and entirely about dancing.</span></div>
+          <div class="meta-line"><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Cabaretito%20Punto%20y%20Aparte%2C%20Amberes%2061%2C%20Ju%C3%A1rez%2C%20Ciudad%20de%20M%C3%A9xico">Cabaré-Tito Punto y Aparte</a></b><span>Queer Zona Rosa institution with separate perreo, tropical, Latin-pop and karaoke rooms. The easiest late fallback if the group wants reggaetón rather than partner dancing.</span></div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ================= SUNDAY ================= -->
+  <section class="day" id="sun">
+    <div class="day-head">
+      <div class="day-top"><h2 class="day-name">Sunday</h2><span class="day-date">Sep 6 · Brunch, adventures, long night</span></div>
+      <p class="day-shape">Brunch together, explore in smaller groups, then regroup for a casual dinner and cocktails.</p>
+      <div class="wxday"><span class="wxtag">72° / 55°</span><span class="wxtag rain-lo">Light showers possible</span></div>
+    </div>
+
+    <div class="day-body">
+
+    <div class="slot">
+      <div class="slot-time">10:30 AM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Mandolina <span class="chip ok">Confirmed</span></h3>
+        <p class="slot-what">Our group brunch in Roma, with an Italian-leaning menu and two tables side by side.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Where</b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Mandolina%20Roma%2C%20Zacatecas%2080%2C%20Roma%20Norte%2C%20Ciudad%20de%20M%C3%A9xico">Zacatecas 80, Roma Norte</a></div>
+          <div class="meta-line"><b>Ask for</b><b>Chhaya Arora</b> or <b>Aditya Sood</b></div>
+          <div class="meta-line"><b>Alternative</b>If you would rather wander off, <b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Cuina%2C%20Ciudad%20de%20M%C3%A9xico">Cuina</a></b> and <b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Niddo%2C%20Ciudad%20de%20M%C3%A9xico">Niddo</a></b> are both excellent and walk-in only.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADVENTURE -->
+    <div class="adv">
+      <div class="adv-head">
+        <h3>Afternoon: pick your adventure</h3>
+        <p>From roughly 12:30 to 6:00, choose the part of the city that sounds best and explore in smaller groups. Each route heads in a different direction, so staying within one area will leave more time for the fun part.</p>
+      </div>
+      <div class="adv-body">
+        <div class="cat">
+          <p class="cat-k">Chapultepec <span class="where">· 10-15 min west</span></p>
+          <ul>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Librer%C3%ADa%20Porr%C3%BAa%20Chapultepec%2C%20Av%20Grutas%20S%2FN%2C%20Bosque%20de%20Chapultepec%2C%20Ciudad%20de%20M%C3%A9xico">Librería Porrúa</a></b>, a bookstore on the water with a terrace over the lake, five minutes from the museums below.</li>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Museo%20Nacional%20de%20Antropolog%C3%ADa%2C%20Ciudad%20de%20M%C3%A9xico">Museo Nacional de Antropología</a></b>, the big one. Give it at least two hours.</li>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Museo%20de%20Arte%20Moderno%2C%20Ciudad%20de%20M%C3%A9xico">Museo de Arte Moderno</a></b>, smaller and excellent, in the same park.</li>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Casa%20Estudio%20Luis%20Barrag%C3%A1n%2C%20General%20Francisco%20Ram%C3%ADrez%2012%2C%20Ciudad%20de%20M%C3%A9xico">Casa Luis Barragán</a></b> and <b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Casa%20Gilardi%2C%20General%20Antonio%20Le%C3%B3n%2082%2C%20San%20Miguel%20Chapultepec%2C%20Ciudad%20de%20M%C3%A9xico">Casa Gilardi</a></b>, just south of the park. <span class="note">Both require reservations and do not accept walk-ins. Book before Sunday if either is a priority.</span></li>
+          </ul>
+        </div>
+        <div class="cat">
+          <p class="cat-k">Centro <span class="where">· 20-30 min northeast</span></p>
+          <ul>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Mercado%20de%20La%20Lagunilla%2C%20Ciudad%20de%20M%C3%A9xico">La Lagunilla</a></b> for flea-market finds and antiques. Sunday is its best day.</li>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Mercado%20de%20Artesan%C3%ADas%20La%20Ciudadela%2C%20Balderas%2C%20Centro%2C%20Ciudad%20de%20M%C3%A9xico">Mercado de Artesanías La Ciudadela</a></b> for crafts from across the country.</li>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Biblioteca%20Vasconcelos%2C%20Ciudad%20de%20M%C3%A9xico">Biblioteca Vasconcelos</a></b>, the free floating-stacks library unlike anything else in the city.</li>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Palacio%20de%20Bellas%20Artes%2C%20Ciudad%20de%20M%C3%A9xico">Palacio de Bellas Artes</a></b> and <b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Museo%20Nacional%20de%20Arte%20MUNAL%2C%20Ciudad%20de%20M%C3%A9xico">MUNAL</a></b> for murals and architecture, just two blocks apart.</li>
+          </ul>
+        </div>
+        <div class="cat">
+          <p class="cat-k">Roma &amp; Condesa <span class="where">· on foot</span></p>
+          <ul>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Xin%C3%BA%20perfumes%2C%20Ciudad%20de%20M%C3%A9xico">Xinú</a></b> is the perfume stop to beat. <span class="note">Also consider <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Perfumerica%2C%20Ciudad%20de%20M%C3%A9xico">Perfumerica</a> and Lulu.</span></li>
+            <li><b>Clothes, bags, and local shops:</b> <a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Goodbye%20Folk%2C%20Roma%20Norte%2C%20Ciudad%20de%20M%C3%A9xico">Goodbye Folk</a>, Vintage Hoe, Back to Life, La Nación de Todos, Verde Permuta, and Void. Enjoy them as a neighborhood wander, not a six-store checklist.</li>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Cara%20de%20Planta%2C%20Ciudad%20de%20M%C3%A9xico">Cara de Planta</a></b>, a plant shop worth the detour.</li>
+            <li>Or simply wander, sit in a park, and drink coffee. A slower afternoon is entirely valid.</li>
+          </ul>
+        </div>
+        <div class="cat">
+          <p class="cat-k">Coyoacán <span class="where">· 35 min south, the committed option</span></p>
+          <ul>
+            <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Museo%20Frida%20Kahlo%2C%20Londres%20247%2C%20Coyoac%C3%A1n%2C%20Ciudad%20de%20M%C3%A9xico">Museo Frida Kahlo</a></b>, plus the surrounding plaza and market. <span class="note">Timed tickets sell out days ahead, so book before Sunday. Allow 35 minutes each way and leave by 5:15.</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="missions">
+        <h4>Secret missions</h4>
+        <p class="rule">Try any <b>three of six</b> with your group. Extra credit is real and will be acknowledged.</p>
+        <div class="mlist">
+          <div class="m"><div class="m-n">1</div><div class="m-t"><b>The History Challenge</b><span>One group photo that somehow incorporates both pre-Hispanic and colonial Mexico. Be prepared to explain your artistic vision.</span></div></div>
+          <div class="m"><div class="m-n">2</div><div class="m-t"><b>The Food Challenge</b><span>Find one food item the group's bravest would risk gastrointestinal consequences for. Someone has to actually eat it. Alternatively: share the best thing you ate all afternoon.</span></div></div>
+          <div class="m"><div class="m-n">3</div><div class="m-t"><b>The Birthday Challenge</b><span>One object under 200 pesos that is the perfect representation of the birthday girl.</span></div></div>
+          <div class="m"><div class="m-n">4</div><div class="m-t"><b>The CDMX Challenge</b><span>Record a 10-second tourism commercial for Mexico City that would absolutely never be approved by the city's tourism department.</span></div></div>
+          <div class="m"><div class="m-n">5</div><div class="m-t"><b>The Impulse Purchase</b><span>Spend 50 pesos or less on the most unnecessary object you can find, then give a 30-second pitch on why it was absolutely essential.</span></div></div>
+          <div class="m"><div class="m-n">6</div><div class="m-t"><b>The Chaos Challenge</b><span>Re-create a work of art, a statue, or an advertisement using only your bodies.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="slot-time">6:45 PM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Páramo <span class="chip ok">Confirmed · Terraza</span></h3>
+        <p class="slot-what">A casual Sunday dinner of tacos and mezcal in a lively open-air Roma courtyard. Come as you are after the afternoon's adventures.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Where</b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=P%C3%A1ramo%2C%20Av.%20Yucat%C3%A1n%2084%2C%20Roma%20Norte%2C%20Ciudad%20de%20M%C3%A9xico">Av. Yucatán 84, Roma Norte</a>. It is upstairs, and the entrance is easy to miss.</div>
+          <div class="meta-line"><b>Ask for</b><b>Ash Sood</b> or <b>Nitish Sood</b>, with two tables on the terraza</div>
+          <div class="meta-line"><b>Arrive</b>Come at 6:45. One table is booked for 6:45 and the second for 7:00.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="slot-time">8:30 PM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Kaito del Valle <span class="chip ok">Confirmed</span></h3>
+        <p class="slot-what">A Japanese-influenced cocktail bar recognized among North America's 50 Best. This stop is for drinks and snacks, not another dinner.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Where</b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Kaito%20del%20Valle%2C%20Hamburgo%2070B%2C%20Ju%C3%A1rez%2C%20Ciudad%20de%20M%C3%A9xico">Hamburgo 70B, Colonia Juárez</a> (Zona Rosa), 10 min from Páramo</div>
+          <div class="meta-line"><b>Ask for</b><b>Aditya</b>, <b>Chhaya</b>, or <b>Aya</b></div>
+        </div>
+        <div class="heads-up"><b>Heads up on the name.</b> Despite "del Valle," this bar is in Zona Rosa on Hamburgo. There is another Kaito in Colonia del Valle, 6 km south. If your map says Pestalozzi, it is sending you to the wrong one.</div>
+      </div>
+    </div>
+
+    <div class="slot soft">
+      <div class="slot-time">11:30 PM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">FOMA <span class="chip ok">Confirmed · 6 seats</span></h3>
+        <p class="slot-what">An experimental cocktail bar back in Roma, reserved for whichever six people still want one more stop.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Where</b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=FORM%20%2B%20MATTER%20FOMA%2C%20San%20Luis%20Potos%C3%AD%2037%2C%20Roma%20Norte%2C%20Ciudad%20de%20M%C3%A9xico">San Luis Potosí 37, Roma Norte</a>. <b>The door is on Mérida.</b></div>
+          <div class="meta-line"><b>Ask for</b>Chhaya Arora</div>
+          <div class="meta-line"><b>Note</b>They close at 1:00 AM and last call is 12:30, so expect a focused final hour.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="slot soft">
+      <div class="slot-time">Later</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Sunday dancing <span class="chip idea">Ideas</span></h3>
+        <p class="slot-what">Sunday has fewer late options, but these keep the music on the Latin and Mexican side rather than house.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Cabaretito%20Punto%20y%20Aparte%2C%20Amberes%2061%2C%20Ju%C3%A1rez%2C%20Ciudad%20de%20M%C3%A9xico">Cabaré-Tito Punto y Aparte</a></b><span><b>Best late option.</b> Open Sundays in Zona Rosa, with separate perreo, tropical, Latin-pop and karaoke rooms. Use this instead of FOMA if the group wants to dance.</span></div>
+          <div class="meta-line"><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Sal%C3%B3n%20Los%20%C3%81ngeles%2C%20Lerdo%20206%2C%20Guerrero%2C%20Ciudad%20de%20M%C3%A9xico">Salón Los Ángeles</a></b><span><b>Most Mexican option.</b> The historic ballroom's Sunday session is 5:00-10:00 PM, with live salsa, son, and cumbia. This would replace Páramo and Kaito rather than follow them.</span></div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ================= MONDAY ================= -->
+  <section class="day" id="mon">
+    <div class="day-head">
+      <div class="day-top"><h2 class="day-name">Monday</h2><span class="day-date">Sep 7 · Out</span></div>
+      <p class="day-shape">One last brunch, then everyone scatters.</p>
+      <div class="wxday"><span class="wxtag">64° / 55°</span><span class="wxtag rain-lo">Light showers possible</span></div>
+    </div>
+
+    <div class="day-body">
+
+    <div class="slot">
+      <div class="slot-time">10:30 AM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Madre Café <span class="chip ok">Confirmed · 10 seats</span></h3>
+        <p class="slot-what">One last brunch for whoever is still in town. Anish and Maddie fly earlier, so this is a smaller table by design.</p>
+        <div class="slot-meta">
+          <div class="meta-line"><b>Where</b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Madre%20Caf%C3%A9%2C%20Orizaba%20131%2C%20Roma%20Norte%2C%20Ciudad%20de%20M%C3%A9xico">Orizaba 131, Roma Norte</a></div>
+          <div class="meta-line"><b>Ask for</b>Chhaya Arora</div>
+        </div>
+        <div class="heads-up"><b>Bring your bags with you.</b> Checkout is 11:00 and brunch begins at 10:30. Pack Sunday night, clear the house on your way out, and continue to the airport from Madre.</div>
+      </div>
+    </div>
+
+    <div class="slot">
+      <div class="slot-time">11:00 AM</div>
+      <div class="slot-body">
+        <h3 class="slot-title">Check out</h3>
+        <p class="slot-what">The cleaners arrive at 11, so the house needs to be clear.</p>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- ================= ANYTIME ================= -->
+  <section id="anytime">
+    <h2 class="sec-h">Anytime</h2>
+    <p class="sec-sub">Not scheduled, just good. Slot them in wherever they fit.</p>
+    <div class="anytime">
+      <div class="at-cell">
+        <h4>Dessert</h4>
+        <ul>
+          <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Lindy%2C%20Condesa%2C%20Ciudad%20de%20M%C3%A9xico">Lindy</a></b> for the classic flan, 15 minutes' walk from the house.</li>
+          <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Ren%20y%20Nata%20churros%2C%20Ciudad%20de%20M%C3%A9xico">Ren &amp; Nata</a></b> for churros.</li>
+          <li><b><a class="map" href="https://www.google.com/maps/search/?api=1&amp;query=Ritmo%20Caf%C3%A9%2C%20Ciudad%20de%20M%C3%A9xico">Ritmo Café</a></b> for frozen yogurt.</li>
+        </ul>
+      </div>
+      <div class="at-cell">
+        <h4>One more idea</h4>
+        <ul>
+          <li><b>Mezcal tasting</b>, roughly $100 per person and not currently booked. Tell Aditya if you are interested and he will see whether there is a group.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= NOTES ================= -->
+  <section id="know">
+    <div class="notes">
+      <h2>Worth knowing</h2>
+      <ul>
+        <li><b>Use Uber rather than street taxis.</b> Rides are inexpensive and work well. Trips between Roma, Condesa, Juárez, and Reforma are usually about 15 minutes or less.</li>
+        <li><b>Most stops are clustered in Roma Norte.</b> Tacobar, Mandolina, Páramo, FOMA, and Madre are within a few blocks of one another. Páramo to FOMA is a 9-minute walk; Kaito is about 10 minutes north in Zona Rosa.</li>
+        <li><b>Aditya and Chhaya are covering</b> the house, the Chinampas day and the private chef. Everything else we split as we go.</li>
+        <li><b>Some tables are under different names</b> at Tacobar, Mandolina, and Kaito because of our group size. If you arrive separately, use any of the reservation names listed for that stop.</li>
+      </ul>
+    </div>
+  </section>
+
+  <p class="sig">Happy birthday, Chhaya</p>
+
+</div>
+
+<script>
+  (() => {
+    const nav = document.querySelector('.daynav');
+    const links = [...nav.querySelectorAll('a[href^="#"]')];
+    const sections = links
+      .map(link => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    const setCurrent = id => {
+      links.forEach(link => {
+        const current = link.getAttribute('href') === `#${id}`;
+        if (current) {
+          link.setAttribute('aria-current', 'true');
+          link.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+        } else {
+          link.removeAttribute('aria-current');
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(entries => {
+      const visible = entries
+        .filter(entry => entry.isIntersecting)
+        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (visible) setCurrent(visible.target.id);
+    }, { rootMargin: '-18% 0px -68% 0px', threshold: [0, .1, .25, .5] });
+
+    sections.forEach(section => observer.observe(section));
+    links.forEach(link => link.addEventListener('click', () => setCurrent(link.hash.slice(1))));
+    setCurrent(location.hash.slice(1) || 'fri');
+  })();
+</script>
+
+</body>
+</html>
