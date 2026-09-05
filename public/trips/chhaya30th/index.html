@@ -320,6 +320,86 @@
   @media (prefers-reduced-motion:reduce){
     .copy-addr,.copy-toast{transition:opacity 100ms linear;}
   }
+  /* ===== Group drawer ===== */
+  #groups{scroll-margin-top:94px;margin:72px 0 0;}
+  .grp{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.05fr);gap:1px;overflow:hidden;border:1px solid var(--rule);border-radius:var(--radius);background:var(--rule);box-shadow:var(--shadow);}
+  .grp-panel{display:flex;flex-direction:column;padding:25px 27px;background:var(--surface);}
+  .grp-panel + .grp-panel{background:var(--surface-2);}
+  .grp-k{display:flex;align-items:baseline;gap:10px;margin:0 0 14px;color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;}
+  .grp-count{color:var(--muted);font-weight:500;letter-spacing:.06em;}
+  .grp-hint{margin:12px 0 0;color:var(--muted);font-size:12.5px;line-height:1.5;}
+
+  .roster{display:flex;flex-wrap:wrap;gap:7px;}
+  .who{display:inline-flex;align-items:center;overflow:hidden;border:1px solid var(--rule);border-radius:999px;background:var(--surface-2);transition:opacity 140ms ease,border-color 140ms ease;}
+  .grp-panel .who{background:var(--surface);}
+  .who.out{opacity:.42;}
+  .who button{border:0;background:none;color:var(--ink);font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;}
+  .who-t{padding:6px 4px 6px 12px;font-size:13.5px;}
+  .who.out .who-t{text-decoration:line-through;}
+  .who-x{padding:6px 10px 6px 6px;color:var(--muted);font-size:14px;line-height:1;}
+  .who button:focus-visible{outline:2px solid var(--accent);outline-offset:-2px;border-radius:999px;}
+  @media (hover:hover){
+    .who-t:hover{color:var(--accent);}
+    .who-x:hover{color:var(--accent);}
+  }
+
+  .grp-add{display:flex;gap:8px;margin-top:12px;}
+  .grp-add input{flex:1 1 auto;min-width:0;}
+  .grp input[type="text"]{padding:9px 12px;border:1px solid var(--rule);border-radius:10px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:14px;}
+  .grp input[type="text"]:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+  .grp-add button{padding:9px 15px;border:1px solid var(--rule);border-radius:10px;background:var(--surface-2);color:var(--ink-2);font-family:inherit;font-size:13.5px;font-weight:600;cursor:pointer;}
+
+  .grp-presets{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;}
+  .grp-presets button{padding:7px 12px;border:1px dashed var(--rule);border-radius:999px;background:transparent;color:var(--ink-2);font-family:inherit;font-size:12.5px;cursor:pointer;transition:color 140ms ease,border-color 140ms ease,background-color 140ms ease;}
+  .grp-presets button[aria-pressed="true"]{border-style:solid;border-color:color-mix(in srgb,var(--accent) 45%,var(--rule));background:var(--accent-soft);color:var(--accent-ink);}
+
+  .grp-field{display:flex;flex-direction:column;gap:6px;margin-bottom:18px;}
+  .grp-field label{color:var(--ink-2);font-size:13px;font-weight:600;}
+  .grp-chaos-name{color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+  .grp-help{color:var(--muted);font-size:12.5px;line-height:1.5;}
+  .grp-help b{color:var(--ink-2);font-family:"IBM Plex Mono",monospace;font-weight:600;}
+  .grp input[type="range"]{width:100%;margin:2px 0;accent-color:var(--accent);}
+
+  .grp-go{display:flex;flex-wrap:wrap;gap:9px;margin-top:auto;padding-top:4px;}
+  .grp-draw{padding:12px 22px;border:0;border-radius:999px;background:var(--accent);color:var(--ground);font-family:inherit;font-size:14.5px;font-weight:600;cursor:pointer;transition:transform 140ms var(--ease-out),filter 140ms ease;}
+  .grp-ghost{padding:12px 18px;border:1px solid var(--rule);border-radius:999px;background:transparent;color:var(--ink-2);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;}
+  .grp-draw:active,.grp-ghost:active{transform:translateY(1px);}
+  .grp-draw:focus-visible,.grp-ghost:focus-visible,.grp-add button:focus-visible,.grp-presets button:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  @media (hover:hover){
+    .grp-draw:hover{filter:brightness(1.08);}
+    .grp-ghost:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--rule));color:var(--accent);}
+    .grp-presets button:hover{border-color:color-mix(in srgb,var(--accent) 45%,var(--rule));color:var(--accent);}
+  }
+  .grp-status{min-height:18px;margin:14px 0 0;color:var(--muted);font-size:12.5px;line-height:1.5;}
+
+  .grp-out{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:14px;margin-top:16px;}
+  .grp-out:empty{margin-top:0;}
+  .team{padding:19px 21px 21px;border:1px solid var(--rule);border-radius:14px;background:var(--surface);box-shadow:var(--shadow);}
+  .team.locked{border-color:color-mix(in srgb,var(--accent) 50%,var(--rule));background:color-mix(in srgb,var(--accent-soft) 30%,var(--surface));}
+  .team-h{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;}
+  .team-n{margin:0;font-family:"Archivo",sans-serif;font-size:19px;font-weight:800;letter-spacing:-.025em;line-height:1.15;}
+  .team-k{display:block;margin:3px 0 13px;color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;}
+  .team-lock{flex:0 0 auto;padding:3px 8px;border:1px solid var(--rule);border-radius:999px;background:transparent;color:var(--muted);font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
+  .team.locked .team-lock{border-color:color-mix(in srgb,var(--accent) 50%,var(--rule));color:var(--accent);}
+  .team-lock:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  .team ul{display:flex;flex-direction:column;gap:5px;margin:0;padding:0;list-style:none;}
+  .team li{font-size:14.5px;}
+  .team-extra{margin:13px 0 0;padding-top:12px;border-top:1px dashed var(--rule);color:var(--ink-2);font-size:12.5px;line-height:1.55;}
+  .team-extra b{color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;display:block;margin-bottom:4px;}
+  .grp-memory{margin:14px 0 0;color:var(--muted);font-size:12.5px;}
+  .grp-memory button{border:0;background:none;padding:0;color:var(--accent);font-family:inherit;font-size:12.5px;text-decoration:underline;cursor:pointer;}
+  .team-in{animation:teamIn 320ms var(--ease-out) both;}
+  @keyframes teamIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+
+  @media (max-width:700px){
+    #groups{margin-top:56px;}
+    .grp{grid-template-columns:1fr;}
+    .grp-out{grid-template-columns:1fr;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .team-in{animation:none;}
+    .grp-draw,.grp-ghost{transition:none;}
+  }
 </style>
 </head>
 <body>
@@ -329,7 +409,7 @@
 
   <nav class="daynav" aria-label="Weekend itinerary">
     <a href="#fri">Fri</a><a href="#sat">Sat</a><a href="#sun">Sun</a><a href="#mon">Mon</a>
-    <a href="#anytime">Anytime</a><a href="#know">Know</a>
+    <a href="#anytime">Anytime</a><a href="#know">Know</a><a href="#groups">Groups</a>
   </nav>
 
   <header class="masthead">
@@ -720,6 +800,52 @@
     </div>
   </section>
 
+  <!-- ================= GROUPS ================= -->
+  <section id="groups">
+    <h2 class="sec-h">Split us up</h2>
+    <p class="sec-sub">Cars, tables, Sunday routes. Say what shape you want, pick how much chaos, and draw. Everything here is saved on your own phone.</p>
+
+    <div class="grp">
+      <div class="grp-panel">
+        <h4 class="grp-k">Who's in <span class="grp-count" id="grpCount"></span></h4>
+        <div class="roster" id="grpRoster"></div>
+        <form class="grp-add" id="grpAdd">
+          <input id="grpName" type="text" placeholder="Add a name" autocomplete="off" aria-label="Add a name">
+          <button type="submit">Add</button>
+        </form>
+        <p class="grp-hint">Tap a name to sit them out of the next draw; the &times; removes them for good. Seeded with the names on this page, so add whoever is missing.</p>
+      </div>
+
+      <div class="grp-panel">
+        <h4 class="grp-k">The shape</h4>
+        <div class="grp-presets" id="grpPresets">
+          <button type="button" data-shape="4 4 3 2" data-kind="route">Sunday routes &middot; 4-4-3-2</button>
+          <button type="button" data-shape="4" data-kind="car">Ubers &middot; 4 a car</button>
+          <button type="button" data-shape="x2" data-kind="table">Two dinner tables</button>
+          <button type="button" data-shape="2" data-kind="group">Pairs</button>
+        </div>
+        <div class="grp-field">
+          <label for="grpShape">Sizes</label>
+          <input id="grpShape" type="text" autocomplete="off" spellcheck="false">
+          <span class="grp-help"><b>4 4 3 2</b> for those exact groups &middot; <b>4</b> for groups of four &middot; <b>x3</b> for three groups</span>
+        </div>
+        <div class="grp-field">
+          <label for="grpChaos">Chaos <span class="grp-chaos-name" id="grpChaosName"></span></label>
+          <input id="grpChaos" type="range" min="0" max="100" step="1">
+          <span class="grp-help" id="grpChaosWhat"></span>
+        </div>
+        <div class="grp-go">
+          <button type="button" class="grp-draw" id="grpDraw">Draw the groups</button>
+          <button type="button" class="grp-ghost" id="grpCopy" hidden>Copy groups</button>
+        </div>
+        <p class="grp-status" id="grpStatus"></p>
+      </div>
+    </div>
+
+    <div class="grp-out" id="grpOut"></div>
+    <p class="grp-memory" id="grpMemory" hidden></p>
+  </section>
+
   <p class="sig">Happy birthday, Chhaya</p>
 
 </div>
@@ -799,21 +925,9 @@
     }));
     setCurrent(location.hash.slice(1) || activeId());
   })();
-  // A copy button beside every map link: the link opens Google Maps, the button
-  // hands you the plain address to paste into Uber.
-  (() => {
-    const links = [...document.querySelectorAll('a.map')];
-    if (!links.length) return;
-
-    const addressOf = link => {
-      if (link.dataset.addr) return link.dataset.addr;
-      try {
-        return new URL(link.href, location.href).searchParams.get('query') || '';
-      } catch {
-        return '';
-      }
-    };
-
+  // Clipboard plus the toast that confirms it, shared by the address buttons
+  // and the group drawer.
+  const share = (() => {
     const toast = document.createElement('div');
     toast.className = 'copy-toast';
     toast.setAttribute('role', 'status');
@@ -851,6 +965,24 @@
       }
     };
 
+    return { copy, flash };
+  })();
+
+  // A copy button beside every map link: the link opens Google Maps, the button
+  // hands you the plain address to paste into Uber.
+  (() => {
+    const links = [...document.querySelectorAll('a.map')];
+    if (!links.length) return;
+
+    const addressOf = link => {
+      if (link.dataset.addr) return link.dataset.addr;
+      try {
+        return new URL(link.href, location.href).searchParams.get('query') || '';
+      } catch {
+        return '';
+      }
+    };
+
     const clipboardIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>';
     const checkIcon = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9.5 18 20 6.5"/></svg>';
 
@@ -880,8 +1012,8 @@
 
       let reset;
       button.addEventListener('click', async () => {
-        const copied = await copy(address);
-        flash(copied ? `Copied: ${address}` : `Copy failed. The address is: ${address}`);
+        const copied = await share.copy(address);
+        share.flash(copied ? `Copied: ${address}` : `Copy failed. The address is: ${address}`);
         if (!copied) return;
         button.innerHTML = checkIcon;
         button.classList.add('is-copied');
@@ -900,6 +1032,442 @@
       link.before(addr);
       addr.append(link, document.createTextNode('\u00A0'), button);
     });
+  })();
+  // Draw the group into smaller groups: cars, dinner tables, Sunday routes.
+  // Chaos is the dial between "mix people who have not been together yet" and
+  // "pure luck, with jokes".
+  (() => {
+    const root = document.querySelector('#groups');
+    if (!root) return;
+    const pick = selector => root.querySelector(selector);
+
+    const STORE = 'chhaya30:groups';
+    // Seeded from the names this page already mentions; the rest get added by hand.
+    const SEED = ['Chhaya', 'Aditya', 'Nitish', 'Ash', 'Anish', 'Maddie'];
+    // Read straight from the page so the routes and missions can never drift.
+    const ROUTES = [...document.querySelectorAll('.adv-body .cat-k')]
+      .map(node => node.firstChild.textContent.trim());
+    const MISSIONS = [...document.querySelectorAll('.missions .m-t b')]
+      .map(node => node.textContent.trim());
+    const NICKNAMES = ['Trajinera', 'Mezcalito', 'Papel Picado', 'Churro', 'Chinampa',
+      'Lucha Libre', 'Agave', 'Xolo', 'Piñata', 'Tlacoyo'];
+    const TWISTS = [
+      'Orders for the whole table.',
+      'Buys the first round.',
+      'Owes everyone one group photo, badly posed.',
+      'Picks the music in the car.',
+      'Navigates for ten minutes with no phone.',
+      'Must order something in Spanish nobody recognises.',
+      'Chooses dessert for the group, no appeals.',
+      'Finds the most unnecessary souvenir under 50 pesos.',
+    ];
+    const BANDS = [
+      { at: 0,  name: 'Diplomatic', what: 'Works hard to put people together who have not been grouped before.' },
+      { at: 20, name: 'Sensible',   what: 'Mixes things up, gently steering away from repeat pairings.' },
+      { at: 45, name: 'Spicy',      what: 'Mostly luck, with a little memory of past draws.' },
+      { at: 70, name: 'Reckless',   what: 'Pure luck, silly group names, and a twist for each group.' },
+      { at: 90, name: 'Total chaos', what: 'Pure luck, twists, and the sizes may wobble by one.' },
+    ];
+
+    const el = {
+      roster: pick('#grpRoster'), count: pick('#grpCount'), add: pick('#grpAdd'),
+      name: pick('#grpName'), presets: pick('#grpPresets'), shape: pick('#grpShape'),
+      chaos: pick('#grpChaos'), chaosName: pick('#grpChaosName'), chaosWhat: pick('#grpChaosWhat'),
+      draw: pick('#grpDraw'), copy: pick('#grpCopy'), status: pick('#grpStatus'),
+      out: pick('#grpOut'), memory: pick('#grpMemory'),
+    };
+
+    const blank = () => ({
+      roster: SEED.map(name => ({ name, out: false })),
+      shape: '4 4 3 2', kind: 'route', chaos: 30, pairs: {}, teams: [],
+    });
+
+    let state;
+    try {
+      state = { ...blank(), ...JSON.parse(localStorage.getItem(STORE) || 'null') };
+    } catch {
+      state = blank();
+    }
+    if (!Array.isArray(state.roster) || !state.roster.length) state = blank();
+
+    const save = () => {
+      try { localStorage.setItem(STORE, JSON.stringify(state)); } catch {}
+    };
+
+    const shuffled = list => {
+      const out = [...list];
+      for (let i = out.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [out[i], out[j]] = [out[j], out[i]];
+      }
+      return out;
+    };
+
+    const band = chaos => BANDS.reduce((found, entry) => (chaos >= entry.at ? entry : found), BANDS[0]);
+    const playing = () => state.roster.filter(person => !person.out).map(person => person.name);
+
+    // --- turning "4 4 3 2", "4" or "x3" into a list of sizes ----------------
+    const balanced = (people, groups) => {
+      const count = Math.max(1, Math.min(groups, people));
+      const base = Math.floor(people / count);
+      const extra = people % count;
+      return Array.from({ length: count }, (_, i) => base + (i < extra ? 1 : 0));
+    };
+
+    // Grow the smallest groups, or shrink the largest, until the plan holds
+    // exactly the people we have.
+    const fit = (sizes, people) => {
+      const out = sizes.filter(size => size > 0);
+      if (!out.length) return people ? [people] : [];
+      let total = out.reduce((sum, size) => sum + size, 0);
+      while (total < people) { out[out.indexOf(Math.min(...out))]++; total++; }
+      while (total > people) {
+        const at = out.indexOf(Math.max(...out));
+        out[at]--; total--;
+        if (!out[at]) out.splice(at, 1);
+      }
+      return out.sort((a, b) => b - a);
+    };
+
+    const planFor = (text, people) => {
+      const raw = (text || '').trim().toLowerCase();
+      if (!people) return { sizes: [], asked: '' };
+      const groups = raw.match(/^x\s*(\d+)$/) || raw.match(/^(\d+)\s*groups?$/);
+      if (groups) return { sizes: balanced(people, Number(groups[1])), asked: `${groups[1]} groups` };
+      const numbers = (raw.match(/\d+/g) || []).map(Number).filter(size => size > 0);
+      if (!numbers.length) return { sizes: [], asked: '' };
+      if (numbers.length === 1) {
+        return {
+          sizes: balanced(people, Math.ceil(people / numbers[0])),
+          asked: `groups of ${numbers[0]}`,
+        };
+      }
+      return { sizes: fit(numbers, people), asked: numbers.join(' + ') };
+    };
+
+    // --- how often each pair has already landed together --------------------
+    const pairKey = (a, b) => (a < b ? `${a}|${b}` : `${b}|${a}`);
+    const pairsOf = members => {
+      const keys = [];
+      for (let i = 0; i < members.length; i++) {
+        for (let j = i + 1; j < members.length; j++) keys.push(pairKey(members[i], members[j]));
+      }
+      return keys;
+    };
+    const costOf = groups => groups.reduce(
+      (sum, members) => sum + pairsOf(members).reduce((inner, key) => inner + (state.pairs[key] || 0), 0), 0);
+
+    const split = (pool, sizes) => {
+      const groups = [];
+      let at = 0;
+      sizes.forEach(size => { groups.push(pool.slice(at, at + size)); at += size; });
+      return groups;
+    };
+
+    // Low chaos spends its effort swapping people out of repeat pairings; at
+    // full chaos this loop never runs and the shuffle stands as drawn. The cube
+    // keeps the middle of the dial from behaving like the diplomatic end.
+    const settle = (groups, chaos) => {
+      const rounds = Math.round(500 * (1 - chaos / 100) ** 3);
+      if (rounds < 1 || groups.length < 2) return groups;
+      let best = costOf(groups);
+      for (let round = 0; round < rounds; round++) {
+        const a = Math.floor(Math.random() * groups.length);
+        let b = Math.floor(Math.random() * groups.length);
+        if (a === b) b = (b + 1) % groups.length;
+        if (!groups[a].length || !groups[b].length) continue;
+        const i = Math.floor(Math.random() * groups[a].length);
+        const j = Math.floor(Math.random() * groups[b].length);
+        [groups[a][i], groups[b][j]] = [groups[b][j], groups[a][i]];
+        const cost = costOf(groups);
+        if (cost <= best) best = cost;
+        else [groups[a][i], groups[b][j]] = [groups[b][j], groups[a][i]];
+      }
+      return groups;
+    };
+
+    const labelsFor = (kind, count, chaos, taken) => {
+      const used = new Set(taken);
+      const source = chaos >= 70
+        ? shuffled(NICKNAMES)
+        : kind === 'route' && ROUTES.length ? ROUTES
+        : null;
+      const fallback = kind === 'car' ? 'Car' : kind === 'table' ? 'Table' : 'Group';
+      const names = [];
+      let plain = 1;
+      for (let i = 0; i < count; i++) {
+        let name = source ? source[i % source.length] : '';
+        if (!name || used.has(name)) {
+          while (used.has(`${fallback} ${plain}`)) plain++;
+          name = `${fallback} ${plain}`;
+        }
+        used.add(name);
+        names.push(name);
+      }
+      return names;
+    };
+
+    const extrasFor = (kind, chaos) => {
+      const extras = [];
+      if (kind === 'route' && MISSIONS.length >= 3) {
+        extras.push({ k: 'Three missions', v: shuffled(MISSIONS).slice(0, 3).join(' · ') });
+      }
+      if (chaos >= 70 && TWISTS.length) {
+        extras.push({ k: 'Twist', v: shuffled(TWISTS)[0] });
+      }
+      return extras;
+    };
+
+    const say = message => { el.status.textContent = message; };
+
+    const draw = () => {
+      const everyone = playing();
+      if (everyone.length < 2) {
+        say('Add at least two people first.');
+        return;
+      }
+
+      const locked = state.teams.filter(team => team.locked && team.members.length);
+      const held = new Set(locked.flatMap(team => team.members));
+      const pool = shuffled(everyone.filter(name => !held.has(name)));
+      const chaos = state.chaos;
+
+      const plan = planFor(state.shape, everyone.length);
+      if (!plan.sizes.length) {
+        say('Tell me a shape first: 4 4 3 2, or 4, or x3.');
+        return;
+      }
+
+      // Locked groups keep their people and their slot in the plan.
+      const open = [...plan.sizes];
+      locked.forEach(team => {
+        const at = open.indexOf(team.members.length);
+        if (at >= 0) open.splice(at, 1); else open.pop();
+      });
+      let sizes = fit(open, pool.length);
+
+      let wobbled = false;
+      if (chaos >= 90 && sizes.length > 1 && Math.random() < 0.6) {
+        const from = sizes.findIndex(size => size > 1);
+        const to = sizes.findIndex((_, i) => i !== from);
+        if (from >= 0 && to >= 0) { sizes[from]--; sizes[to]++; wobbled = true; }
+      }
+
+      const fresh = settle(split(pool, sizes), chaos);
+      const repeats = fresh.reduce(
+        (sum, members) => sum + pairsOf(members).filter(key => state.pairs[key]).length, 0);
+
+      const names = labelsFor(state.kind, fresh.length, chaos, locked.map(team => team.label));
+      const drawn = fresh.map((members, i) => ({
+        label: names[i],
+        members,
+        locked: false,
+        extras: extrasFor(state.kind, chaos),
+      }));
+
+      // Keep locked groups where they were; new ones fill the gaps.
+      const teams = [];
+      let next = 0;
+      state.teams.forEach(team => {
+        if (team.locked && team.members.length) teams.push(team);
+        else if (next < drawn.length) teams.push(drawn[next++]);
+      });
+      while (next < drawn.length) teams.push(drawn[next++]);
+      state.teams = teams;
+
+      // Remember who was with whom, so the next low-chaos draw can avoid it.
+      teams.forEach(team => pairsOf(team.members).forEach(key => {
+        state.pairs[key] = (state.pairs[key] || 0) + 1;
+      }));
+
+      const shape = sizes.join(' + ') || '—';
+      const bits = [`${everyone.length} of us, drawn ${teams.map(team => team.members.length).join('-')}`];
+      if (plan.asked && plan.asked !== shape) bits.push(`asked for ${plan.asked}`);
+      if (wobbled) bits.push('chaos moved someone');
+      if (locked.length) bits.push(`${locked.length} group${locked.length > 1 ? 's' : ''} kept`);
+      bits.push(repeats ? `${repeats} pairing${repeats > 1 ? 's' : ''} we have had before` : 'every pairing is new');
+      say(bits.join(' · '));
+
+      save();
+      render();
+    };
+
+    const asText = () => {
+      const header = state.kind === 'route' ? 'Sunday routes'
+        : state.kind === 'car' ? 'Cars'
+        : state.kind === 'table' ? 'Tables' : 'Groups';
+      return [`${header} — ${playing().length} of us`, ...state.teams.map(team =>
+        `${team.label} (${team.members.length}): ${team.members.join(', ')}`)].join('\n');
+    };
+
+    const renderRoster = () => {
+      el.roster.replaceChildren(...state.roster.map((person, index) => {
+        const chip = document.createElement('span');
+        chip.className = person.out ? 'who out' : 'who';
+
+        const toggle = document.createElement('button');
+        toggle.type = 'button';
+        toggle.className = 'who-t';
+        toggle.textContent = person.name;
+        toggle.setAttribute('aria-pressed', String(!person.out));
+        toggle.title = person.out ? `Bring ${person.name} back in` : `Sit ${person.name} out`;
+        toggle.addEventListener('click', () => {
+          state.roster[index].out = !state.roster[index].out;
+          save();
+          renderRoster();
+        });
+
+        const remove = document.createElement('button');
+        remove.type = 'button';
+        remove.className = 'who-x';
+        remove.innerHTML = '&times;';
+        remove.setAttribute('aria-label', `Remove ${person.name}`);
+        remove.addEventListener('click', () => {
+          state.roster.splice(index, 1);
+          save();
+          renderRoster();
+        });
+
+        chip.append(toggle, remove);
+        return chip;
+      }));
+
+      const inCount = playing().length;
+      const sitting = state.roster.length - inCount;
+      el.count.textContent = sitting ? `${inCount} in · ${sitting} sitting out` : `${inCount} in`;
+    };
+
+    const renderTeams = () => {
+      const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      el.out.replaceChildren(...state.teams.map((team, index) => {
+        const card = document.createElement('article');
+        card.className = team.locked ? 'team locked' : 'team';
+        if (!reduceMotion) {
+          card.classList.add('team-in');
+          card.style.animationDelay = `${Math.min(index * 55, 400)}ms`;
+        }
+
+        const head = document.createElement('div');
+        head.className = 'team-h';
+        const name = document.createElement('h3');
+        name.className = 'team-n';
+        name.textContent = team.label;
+        const lock = document.createElement('button');
+        lock.type = 'button';
+        lock.className = 'team-lock';
+        lock.textContent = team.locked ? 'Locked' : 'Lock';
+        lock.setAttribute('aria-pressed', String(!!team.locked));
+        lock.title = team.locked ? 'Let this group be redrawn' : 'Keep this group on the next draw';
+        lock.addEventListener('click', () => {
+          team.locked = !team.locked;
+          save();
+          renderTeams();
+        });
+        head.append(name, lock);
+
+        const size = document.createElement('span');
+        size.className = 'team-k';
+        size.textContent = `${team.members.length} ${team.members.length === 1 ? 'person' : 'people'}`;
+
+        const list = document.createElement('ul');
+        list.append(...team.members.map(member => {
+          const item = document.createElement('li');
+          item.textContent = member;
+          return item;
+        }));
+
+        card.append(head, size, list);
+        (team.extras || []).forEach(extra => {
+          const note = document.createElement('p');
+          note.className = 'team-extra';
+          const key = document.createElement('b');
+          key.textContent = extra.k;
+          note.append(key, document.createTextNode(extra.v));
+          card.append(note);
+        });
+        return card;
+      }));
+
+      el.copy.hidden = !state.teams.length;
+
+      const remembered = Object.keys(state.pairs).length;
+      el.memory.hidden = !remembered;
+      if (remembered) {
+        el.memory.replaceChildren(
+          document.createTextNode(`Remembering ${remembered} past pairing${remembered > 1 ? 's' : ''} to keep future draws fresh. `));
+        const forget = document.createElement('button');
+        forget.type = 'button';
+        forget.textContent = 'Forget them';
+        forget.addEventListener('click', () => {
+          state.pairs = {};
+          save();
+          renderTeams();
+          say('Memory cleared. Everyone is a stranger again.');
+        });
+        el.memory.append(forget);
+      }
+    };
+
+    const renderControls = () => {
+      el.shape.value = state.shape;
+      el.chaos.value = state.chaos;
+      const level = band(state.chaos);
+      el.chaosName.textContent = level.name;
+      el.chaosWhat.textContent = level.what;
+      [...el.presets.children].forEach(button => {
+        const on = button.dataset.shape === state.shape && button.dataset.kind === state.kind;
+        button.setAttribute('aria-pressed', String(on));
+      });
+    };
+
+    const render = () => { renderRoster(); renderTeams(); renderControls(); };
+
+    el.presets.addEventListener('click', event => {
+      const button = event.target.closest('button');
+      if (!button) return;
+      state.shape = button.dataset.shape;
+      state.kind = button.dataset.kind;
+      save();
+      renderControls();
+    });
+
+    el.shape.addEventListener('input', () => {
+      state.shape = el.shape.value;
+      if (!state.teams.length) state.kind = 'group';
+      save();
+      renderControls();
+    });
+
+    el.chaos.addEventListener('input', () => {
+      state.chaos = Number(el.chaos.value);
+      save();
+      renderControls();
+    });
+
+    el.add.addEventListener('submit', event => {
+      event.preventDefault();
+      const name = el.name.value.trim().slice(0, 24);
+      if (!name) return;
+      if (state.roster.some(person => person.name.toLowerCase() === name.toLowerCase())) {
+        say(`${name} is already on the list.`);
+      } else {
+        state.roster.push({ name, out: false });
+        save();
+        renderRoster();
+        say('');
+      }
+      el.name.value = '';
+      el.name.focus();
+    });
+
+    el.draw.addEventListener('click', draw);
+    el.copy.addEventListener('click', async () => {
+      const text = asText();
+      const copied = await share.copy(text);
+      share.flash(copied ? 'Groups copied — paste them in the chat' : 'Copy failed, so select the cards instead');
+    });
+
+    render();
   })();
 </script>
 
