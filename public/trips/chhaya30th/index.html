@@ -1065,7 +1065,7 @@
       { at: 20, name: 'Sensible',   what: 'Couples stay together, groups stay mixed, luck gets a say.' },
       { at: 45, name: 'Spicy',      what: 'Luck leads. Couples still tend to land together.' },
       { at: 70, name: 'Shake-up',   what: 'Couples get split up, the two halves of the room get properly mixed, and each group gets a twist.' },
-      { at: 90, name: 'Total chaos', what: 'Couples split, halves mixed hard, twists all round, and the sizes may wobble by one.' },
+      { at: 90, name: 'Total chaos', what: 'Couples split, halves mixed hard, twists all round. Your sizes still hold.' },
     ];
 
     // Draw tuning, keyed by a salted hash of each name so the page carries the
@@ -1312,14 +1312,9 @@
         const at = open.indexOf(team.members.length);
         if (at >= 0) open.splice(at, 1); else open.pop();
       });
-      let sizes = fit(open, pool.length);
-
-      let wobbled = false;
-      if (chaos >= 90 && sizes.length > 1 && Math.random() < 0.6) {
-        const from = sizes.findIndex(size => size > 1);
-        const to = sizes.findIndex((_, i) => i !== from);
-        if (from >= 0 && to >= 0) { sizes[from]--; sizes[to]++; wobbled = true; }
-      }
+      // The sizes you asked for are the sizes you get. Chaos changes who lands
+      // where, never how many fit in a car.
+      const sizes = fit(open, pool.length);
 
       const fresh = settle(split(pool, sizes), chaos);
       const repeats = fresh.reduce(
@@ -1351,7 +1346,6 @@
       const shape = sizes.join(' + ') || '—';
       const bits = [`${everyone.length} of us, drawn ${teams.map(team => team.members.length).join('-')}`];
       if (plan.asked && plan.asked !== shape) bits.push(`asked for ${plan.asked}`);
-      if (wobbled) bits.push('chaos moved someone');
       if (locked.length) bits.push(`${locked.length} group${locked.length > 1 ? 's' : ''} kept`);
       bits.push(repeats ? `${repeats} pairing${repeats > 1 ? 's' : ''} we have had before` : 'every pairing is new');
       say(bits.join(' · '));
