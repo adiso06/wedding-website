@@ -824,11 +824,12 @@
           <button type="button" data-shape="3">Threes</button>
           <button type="button" data-shape="x2">Halves</button>
           <button type="button" data-shape="2">Pairs</button>
+          <button type="button" data-shape="vs">Guys v girls</button>
         </div>
         <div class="grp-field">
           <label for="grpShape">Sizes</label>
           <input id="grpShape" type="text" autocomplete="off" spellcheck="false">
-          <span class="grp-help"><b>4 4 3 2</b> for those exact groups &middot; <b>4</b> for groups of four &middot; <b>x3</b> for three groups</span>
+          <span class="grp-help"><b>4 4 3 2</b> for those exact groups &middot; <b>4</b> for groups of four &middot; <b>x3</b> for three groups &middot; <b>vs</b> for guys against girls</span>
         </div>
         <div class="grp-field">
           <label for="grpChaos">Chaos <span class="grp-chaos-name" id="grpChaosName"></span></label>
@@ -1067,19 +1068,31 @@
       { at: 90, name: 'Total chaos', what: 'Couples split, halves mixed hard, twists all round, and the sizes may wobble by one.' },
     ];
 
-    // Beyond luck, two things shape a draw: who travels as a pair, and which
-    // half of the room someone came in with. A calm draw keeps pairs together
-    // and gives every group some of both halves; chaos does the opposite.
-    const BONDED = [['Chhaya', 'Aditya'], ['Anish', 'Maddie'], ['Nitish', 'Christina']];
-    const HALVES = [
-      ['Aditya', 'Nitish', 'Ashish', 'Christina'],
-      ['Chhaya', 'Lillian', 'Keertana', 'Lahari', 'Emily', 'Yuki'],
-    ];
+    // Draw tuning, keyed by a salted hash of each name so the page carries the
+    // structure without a readable list of who is who.
+    const SALT = 'cdmx26:';
+    const tag = text => {
+      let acc = 0x811c9dc5;
+      const source = SALT + text.toLowerCase();
+      for (let i = 0; i < source.length; i++) {
+        acc ^= source.charCodeAt(i);
+        acc = Math.imul(acc, 0x01000193) >>> 0;
+      }
+      return acc.toString(36);
+    };
+    const pairTag = (a, b) => {
+      const [lo, hi] = [a.toLowerCase(), b.toLowerCase()].sort();
+      return tag(`${lo}|${hi}`);
+    };
 
-    const bonded = new Set(BONDED.map(pair => [...pair].sort().join('|')));
-    const halfOf = new Map();
-    HALVES.forEach((names, half) => names.forEach(name => halfOf.set(name, half)));
-    const bondBetween = (a, b) => (bonded.has([a, b].sort().join('|')) ? 1 : 0);
+    const TUNING = (() => {
+      const packed = 'eyJwIjp7IjVpbHRwcCI6LTE0LCIxeHBtY2t3IjotMTQsIjE1aHZsdnQiOi0xNH0sInMiOnsiMXV6cHZ6MSI6MSwiamJlYjRhIjoxLCIxNGQydjBmIjoxLCJ5eHIwM3ciOjEsIjFwMGw2cWQiOjIsInVwNGIwIjoyLCJ4NHdmZ3kiOjIsIjF0eWg5eWEiOjIsIjF4ZmhjbXIiOjIsIjFncmdnM3giOjJ9LCJnIjp7IjF1enB2ejEiOjEsIjE0ZDJ2MGYiOjEsImpiZWI0YSI6MSwiZzdyM293IjoxLCIxNXowbGsxIjoxLCIxZ3JnZzN4IjoxLCIxcDBsNnFkIjoyLCJ5eHIwM3ciOjIsIjc2ZW1kYiI6MiwidXA0YjAiOjIsIng0d2ZneSI6MiwiMXR5aDl5YSI6MiwiMXhmaGNtciI6Mn19';
+      try { return JSON.parse(atob(packed)); } catch { return { p: {}, s: {}, g: {} }; }
+    })();
+
+    const bondBetween = (a, b) => (TUNING.p[pairTag(a, b)] ? 1 : 0);
+    const halfOf = name => TUNING.s[tag(name)];
+    const teamOf = name => TUNING.g[tag(name)];
 
     const el = {
       roster: pick('#grpRoster'), count: pick('#grpCount'), add: pick('#grpAdd'),
@@ -1180,8 +1193,8 @@
     const mixing = members => {
       const seen = [0, 0];
       members.forEach(name => {
-        const half = halfOf.get(name);
-        if (half !== undefined) seen[half]++;
+        const half = halfOf(name);
+        if (half) seen[half - 1]++;
       });
       if (members.length < 2 || !seen[0] || !seen[1]) {
         return seen[0] + seen[1] > 1 ? 3 : 0;
@@ -1269,6 +1282,23 @@
       const held = new Set(locked.flatMap(team => team.members));
       const pool = shuffled(everyone.filter(name => !held.has(name)));
       const chaos = state.chaos;
+
+      // The one draw that is not a shape: two fixed teams, no shuffling to do.
+      if (state.shape.trim().toLowerCase() === 'vs') {
+        const sides = [[], []];
+        shuffled(everyone).forEach(name => {
+          const team = teamOf(name);
+          const at = team ? team - 1 : (sides[0].length <= sides[1].length ? 0 : 1);
+          sides[at].push(name);
+        });
+        state.teams = ['Guys', 'Girls'].map((label, i) => ({
+          label, members: sides[i], locked: false, extras: extrasFor(chaos),
+        })).filter(team => team.members.length);
+        say(`${everyone.length} of us, ${sides[0].length} against ${sides[1].length}`);
+        save();
+        render();
+        return;
+      }
 
       const plan = planFor(state.shape, everyone.length);
       if (!plan.sizes.length) {
