@@ -384,6 +384,15 @@
   .team-lock:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
   .team ul{display:flex;flex-direction:column;gap:5px;margin:0;padding:0;list-style:none;}
   .team li{font-size:14.5px;}
+  .who-m{display:block;width:calc(100% + 14px);margin:0 -7px;padding:3px 7px;border:0;border-radius:8px;background:none;color:inherit;font:inherit;text-align:left;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-tap-highlight-color:transparent;transition:background-color 120ms ease,color 120ms ease;}
+  .who-m:focus-visible{outline:2px solid var(--accent);outline-offset:1px;}
+  .who-m[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent-ink);font-weight:600;}
+  .who-m.is-dragging{opacity:.3;}
+  @media (hover:hover){ .who-m:hover{background:var(--surface-2);} }
+  .team.drop-here{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft),var(--shadow);}
+  .drag-ghost{position:fixed;top:0;left:0;z-index:80;pointer-events:none;margin:-16px 0 0 -40px;padding:7px 14px;border:1px solid var(--accent);border-radius:999px;background:var(--surface);color:var(--ink);font-size:14px;font-weight:600;box-shadow:var(--shadow);}
+  .grp-undo{margin-left:2px;padding:0;border:0;background:none;color:var(--accent);font:inherit;text-decoration:underline;cursor:pointer;}
+  .grp-tip{margin:16px 0 0;color:var(--muted);font-size:12.5px;line-height:1.5;}
   .team-extra{margin:13px 0 0;padding-top:12px;border-top:1px dashed var(--rule);color:var(--ink-2);font-size:12.5px;line-height:1.55;}
   .team-extra b{color:var(--accent);font-family:"IBM Plex Mono",monospace;font-size:9.5px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;display:block;margin-bottom:4px;}
   .grp-memory{margin:14px 0 0;color:var(--muted);font-size:12.5px;}
@@ -844,6 +853,7 @@
       </div>
     </div>
 
+    <p class="grp-tip" id="grpTip" hidden>Not quite right? Tap a name, then tap a group to move them there &mdash; or tap a second name to swap the two and keep every group its size. Press and hold to drag instead.</p>
     <div class="grp-out" id="grpOut"></div>
     <p class="grp-memory" id="grpMemory" hidden></p>
   </section>
@@ -1099,8 +1109,11 @@
       name: pick('#grpName'), presets: pick('#grpPresets'), shape: pick('#grpShape'),
       chaos: pick('#grpChaos'), chaosName: pick('#grpChaosName'), chaosWhat: pick('#grpChaosWhat'),
       draw: pick('#grpDraw'), copy: pick('#grpCopy'), status: pick('#grpStatus'),
-      out: pick('#grpOut'), memory: pick('#grpMemory'),
+      out: pick('#grpOut'), memory: pick('#grpMemory'), tip: pick('#grpTip'),
     };
+
+    let picked = null;    // a name lifted by tapping, waiting for somewhere to land
+    let dragging = false; // a name currently under a finger
 
     const blank = () => ({
       roster: CREW.map(name => ({ name, out: false })),
@@ -1428,10 +1441,20 @@
         size.className = 'team-k';
         size.textContent = `${team.members.length} ${team.members.length === 1 ? 'person' : 'people'}`;
 
+        card.dataset.team = String(index);
         const list = document.createElement('ul');
-        list.append(...team.members.map(member => {
+        list.append(...team.members.map((member, at) => {
           const item = document.createElement('li');
-          item.textContent = member;
+          const grip = document.createElement('button');
+          grip.type = 'button';
+          grip.className = 'who-m';
+          grip.textContent = member;
+          grip.dataset.team = String(index);
+          grip.dataset.at = String(at);
+          const up = picked && picked.team === index && picked.at === at;
+          grip.setAttribute('aria-pressed', String(!!up));
+          grip.title = up ? 'Tap a group to drop them there' : `Move ${member}`;
+          item.append(grip);
           return item;
         }));
 
@@ -1448,6 +1471,7 @@
       }));
 
       el.copy.hidden = !state.teams.length;
+      el.tip.hidden = !state.teams.length;
 
       const remembered = Object.keys(state.pairs).length;
       el.memory.hidden = !remembered;
@@ -1466,6 +1490,169 @@
         el.memory.append(forget);
       }
     };
+
+    // --- hand-sorting: tap a name then a group to move, or press and drag ----
+    // Sizes are the whole point of a draw, so dropping a name onto another name
+    // swaps the two and leaves every group the size it was; dropping onto the
+    // group itself moves them and lets the sizes change.
+    const snapshot = () => state.teams.map(team => ({ ...team, members: [...team.members] }));
+
+    const afterHand = (message, undoTo) => {
+      picked = null;
+      save();
+      renderTeams();
+      el.status.textContent = `${message} · ${state.teams.map(team => team.members.length).join('-')} `;
+      const undo = document.createElement('button');
+      undo.type = 'button';
+      undo.className = 'grp-undo';
+      undo.textContent = 'Undo';
+      undo.addEventListener('click', () => {
+        state.teams = undoTo;
+        save();
+        renderTeams();
+        say('Put back.');
+      });
+      el.status.append(undo);
+    };
+
+    const moveInto = (from, toTeam) => {
+      if (from.team === toTeam) { picked = null; renderTeams(); say(''); return; }
+      const undoTo = snapshot();
+      const [name] = state.teams[from.team].members.splice(from.at, 1);
+      state.teams[toTeam].members.push(name);
+      state.teams = state.teams.filter(team => team.members.length);
+      afterHand(`${name} moved to ${state.teams[Math.min(toTeam, state.teams.length - 1)].label}`, undoTo);
+    };
+
+    const swapWith = (from, to) => {
+      if (from.team === to.team && from.at === to.at) { picked = null; renderTeams(); say(''); return; }
+      const undoTo = snapshot();
+      const a = state.teams[from.team].members[from.at];
+      const b = state.teams[to.team].members[to.at];
+      state.teams[from.team].members[from.at] = b;
+      state.teams[to.team].members[to.at] = a;
+      afterHand(`${a} and ${b} swapped`, undoTo);
+    };
+
+    const spotOf = element => {
+      const grip = element && element.closest ? element.closest('.who-m') : null;
+      if (grip) return { team: Number(grip.dataset.team), at: Number(grip.dataset.at) };
+      return null;
+    };
+
+    el.out.addEventListener('click', event => {
+      if (dragging) return;
+      const grip = event.target.closest('.who-m');
+      const card = event.target.closest('.team');
+      if (grip) {
+        const spot = spotOf(grip);
+        if (!picked) {
+          picked = spot;
+          renderTeams();
+          say(`${state.teams[spot.team].members[spot.at]} is up — tap a group to move them, or another name to swap.`);
+        } else {
+          swapWith(picked, spot);
+        }
+        return;
+      }
+      if (card && picked) moveInto(picked, Number(card.dataset.team));
+    });
+
+    // Press and hold to lift, then drag. The hold keeps a plain tap working and
+    // stops a scroll gesture from dragging someone across the page.
+    el.out.addEventListener('pointerdown', event => {
+      const grip = event.target.closest('.who-m');
+      if (!grip || (event.pointerType === 'mouse' && event.button !== 0)) return;
+      const from = spotOf(grip);
+      const startX = event.clientX;
+      const startY = event.clientY;
+      let ghost = null;
+      let over = null;
+      let frame = 0;
+      const at = { x: startX, y: startY };
+
+      const paint = (x, y) => {
+        ghost.style.transform = `translate(${x}px, ${y}px)`;
+        const under = document.elementFromPoint(x, y);
+        const card = under && under.closest ? under.closest('.team') : null;
+        if (over === card) return;
+        if (over) over.classList.remove('drop-here');
+        over = card;
+        if (over) over.classList.add('drop-here');
+      };
+
+      const lift = () => {
+        dragging = true;
+        grip.classList.add('is-dragging');
+        ghost = document.createElement('div');
+        ghost.className = 'drag-ghost';
+        ghost.textContent = grip.textContent;
+        document.body.append(ghost);
+        // Capture is a nicety, not a requirement — the move and up listeners sit
+        // on the window, so tracking survives a browser that refuses it.
+        try { grip.setPointerCapture(event.pointerId); } catch {}
+        paint(startX, startY);
+        // On a phone the groups stack, so the one you want is usually off
+        // screen. Holding near an edge scrolls the page under the finger.
+        const tick = () => {
+          const edge = Math.min(90, innerHeight / 5);
+          const up = at.y < edge;
+          const down = at.y > innerHeight - edge;
+          if (up || down) {
+            // Crawl at the boundary, quicker at the very edge, so the group you
+            // want does not shoot past.
+            const depth = up ? (edge - at.y) / edge : (at.y - (innerHeight - edge)) / edge;
+            const speed = 1 + 7 * Math.max(0, Math.min(1, depth));
+            scrollBy({ top: up ? -speed : speed, behavior: 'instant' });
+          }
+          paint(at.x, at.y);
+          frame = requestAnimationFrame(tick);
+        };
+        frame = requestAnimationFrame(tick);
+      };
+
+      let hold = setTimeout(lift, 170);
+
+      const onMove = move => {
+        if (!dragging) {
+          if (Math.hypot(move.clientX - startX, move.clientY - startY) > 10) finish(null);
+          return;
+        }
+        move.preventDefault();
+        at.x = move.clientX;
+        at.y = move.clientY;
+        paint(at.x, at.y);
+      };
+
+      const onUp = up => {
+        if (!dragging) return finish(null);
+        const under = document.elementFromPoint(up.clientX, up.clientY);
+        finish(under);
+      };
+
+      function finish(under) {
+        clearTimeout(hold);
+        cancelAnimationFrame(frame);
+        removeEventListener('pointermove', onMove);
+        removeEventListener('pointerup', onUp);
+        removeEventListener('pointercancel', onUp);
+        if (over) over.classList.remove('drop-here');
+        if (ghost) ghost.remove();
+        grip.classList.remove('is-dragging');
+        if (!dragging) return;
+        // Let the click that follows this drag pass by without re-picking.
+        setTimeout(() => { dragging = false; }, 0);
+        if (!under) return;
+        const onto = spotOf(under);
+        if (onto) return swapWith(from, onto);
+        const card = under.closest ? under.closest('.team') : null;
+        if (card) moveInto(from, Number(card.dataset.team));
+      }
+
+      addEventListener('pointermove', onMove, { passive: false });
+      addEventListener('pointerup', onUp);
+      addEventListener('pointercancel', onUp);
+    });
 
     const renderControls = () => {
       el.shape.value = state.shape;
