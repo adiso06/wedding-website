@@ -803,7 +803,7 @@
   <!-- ================= GROUPS ================= -->
   <section id="groups">
     <h2 class="sec-h">Split us up</h2>
-    <p class="sec-sub">Cars, tables, Sunday routes. Say what shape you want, pick how much chaos, and draw. Everything here is saved on your own phone.</p>
+    <p class="sec-sub">Everyone is in. Say what shape you want, pick how much chaos, and draw.</p>
 
     <div class="grp">
       <div class="grp-panel">
@@ -813,16 +813,17 @@
           <input id="grpName" type="text" placeholder="Add a name" autocomplete="off" aria-label="Add a name">
           <button type="submit">Add</button>
         </form>
-        <p class="grp-hint">Tap a name to sit them out of the next draw; the &times; removes them for good. Seeded with the names on this page, so add whoever is missing.</p>
+        <p class="grp-hint">Tap a name to sit someone out; the &times; removes them for good. Changes stay on this phone.</p>
       </div>
 
       <div class="grp-panel">
         <h4 class="grp-k">The shape</h4>
         <div class="grp-presets" id="grpPresets">
-          <button type="button" data-shape="4 4 3 2" data-kind="route">Sunday routes &middot; 4-4-3-2</button>
-          <button type="button" data-shape="4" data-kind="car">Ubers &middot; 4 a car</button>
-          <button type="button" data-shape="x2" data-kind="table">Two dinner tables</button>
-          <button type="button" data-shape="2" data-kind="group">Pairs</button>
+          <button type="button" data-shape="4 4 3 2">4-4-3-2</button>
+          <button type="button" data-shape="4">Fours</button>
+          <button type="button" data-shape="3">Threes</button>
+          <button type="button" data-shape="x2">Halves</button>
+          <button type="button" data-shape="2">Pairs</button>
         </div>
         <div class="grp-field">
           <label for="grpShape">Sizes</label>
@@ -1041,16 +1042,13 @@
     if (!root) return;
     const pick = selector => root.querySelector(selector);
 
-    const STORE = 'chhaya30:groups';
-    // Seeded from the names this page already mentions; the rest get added by hand.
-    const SEED = ['Chhaya', 'Aditya', 'Nitish', 'Ash', 'Anish', 'Maddie'];
-    // Read straight from the page so the routes and missions can never drift.
-    const ROUTES = [...document.querySelectorAll('.adv-body .cat-k')]
-      .map(node => node.firstChild.textContent.trim());
-    const MISSIONS = [...document.querySelectorAll('.missions .m-t b')]
-      .map(node => node.textContent.trim());
+    const STORE = 'chhaya30:groups:2';
+    // Everyone on the trip, in by default. Tapping a name sits them out.
+    const CREW = ['Chhaya', 'Aditya', 'Ashish', 'Nitish', 'Christina', 'Anish', 'Maddie',
+      'Lillian', 'Keertana', 'Lahari', 'Arnav', 'Emily', 'Yuki'];
     const NICKNAMES = ['Trajinera', 'Mezcalito', 'Papel Picado', 'Churro', 'Chinampa',
-      'Lucha Libre', 'Agave', 'Xolo', 'Piñata', 'Tlacoyo'];
+      'Lucha Libre', 'Agave', 'Xolo', 'Piñata', 'Tlacoyo', 'Cempasúchil', 'Alebrije',
+      'Nopal', 'Jacaranda'];
     const TWISTS = [
       'Orders for the whole table.',
       'Buys the first round.',
@@ -1062,12 +1060,26 @@
       'Finds the most unnecessary souvenir under 50 pesos.',
     ];
     const BANDS = [
-      { at: 0,  name: 'Diplomatic', what: 'Works hard to put people together who have not been grouped before.' },
-      { at: 20, name: 'Sensible',   what: 'Mixes things up, gently steering away from repeat pairings.' },
-      { at: 45, name: 'Spicy',      what: 'Mostly luck, with a little memory of past draws.' },
-      { at: 70, name: 'Reckless',   what: 'Pure luck, silly group names, and a twist for each group.' },
-      { at: 90, name: 'Total chaos', what: 'Pure luck, twists, and the sizes may wobble by one.' },
+      { at: 0,  name: 'Diplomatic', what: 'Couples stay together, groups mix both halves of the room wherever the sizes allow, and nobody repeats a group they have already had.' },
+      { at: 20, name: 'Sensible',   what: 'Couples stay together, groups stay mixed, luck gets a say.' },
+      { at: 45, name: 'Spicy',      what: 'Luck leads. Couples still tend to land together.' },
+      { at: 70, name: 'Shake-up',   what: 'Couples get split up, the two halves of the room get properly mixed, and each group gets a twist.' },
+      { at: 90, name: 'Total chaos', what: 'Couples split, halves mixed hard, twists all round, and the sizes may wobble by one.' },
     ];
+
+    // Beyond luck, two things shape a draw: who travels as a pair, and which
+    // half of the room someone came in with. A calm draw keeps pairs together
+    // and gives every group some of both halves; chaos does the opposite.
+    const BONDED = [['Chhaya', 'Aditya'], ['Anish', 'Maddie'], ['Nitish', 'Christina']];
+    const HALVES = [
+      ['Aditya', 'Nitish', 'Ashish', 'Christina'],
+      ['Chhaya', 'Lillian', 'Keertana', 'Lahari', 'Emily', 'Yuki'],
+    ];
+
+    const bonded = new Set(BONDED.map(pair => [...pair].sort().join('|')));
+    const halfOf = new Map();
+    HALVES.forEach((names, half) => names.forEach(name => halfOf.set(name, half)));
+    const bondBetween = (a, b) => (bonded.has([a, b].sort().join('|')) ? 1 : 0);
 
     const el = {
       roster: pick('#grpRoster'), count: pick('#grpCount'), add: pick('#grpAdd'),
@@ -1078,8 +1090,8 @@
     };
 
     const blank = () => ({
-      roster: SEED.map(name => ({ name, out: false })),
-      shape: '4 4 3 2', kind: 'route', chaos: 30, pairs: {}, teams: [],
+      roster: CREW.map(name => ({ name, out: false })),
+      shape: '4 4 3 2', chaos: 30, pairs: {}, teams: [],
     });
 
     let state;
@@ -1154,8 +1166,43 @@
       }
       return keys;
     };
-    const costOf = groups => groups.reduce(
-      (sum, members) => sum + pairsOf(members).reduce((inner, key) => inner + (state.pairs[key] || 0), 0), 0);
+    // Three pulls on a draw: pairings we have already used, couples, and how
+    // well each group mixes the two halves of the room. Chaos fades the memory,
+    // pushes the mixing harder, and past the shake-up notch it turns couples
+    // from something to protect into something to break up.
+    const dialFor = chaos => ({
+      memory: 1 - chaos / 100,
+      bond: chaos >= 70 ? -1 : 1 - chaos / 100,
+      mix: 1.4 + chaos / 50,
+    });
+
+    // A group that is all one half of the room costs; one of each is free.
+    const mixing = members => {
+      const seen = [0, 0];
+      members.forEach(name => {
+        const half = halfOf.get(name);
+        if (half !== undefined) seen[half]++;
+      });
+      if (members.length < 2 || !seen[0] || !seen[1]) {
+        return seen[0] + seen[1] > 1 ? 3 : 0;
+      }
+      return Math.max(0, Math.abs(seen[0] - seen[1]) - 1);
+    };
+
+    const costOf = (groups, dial) => groups.reduce((sum, members) => {
+      let memory = 0;
+      let couples = 0;
+      for (let i = 0; i < members.length; i++) {
+        for (let j = i + 1; j < members.length; j++) {
+          memory += state.pairs[pairKey(members[i], members[j])] || 0;
+          couples += bondBetween(members[i], members[j]);
+        }
+      }
+      return sum
+        + dial.memory * memory
+        - dial.bond * 14 * couples
+        + dial.mix * mixing(members);
+    }, 0);
 
     const split = (pool, sizes) => {
       const groups = [];
@@ -1164,13 +1211,15 @@
       return groups;
     };
 
-    // Low chaos spends its effort swapping people out of repeat pairings; at
-    // full chaos this loop never runs and the shuffle stands as drawn. The cube
-    // keeps the middle of the dial from behaving like the diplomatic end.
+    // Swap people between groups while it lowers the cost. The middle of the
+    // dial gets fewer rounds, so luck creeps in before the weights stop
+    // mattering; the top of the dial keeps just enough rounds to act on a
+    // flipped table.
     const settle = (groups, chaos) => {
-      const rounds = Math.round(500 * (1 - chaos / 100) ** 3);
-      if (rounds < 1 || groups.length < 2) return groups;
-      let best = costOf(groups);
+      const dial = dialFor(chaos);
+      const rounds = 60 + Math.round(440 * (1 - chaos / 100) ** 3);
+      if (groups.length < 2) return groups;
+      let best = costOf(groups, dial);
       for (let round = 0; round < rounds; round++) {
         const a = Math.floor(Math.random() * groups.length);
         let b = Math.floor(Math.random() * groups.length);
@@ -1179,27 +1228,23 @@
         const i = Math.floor(Math.random() * groups[a].length);
         const j = Math.floor(Math.random() * groups[b].length);
         [groups[a][i], groups[b][j]] = [groups[b][j], groups[a][i]];
-        const cost = costOf(groups);
+        const cost = costOf(groups, dial);
         if (cost <= best) best = cost;
         else [groups[a][i], groups[b][j]] = [groups[b][j], groups[a][i]];
       }
       return groups;
     };
 
-    const labelsFor = (kind, count, chaos, taken) => {
+    const labelsFor = (count, taken) => {
       const used = new Set(taken);
-      const source = chaos >= 70
-        ? shuffled(NICKNAMES)
-        : kind === 'route' && ROUTES.length ? ROUTES
-        : null;
-      const fallback = kind === 'car' ? 'Car' : kind === 'table' ? 'Table' : 'Group';
+      const source = shuffled(NICKNAMES);
       const names = [];
       let plain = 1;
       for (let i = 0; i < count; i++) {
-        let name = source ? source[i % source.length] : '';
+        let name = source[i % source.length];
         if (!name || used.has(name)) {
-          while (used.has(`${fallback} ${plain}`)) plain++;
-          name = `${fallback} ${plain}`;
+          while (used.has(`Group ${plain}`)) plain++;
+          name = `Group ${plain}`;
         }
         used.add(name);
         names.push(name);
@@ -1207,16 +1252,9 @@
       return names;
     };
 
-    const extrasFor = (kind, chaos) => {
-      const extras = [];
-      if (kind === 'route' && MISSIONS.length >= 3) {
-        extras.push({ k: 'Three missions', v: shuffled(MISSIONS).slice(0, 3).join(' · ') });
-      }
-      if (chaos >= 70 && TWISTS.length) {
-        extras.push({ k: 'Twist', v: shuffled(TWISTS)[0] });
-      }
-      return extras;
-    };
+    const extrasFor = chaos => (chaos >= 70 && TWISTS.length
+      ? [{ k: 'Twist', v: shuffled(TWISTS)[0] }]
+      : []);
 
     const say = message => { el.status.textContent = message; };
 
@@ -1257,12 +1295,12 @@
       const repeats = fresh.reduce(
         (sum, members) => sum + pairsOf(members).filter(key => state.pairs[key]).length, 0);
 
-      const names = labelsFor(state.kind, fresh.length, chaos, locked.map(team => team.label));
+      const names = labelsFor(fresh.length, locked.map(team => team.label));
       const drawn = fresh.map((members, i) => ({
         label: names[i],
         members,
         locked: false,
-        extras: extrasFor(state.kind, chaos),
+        extras: extrasFor(chaos),
       }));
 
       // Keep locked groups where they were; new ones fill the gaps.
@@ -1292,13 +1330,10 @@
       render();
     };
 
-    const asText = () => {
-      const header = state.kind === 'route' ? 'Sunday routes'
-        : state.kind === 'car' ? 'Cars'
-        : state.kind === 'table' ? 'Tables' : 'Groups';
-      return [`${header} — ${playing().length} of us`, ...state.teams.map(team =>
-        `${team.label} (${team.members.length}): ${team.members.join(', ')}`)].join('\n');
-    };
+    const asText = () => [
+      `Groups — ${playing().length} of us`,
+      ...state.teams.map(team => `${team.label} (${team.members.length}): ${team.members.join(', ')}`),
+    ].join('\n');
 
     const renderRoster = () => {
       el.roster.replaceChildren(...state.roster.map((person, index) => {
@@ -1415,8 +1450,7 @@
       el.chaosName.textContent = level.name;
       el.chaosWhat.textContent = level.what;
       [...el.presets.children].forEach(button => {
-        const on = button.dataset.shape === state.shape && button.dataset.kind === state.kind;
-        button.setAttribute('aria-pressed', String(on));
+        button.setAttribute('aria-pressed', String(button.dataset.shape === state.shape));
       });
     };
 
@@ -1426,14 +1460,12 @@
       const button = event.target.closest('button');
       if (!button) return;
       state.shape = button.dataset.shape;
-      state.kind = button.dataset.kind;
       save();
       renderControls();
     });
 
     el.shape.addEventListener('input', () => {
       state.shape = el.shape.value;
-      if (!state.teams.length) state.kind = 'group';
       save();
       renderControls();
     });
