@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Day-by-day plan for Mom and Dad's September 2026 visit to New York.">
+<link rel="canonical" href="https://adityaandchhaya.us/trips/momdad2026">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>&#128509;</text></svg>">
+<style>
+:root{color-scheme:light dark}
+body{margin:0}
+img{max-width:100%}
+[hidden]{display:none!important}
+</style>
+<title>Mom &amp; Dad in New York</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Atkinson+Hyperlegible+Mono:wght@400;600&family=Atkinson+Hyperlegible+Next:wght@400;700&display=swap">
+<style>
+:root{
+  --ground:#ECEEEF;
+  --surface:#FFFFFF;
+  --ink:#14171A;
+  --muted:#58606A;
+  --rule:#D5DADE;
+  --chip:#E3E7EA;
+  --sign:#17191C;
+  --sign-ink:#FFFFFF;
+  --sign-muted:#B4BBC2;
+  --sign-edge:#17191C;
+  --accent:#FCCC0A;
+  --accent-ink:#14171A;
+  --call:#C92A2A;
+  --call-ink:#FFFFFF;
+  --focus:#0039A6;
+  --line:#14171A;
+
+  --display:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --body:"Atkinson Hyperlegible Next",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"Atkinson Hyperlegible Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0F1113;
+    --surface:#181B1F;
+    --ink:#E7EAEC;
+    --muted:#9BA3AB;
+    --rule:#2B3137;
+    --chip:#252A2F;
+    --sign:#050607;
+    --sign-ink:#F3F4F5;
+    --sign-muted:#9AA2AA;
+    --sign-edge:#343A40;
+    --call:#E04848;
+    --focus:#8AB0FF;
+    --line:#E7EAEC;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0F1113;
+  --surface:#181B1F;
+  --ink:#E7EAEC;
+  --muted:#9BA3AB;
+  --rule:#2B3137;
+  --chip:#252A2F;
+  --sign:#050607;
+  --sign-ink:#F3F4F5;
+  --sign-muted:#9AA2AA;
+  --sign-edge:#343A40;
+  --call:#E04848;
+  --focus:#8AB0FF;
+  --line:#E7EAEC;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+@media (prefers-reduced-motion: no-preference){html{scroll-behavior:smooth}}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:1.0625rem;line-height:1.55}
+.wrap{max-width:46rem;margin-inline:auto;padding-inline:clamp(16px,4vw,32px);padding-block:2.5rem 4rem}
+a{color:inherit;text-decoration-thickness:1px;text-underline-offset:.18em}
+a:focus-visible,input:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:2px}
+
+/* ---------- masthead ---------- */
+.masthead{display:grid;gap:1rem;margin-bottom:2.25rem}
+.eyebrow{margin:0;font-family:var(--mono);font-size:.8125rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+h1{margin:0;font-family:var(--display);font-stretch:112%;font-weight:800;font-size:clamp(2.25rem,7vw,3.25rem);line-height:1.02;letter-spacing:-.01em;text-wrap:balance}
+.lede{margin:0;max-width:38rem;font-size:1.125rem}
+.fine{margin:0;max-width:38rem;font-size:.9375rem;color:var(--muted)}
+.home{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:.3rem .5rem;font-size:.9375rem}
+.home strong{font-family:var(--mono);font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+
+/* strip map: one stop per day, like the line diagram over subway doors */
+.strip-wrap{overflow-x:auto;padding-block:.5rem .25rem}
+.strip{position:relative;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(10,minmax(2.25rem,1fr))}
+.strip::before{content:"";position:absolute;left:5%;right:5%;top:10px;height:4px;border-radius:2px;background:var(--line)}
+.stop a{display:grid;justify-items:center;gap:.3rem;padding-bottom:.25rem;text-decoration:none;border-radius:4px}
+.dotbox{height:24px;display:grid;place-items:center;position:relative}
+.dot{display:block;width:12px;height:12px;border-radius:50%;background:var(--line)}
+.dot.off{width:22px;height:22px;background:var(--accent);border:3px solid var(--line)}
+.dot.call{width:18px;height:18px;background:var(--surface);border:4px solid var(--call)}
+.stop .dow{font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);line-height:1}
+.stop .dn{font-family:var(--display);font-weight:700;font-size:1rem;line-height:1;font-variant-numeric:tabular-nums}
+.stop a:hover .dn,.stop.today .dn{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.2em}
+.legend{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:.35rem 1.25rem;font-size:.875rem;color:var(--muted)}
+.legend li{display:flex;align-items:center;gap:.5rem}
+.legend .dotbox{width:24px}
+
+/* ---------- days ---------- */
+.days{display:grid;gap:1.5rem}
+.day{scroll-margin-top:1rem}
+.sign{position:relative;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:.25rem 1rem;padding:1.1rem 1.125rem .85rem;background:var(--sign);color:var(--sign-ink);border:1px solid var(--sign-edge)}
+.sign::before{content:"";position:absolute;left:0;right:0;top:.45rem;height:1px;background:var(--sign-ink);opacity:.85}
+.sign h2{margin:0;font-family:var(--display);font-stretch:108%;font-weight:700;font-size:1.5rem;line-height:1.1}
+.sign h2 .date{margin-left:.45rem;font-weight:400;color:var(--sign-muted)}
+.status{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.9375rem;color:var(--sign-muted)}
+.flag{padding:.15rem .45rem;border-radius:2px;font-size:.75rem;font-weight:700;letter-spacing:.04em;line-height:1.3;text-transform:uppercase}
+.flag.off{background:var(--accent);color:var(--accent-ink)}
+.flag.call{background:var(--call);color:var(--call-ink)}
+.flag.arrive{background:var(--sign-ink);color:var(--sign)}
+.flag.guest{border:1px solid var(--sign-muted);color:var(--sign-ink)}
+
+.slots{list-style:none;margin:0;padding:0;background:var(--surface);border:1px solid var(--rule);border-top:0}
+.slot{display:grid;grid-template-columns:6.75rem minmax(0,1fr);gap:.5rem 1.25rem;padding:1rem 1.125rem 1.1rem}
+.slot + .slot{border-top:1px solid var(--rule)}
+.when{display:flex;flex-direction:column;align-items:flex-start;gap:.4rem;padding-top:.2rem}
+.time{font-family:var(--mono);font-size:.8125rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-variant-numeric:tabular-nums}
+.who{padding:.1rem .45rem;border-radius:2px;font-size:.75rem;font-weight:700;line-height:1.35;white-space:nowrap}
+.who.parents{background:var(--chip);color:var(--ink)}
+.who.together{background:var(--accent);color:var(--accent-ink)}
+.what h3{margin:0 0 .3rem;font-family:var(--display);font-weight:650;font-size:1.1875rem;line-height:1.25;text-wrap:balance}
+.what p{margin:0;max-width:36rem}
+.what .alt{margin-top:.75rem;padding-left:.75rem;border-left:2px solid var(--rule);font-size:.9375rem;color:var(--muted)}
+.what .alt strong{color:var(--ink)}
+.what .vibe{margin-top:.55rem;font-size:.9375rem;color:var(--muted)}
+.vibe b{display:inline-block;margin-right:.4rem;padding:.1rem .35rem;border-radius:2px;background:var(--chip);color:var(--ink);font-family:var(--mono);font-size:.6875rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.slot.heads .what h3{color:var(--call)}
+
+.meta{list-style:none;margin:.65rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.45rem 1rem;font-size:.9375rem;color:var(--muted)}
+.meta li{display:inline-flex;flex-wrap:wrap;align-items:center;gap:.3rem}
+.meta a{color:var(--ink);text-decoration:underline;text-decoration-style:dotted;text-decoration-thickness:1px;text-underline-offset:.2em}
+.free{padding:.05rem .4rem;border-radius:2px;background:var(--chip);color:var(--ink);font-family:var(--mono);font-size:.8125rem;white-space:nowrap}
+.sun{font-family:var(--mono);font-size:.8125rem}
+
+/* browse / buy picks: outline = browse, filled = buy */
+.picks{list-style:none;margin:.7rem 0 0;padding:0;display:grid;gap:.6rem}
+.picks li{display:grid;grid-template-columns:4.5rem minmax(0,1fr);gap:.75rem;align-items:baseline;font-size:.9375rem}
+.pick{display:inline-block;padding:.12rem .4rem;border-radius:2px;font-family:var(--mono);font-size:.75rem;font-weight:600;letter-spacing:.05em;line-height:1.3;text-align:center;text-transform:uppercase;white-space:nowrap}
+.pick.browse{border:1px solid var(--ink);color:var(--ink)}
+.pick.buy{border:1px solid var(--ink);background:var(--ink);color:var(--surface)}
+
+.state{display:inline-block;margin-left:.45rem;vertical-align:.15em;padding:.12rem .4rem;border-radius:2px;font-family:var(--body);font-size:.6875rem;font-weight:700;letter-spacing:.05em;line-height:1.3;text-transform:uppercase;white-space:nowrap}
+.state.booked{background:var(--ink);color:var(--surface)}
+.state.planned{border:1px solid var(--ink);color:var(--ink)}
+.state.tobook{background:var(--accent);color:var(--accent-ink)}
+.state.pencil{border:1px dashed var(--muted);color:var(--muted)}
+.state.optional{background:var(--chip);color:var(--muted)}
+.state.nope{border:1px solid var(--call);color:var(--call)}
+
+/* subway bullets — fixed MTA line colors in both themes */
+.b{display:inline-grid;place-items:center;flex:none;width:1.45rem;height:1.45rem;border-radius:50%;vertical-align:-.3em;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:.8125rem;font-weight:700;line-height:1;color:#fff}
+.b.p{background:#B933AD}
+.b.o{background:#FF6319}
+.b.bl{background:#0039A6}
+.b.y{background:#FCCC0A;color:#111}
+.b.g{background:#00933C}
+.b.r{background:#EE352E}
+.b.lg{background:#6CBE45}
+.b.gy{background:#A7A9AC}
+
+.after{margin-top:1rem}
+
+/* ---------- sections after the days ---------- */
+.section{margin-top:3.25rem;scroll-margin-top:1rem}
+.section > h2{margin:0 0 .35rem;font-family:var(--display);font-stretch:108%;font-weight:750;font-size:1.5rem;line-height:1.15;text-wrap:balance}
+.section > .sub{margin:0 0 1rem;max-width:38rem;font-size:.9375rem;color:var(--muted)}
+
+.plans{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:2rem;border-top:2px solid var(--ink)}
+.plan > header{display:grid;gap:.2rem;padding:.9rem 0 .75rem;border-bottom:1px solid var(--rule)}
+.plan > header h3{margin:0;display:flex;align-items:center;gap:.6rem;font-family:var(--display);font-weight:700;font-size:1.25rem;line-height:1.2}
+.plan > header p{margin:0;font-size:.9375rem;color:var(--muted)}
+.route{padding:.85rem 0 1rem;border-bottom:1px solid var(--rule)}
+.route h4{margin:0 0 .25rem;font-family:var(--display);font-weight:650;font-size:1.0625rem;line-height:1.3}
+.route p{margin:0;font-size:.9375rem}
+.route .vibe{margin-top:.5rem;font-size:.9375rem;color:var(--muted)}
+.route .meta{margin-top:.5rem}
+
+.near{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.near li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:.2rem 1rem;align-items:baseline;padding:.8rem 0;border-bottom:1px solid var(--rule)}
+.near-name{display:block;font-weight:700}
+.near-what{display:block;font-size:.9375rem;color:var(--muted)}
+.near-what a{color:var(--ink);text-decoration:underline;text-decoration-style:dotted;text-underline-offset:.2em}
+
+.ideas{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.ideas li{display:grid;grid-template-columns:minmax(0,11rem) minmax(0,1fr) auto;gap:.2rem 1rem;align-items:baseline;padding:.7rem 0;border-bottom:1px solid var(--rule)}
+.idea-name{font-weight:700}
+.idea-where{font-size:.9375rem;color:var(--muted)}
+.ideas .state{margin-left:0;justify-self:end}
+.ideas .nope .idea-name{color:var(--muted);text-decoration:line-through;text-decoration-thickness:1.5px}
+
+.todo{list-style:none;margin:0;padding:0;border-top:2px solid var(--ink)}
+.todo li{border-bottom:1px solid var(--rule)}
+.todo label{display:grid;grid-template-columns:1.5rem minmax(0,1fr);gap:.75rem;align-items:start;padding:.75rem 0;cursor:pointer}
+.todo input{width:1.2rem;height:1.2rem;margin:.2rem 0 0;accent-color:var(--ink)}
+.todo .t{display:block;font-weight:700}
+.todo .d{display:block;font-size:.9375rem;color:var(--muted)}
+.todo input:checked + span .t{color:var(--muted);text-decoration:line-through}
+
+.tips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:2rem;border-top:2px solid var(--ink)}
+.tip{padding:.9rem 0 1rem;border-bottom:1px solid var(--rule)}
+.tip h3{margin:0 0 .25rem;font-family:var(--display);font-weight:700;font-size:1.0625rem;line-height:1.3}
+.tip p{margin:0;font-size:.9375rem}
+
+/* what-to-do generator */
+.rec{display:grid;gap:1.1rem;border-top:2px solid var(--ink);padding-top:1.1rem}
+.dials{display:grid;gap:1rem}
+.dial{display:grid;gap:.3rem}
+.dial label{font-weight:700;font-size:.9375rem}
+.dial input[type="range"]{width:100%;margin:0;accent-color:var(--ink)}
+.dial .ends{display:flex;justify-content:space-between;gap:1rem;font-family:var(--mono);font-size:.6875rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.rec-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1rem}
+.gen{padding:.55rem 1.15rem;border:1px solid var(--ink);border-radius:2px;background:var(--ink);color:var(--surface);font-family:var(--body);font-size:1rem;font-weight:700;cursor:pointer}
+.gen:hover{opacity:.88}
+.rec-note{margin:0;font-size:.875rem;color:var(--muted)}
+.card{background:var(--surface);border:1px solid var(--rule);padding:1.1rem 1.125rem 1.2rem}
+.card h3{margin:0 0 .15rem;font-family:var(--display);font-weight:700;font-size:1.375rem;line-height:1.2;text-wrap:balance}
+.card .area{margin:0 0 .6rem;font-family:var(--mono);font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tagrow{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.65rem}
+.tag{padding:.12rem .4rem;border-radius:2px;background:var(--chip);color:var(--ink);font-family:var(--mono);font-size:.6875rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+.card .why{margin:0}
+.card .day{margin:.55rem 0 0;font-size:.9375rem;color:var(--muted)}
+
+.sources{margin-top:3rem;font-size:.8125rem;color:var(--muted)}
+.sources h2{margin:0;font-family:var(--mono);font-size:.75rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.sources ul{list-style:none;margin:.5rem 0 0;padding:0;display:flex;flex-wrap:wrap;gap:.3rem 1.1rem}
+
+@media (max-width:560px){
+  .slot{grid-template-columns:1fr;gap:.45rem}
+  .when{flex-direction:row;align-items:center;gap:.6rem;padding-top:0}
+  .sign h2{font-size:1.3125rem}
+  .picks li{grid-template-columns:1fr;gap:.25rem}
+  .picks .pick{justify-self:start}
+  .plans{grid-template-columns:1fr}
+  .ideas li{grid-template-columns:minmax(0,1fr) auto}
+  .ideas .idea-name{grid-column:1;grid-row:1}
+  .ideas .state{grid-column:2;grid-row:1}
+  .ideas .idea-where{grid-column:1 / -1;grid-row:2}
+  .tips{grid-template-columns:1fr}
+}
+</style>
+
+</head>
+<body>
+<main class="wrap">
+  <header class="masthead">
+    <p class="eyebrow">Sep 16 – 25, 2026 · from Long Island City</p>
+    <h1>Mom &amp; Dad in New York</h1>
+    <p class="lede">Parks, gardens and the waterfront come first, since that's what Mom and Dad enjoy most. They explore during the day, Aditya and Chhaya join in the evenings, and the weekend of Sat 19 – Sun 20 is free for everyone.</p>
+    <p class="home"><strong>Home base</strong> One QPS, next to <a href="https://www.google.com/maps/search/?api=1&amp;query=Queensboro+Plaza+Subway+Station+Queens+NY">Queensboro Plaza</a> <span class="b p">7</span><span class="b y">N</span><span class="b y">W</span></p>
+
+    <nav class="strip-wrap" aria-label="Jump to a day">
+      <ol class="strip">
+        <li class="stop"><a href="#sep16"><span class="dotbox"><span class="dot"></span></span><span class="dow">Wed</span><span class="dn">16</span></a></li>
+        <li class="stop"><a href="#sep17"><span class="dotbox"><span class="dot"></span></span><span class="dow">Thu</span><span class="dn">17</span></a></li>
+        <li class="stop"><a href="#sep18"><span class="dotbox"><span class="dot"></span></span><span class="dow">Fri</span><span class="dn">18</span></a></li>
+        <li class="stop"><a href="#sep19"><span class="dotbox"><span class="dot off"></span></span><span class="dow">Sat</span><span class="dn">19</span></a></li>
+        <li class="stop"><a href="#sep20"><span class="dotbox"><span class="dot off"></span></span><span class="dow">Sun</span><span class="dn">20</span></a></li>
+        <li class="stop"><a href="#sep21"><span class="dotbox"><span class="dot"></span></span><span class="dow">Mon</span><span class="dn">21</span></a></li>
+        <li class="stop"><a href="#sep22"><span class="dotbox"><span class="dot call"></span></span><span class="dow">Tue</span><span class="dn">22</span></a></li>
+        <li class="stop"><a href="#sep23"><span class="dotbox"><span class="dot"></span></span><span class="dow">Wed</span><span class="dn">23</span></a></li>
+        <li class="stop"><a href="#sep24"><span class="dotbox"><span class="dot"></span></span><span class="dow">Thu</span><span class="dn">24</span></a></li>
+        <li class="stop"><a href="#sep25"><span class="dotbox"><span class="dot"></span></span><span class="dow">Fri</span><span class="dn">25</span></a></li>
+      </ol>
+    </nav>
+    <ul class="legend">
+      <li><span class="dotbox"><span class="dot"></span></span>Aditya works</li>
+      <li><span class="dotbox"><span class="dot off"></span></span>Aditya is off</li>
+      <li><span class="dotbox"><span class="dot call"></span></span>Aditya on call overnight</li>
+    </ul>
+    <p class="fine">Aditya is home by 4–5 on hepatology days and around 6 on inpatient days, so evening plans start then. Every address and station is a link: tap it to open Google Maps. Shopping comes in two flavors, <a href="#shopping">browse or buy</a>, and there's an idea generator for open days at <a href="#today">the bottom</a>.</p>
+  </header>
+
+  <section class="days" aria-label="Day by day">
+
+    <article class="day" id="sep16">
+      <header class="sign">
+        <h2>Wednesday<span class="date">Sep 16</span></h2>
+        <p class="status">Aditya: Hepatology, home by 4–5 <span class="flag arrive">Arrival</span></p>
+      </header>
+      <ol class="slots">
+        <li class="slot">
+          <div class="when"><span class="time">Afternoon</span></div>
+          <div class="what">
+            <h3>Aditya drops off the cat</h3>
+            <p>Done before Mom and Dad arrive.</p>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">Night</span></div>
+          <div class="what">
+            <h3>Mom &amp; Dad land</h3>
+            <p>Nothing planned. Get home and settled.</p>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+    <article class="day" id="sep17">
+      <header class="sign">
+        <h2>Thursday<span class="date">Sep 17</span></h2>
+        <p class="status">Aditya: Hepatology procedure day, home by 4–5</p>
+      </header>
+      <ol class="slots">
+        <li class="slot">
+          <div class="when"><span class="time">Daytime</span><span class="who parents">Mom &amp; Dad</span></div>
+          <div class="what">
+            <h3>Ganesh Temple and Queens Botanical Garden</h3>
+            <p>It's Ganesh Chaturthi festival week at the temple, running through Sep 20. Have darshan and eat at the temple canteen (dosa, idli, vada), then walk about 15 minutes to Queens Botanical Garden. The 7 runs straight to Flushing, the last stop.</p>
+            <p class="vibe"><b>Feels like</b> Flushing is a full Chinatown and Koreatown at once: Chinese and Korean signage everywhere, packed sidewalks, bakeries and fruit stalls, almost no tourists. The temple is a quiet South Indian mandir dropped into the middle of it, and the garden behind it is calm and green.</p>
+            <ul class="meta">
+              <li><span class="b p">7</span> from Queensboro Plaza to <a href="https://www.google.com/maps/search/?api=1&amp;query=Flushing-Main+St+Subway+Station+Queens+NY">Flushing–Main St</a></li>
+              <li>Temple: <a href="https://www.google.com/maps/search/?api=1&amp;query=Sri+Maha+Vallabha+Ganapati+Devasthanam+45-57+Bowne+St+Flushing+NY">45-57 Bowne St</a></li>
+              <li>Garden: <a href="https://www.google.com/maps/search/?api=1&amp;query=Queens+Botanical+Garden+43-50+Main+St+Flushing+NY">43-50 Main St</a>, open 8–6</li>
+              <li><span class="free">Temple: Free</span></li>
+            </ul>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">Evening</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Dinner with Ayush &amp; Nidhi <span class="state planned">Set</span></h3>
+            <p>Aditya is home by 4–5 today, so this is an easy night for it.</p>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+    <article class="day" id="sep18">
+      <header class="sign">
+        <h2>Friday<span class="date">Sep 18</span></h2>
+        <p class="status">Aditya: Hepatology (no clinic), home by 4–5</p>
+      </header>
+      <ol class="slots">
+        <li class="slot">
+          <div class="when"><span class="time">Daytime</span><span class="who parents">Mom &amp; Dad</span></div>
+          <div class="what">
+            <h3>9/11 Memorial and the Hudson riverfront</h3>
+            <p>Take the E to its last stop, World Trade Center, for the 9/11 Memorial pools. Then walk west to the Hudson and south through Battery Park City's riverside gardens to The Battery, where the Statue of Liberty sits out in the harbor.</p>
+            <p class="vibe"><b>Feels like</b> The tallest, newest, glassiest part of the city, and very quiet around the memorial pools. Two blocks away the streets turn narrow and crooked, because they were laid out in the 1600s.</p>
+            <ul class="meta">
+              <li><span class="b bl">E</span> from Queens Plaza to <a href="https://www.google.com/maps/search/?api=1&amp;query=World+Trade+Center+Subway+Station+New+York+NY">World Trade Center</a></li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=National+September+11+Memorial+New+York+NY">9/11 Memorial</a> and <a href="https://www.google.com/maps/search/?api=1&amp;query=The+Battery+Park+New+York+NY">The Battery</a></li>
+              <li><span class="free">Free</span></li>
+            </ul>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">6 PM</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Brooklyn Bridge, then a movie on the lawn</h3>
+            <p>Around 5, Mom and Dad walk to <a href="https://www.google.com/maps/search/?api=1&amp;query=Brooklyn+Bridge+Pedestrian+Walkway+Entrance+Centre+St+New+York+NY">the bridge entrance by City Hall</a> and cross into DUMBO, about 40 minutes at an easy pace. Aditya takes the F from home. Everyone meets at Pier 1 with picnic food for <em>How to Train Your Dragon</em> at Movies With a View, with the Manhattan skyline behind the screen. The lawn opens at 6 and the film starts at sunset. Bring a blanket. Afterward, the F from York St goes straight home.</p>
+            <p class="vibe"><b>Feels like</b> The bridge is crowded and windy and worth every minute. DUMBO below it is cobblestones and old warehouses turned into shops, with a crowd photographing the bridge from every angle.</p>
+            <ul class="meta">
+              <li><span class="b o">F</span> from 21 St–Queensbridge to <a href="https://www.google.com/maps/search/?api=1&amp;query=York+St+Subway+Station+Brooklyn+NY">York St</a></li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Brooklyn+Bridge+Park+Pier+1+Brooklyn+NY">Pier 1, Brooklyn Bridge Park</a></li>
+              <li><span class="free">Free</span></li>
+              <li class="sun">Sunset 7:01</li>
+            </ul>
+            <p class="alt"><strong>Or stay in Manhattan:</strong> Oculus Outdoors is showing <em>The Addams Family</em> at 7 PM (seating from 6, first come), right where Mom and Dad spent the day.</p>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+    <article class="day" id="sep19">
+      <header class="sign">
+        <h2>Saturday<span class="date">Sep 19</span></h2>
+        <p class="status">Aditya: off <span class="flag off">Day off</span></p>
+      </header>
+      <ol class="slots">
+        <li class="slot">
+          <div class="when"><span class="time">Morning</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>F45 class <span class="state optional">Optional</span></h3>
+            <p>F45 Long Island City is about a 10-minute walk from home. Book in the F45 app and ask about intro classes for first-timers.</p>
+            <ul class="meta">
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=F45+Training+Long+Island+City+22-18+Jackson+Ave+Queens+NY">22-18 Jackson Ave</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">2:00 PM</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Omakaseed Vegan <span class="state booked">Booked</span></h3>
+            <p>Vegan omakase at a 10-seat counter inside the Sanctuary Hotel. Plan on about an hour.</p>
+            <p class="vibe"><b>Feels like</b> A tiny, dim counter for ten people, a few steps off the loudest sidewalk in New York.</p>
+            <ul class="meta">
+              <li><span class="b o">F</span> from 21 St–Queensbridge to <a href="https://www.google.com/maps/search/?api=1&amp;query=47-50+Sts-Rockefeller+Center+Subway+Station+New+York+NY">47–50 Sts–Rockefeller Ctr</a></li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Omakaseed+Vegan+132+W+47th+St+New+York+NY">132 W 47th St</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">4:00 PM</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Pickleball at JJ Walker</h3>
+            <p>Two outdoor courts in the West Village. They're free and first come, first served with no booking, so head down straight after lunch and expect to wait a turn on a Saturday. Lines are painted and there are portable nets, but bring paddles and balls.</p>
+            <p class="vibe"><b>Feels like</b> A sunken ballfield ringed by townhouses in the middle of the West Village. Neighborhood regulars, kids on the next court, no tourists.</p>
+            <ul class="meta">
+              <li><span class="b r">1</span> from 50 St to <a href="https://www.google.com/maps/search/?api=1&amp;query=Houston+St+Subway+Station+1+Train+New+York+NY">Houston St</a>, then 5 min on foot</li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=James+J+Walker+Park+17+Clarkson+St+New+York+NY">17 Clarkson St</a></li>
+              <li><span class="free">Free</span></li>
+            </ul>
+            <p class="alt"><strong>Skipping it?</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=Paley+Park+3+E+53rd+St+New+York+NY">Paley Park</a> and its waterfall are 10 minutes from lunch, and Central Park starts six blocks further at <a href="https://www.google.com/maps/search/?api=1&amp;query=Grand+Army+Plaza+Central+Park+5th+Ave+59th+St+New+York+NY">5th Ave &amp; 59th St</a>, with <a href="https://www.google.com/maps/search/?api=1&amp;query=Bethesda+Terrace+Central+Park+New+York+NY">Bethesda Terrace</a> and the Ramble beyond it.</p>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">Evening</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Shopping: browse or buy <span class="state optional">Pick one</span></h3>
+            <p>Saturday evening is when stores stay open latest. Details are in <a href="#shopping">Shopping plans</a> below.</p>
+            <ul class="picks">
+              <li><span class="pick browse">Browse</span><span><strong>SoHo.</strong> A 15-minute walk east of the pickleball courts, or the <span class="b y">R</span><span class="b y">W</span> to <a href="https://www.google.com/maps/search/?api=1&amp;query=Prince+St+Subway+Station+New+York+NY">Prince St</a>. Most shops are open until 8.</span></li>
+              <li><span class="pick buy">Buy</span><span><strong>Macy's Herald Square</strong> is open until 10, and <strong>Nordstrom Rack</strong> at Union Square until 9. Both are on the <span class="b y">N</span><span class="b y">R</span><span class="b y">W</span> from 57 St–7 Av.</span></li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+    <article class="day" id="sep20">
+      <header class="sign">
+        <h2>Sunday<span class="date">Sep 20</span></h2>
+        <p class="status">Aditya: off <span class="flag off">Day off</span> <span class="flag guest">Christina joins</span></p>
+      </header>
+      <ol class="slots">
+        <li class="slot">
+          <div class="when"><span class="time">1:00 PM</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Hangawi lunch <span class="state tobook">To book</span></h3>
+            <p>Christina is with us all day, so the table is for five. Vegetarian Korean: lunch is weekends only (weekdays are dinner only) and starts at 1. Shoes come off at the door, and you sit on floor cushions at low tables with a well underneath for your legs. Slip-ons help.</p>
+            <p class="vibe"><b>Feels like</b> Dim, hushed and wooden inside, like a tea house. Outside is Koreatown: one dense block of neon signs stacked four floors high.</p>
+            <ul class="meta">
+              <li><span class="b y">N</span> from Queensboro Plaza to <a href="https://www.google.com/maps/search/?api=1&amp;query=34+St-Herald+Square+Subway+Station+New+York+NY">34 St–Herald Sq</a></li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Hangawi+12+E+32nd+St+New+York+NY">12 E 32nd St</a></li>
+            </ul>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">Afternoon</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Shopping: browse or buy <span class="state optional">Pick one</span></h3>
+            <p>Both plans work today. Details are in <a href="#shopping">Shopping plans</a> below.</p>
+            <ul class="picks">
+              <li><span class="pick browse">Browse</span><span><strong>Williamsburg.</strong> <span class="b y">N</span><span class="b y">Q</span><span class="b y">R</span> from Herald Sq to 14 St–Union Sq, then <span class="b gy">L</span> to <a href="https://www.google.com/maps/search/?api=1&amp;query=Bedford+Av+Subway+Station+Brooklyn+NY">Bedford Av</a>. Artists &amp; Fleas is open until 7, and the waterfront is right there for sunset at 6:58.</span></li>
+              <li><span class="pick buy">Buy</span><span><strong><a href="https://www.google.com/maps/search/?api=1&amp;query=Macys+Herald+Square+151+W+34th+St+New+York+NY">Macy's Herald Square</a></strong> is two blocks from lunch and open until 9. Or take the <span class="b y">R</span> to <a href="https://www.google.com/maps/search/?api=1&amp;query=Canal+St+Subway+Station+New+York+NY">Canal St</a> for knockoff bags, then Century 21 (open until 8).</span></li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+    <article class="day" id="sep21">
+      <header class="sign">
+        <h2>Monday<span class="date">Sep 21</span></h2>
+        <p class="status">Aditya: Inpatient, home around 6</p>
+      </header>
+      <ol class="slots">
+        <li class="slot">
+          <div class="when"><span class="time">Daytime</span><span class="who parents">Mom &amp; Dad</span></div>
+          <div class="what">
+            <h3>Grand Central, then the High Line to Little Island</h3>
+            <p>Ride the 7 to Grand Central and look up at the Main Concourse ceiling. Walk west on 42nd St past the New York Public Library to Bryant Park, then take the 7 from 5 Av to its last stop, 34 St–Hudson Yards. From there, walk the High Line 1.45 miles south, with plantings and benches the whole way. Stop at Chelsea Market near the end, then walk out to Little Island on the Hudson. The E from 14 St–8 Av goes straight home.</p>
+            <p class="vibe"><b>Feels like</b> The busiest, most photographed stretch of Manhattan, then a complete switch: the High Line is an old freight railway turned into a narrow garden running between buildings, one storey above the traffic.</p>
+            <ul class="meta">
+              <li><span class="b p">7</span> from Queensboro Plaza to <a href="https://www.google.com/maps/search/?api=1&amp;query=Grand+Central+Terminal+New+York+NY">Grand Central</a></li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=New+York+Public+Library+Stephen+A+Schwarzman+Building+476+5th+Ave+New+York+NY">The Library</a> and <a href="https://www.google.com/maps/search/?api=1&amp;query=Bryant+Park+New+York+NY">Bryant Park</a></li>
+              <li>High Line: <a href="https://www.google.com/maps/search/?api=1&amp;query=High+Line+W+34th+St+12th+Ave+New+York+NY">north end at W 34th St</a></li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Chelsea+Market+75+9th+Ave+New+York+NY">Chelsea Market</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=Little+Island+Pier+55+New+York+NY">Little Island</a></li>
+              <li><span class="free">Free</span></li>
+            </ul>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">Evening</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Dinner with Henna Mohan <span class="state pencil">Pencilled in</span></h3>
+            <p>A suggested night; confirm it works for Henna.</p>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+    <article class="day" id="sep22">
+      <header class="sign">
+        <h2>Tuesday<span class="date">Sep 22</span></h2>
+        <p class="status">Aditya: Inpatient, home around 6 <span class="flag call">On call tonight</span></p>
+      </header>
+      <ol class="slots">
+        <li class="slot heads">
+          <div class="when"><span class="time">Heads up</span></div>
+          <div class="what">
+            <h3>The UN General Assembly starts today</h3>
+            <p>Traffic in Midtown East crawls through Thursday, and 1st Ave is closed from 42nd to 48th St. Take the subway, not cabs. Brooklyn is unaffected.</p>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">Daytime</span><span class="who parents">Mom &amp; Dad</span></div>
+          <div class="what">
+            <h3>Brooklyn Botanic Garden and Prospect Park</h3>
+            <p>Start at the Botanic Garden. Its Eastern Parkway entrance is closed for now, so use the Washington Ave gate. Afterward, cross into Prospect Park and walk the Long Meadow, a lawn nearly a mile long, down to 15 St–Prospect Park, where the F goes straight home. Allow about 40 minutes for the park walk.</p>
+            <p class="vibe"><b>Feels like</b> Brownstone Brooklyn: low buildings, big trees, strollers and dog walkers. Prospect Park is Central Park's quieter, more local cousin, by the same designers.</p>
+            <ul class="meta">
+              <li><span class="b p">7</span> to Times Sq, then <span class="b r">2</span><span class="b r">3</span> to <a href="https://www.google.com/maps/search/?api=1&amp;query=Eastern+Parkway-Brooklyn+Museum+Subway+Station+Brooklyn+NY">Eastern Pkwy–Brooklyn Museum</a></li>
+              <li>Garden: <a href="https://www.google.com/maps/search/?api=1&amp;query=Brooklyn+Botanic+Garden+990+Washington+Ave+Brooklyn+NY">990 Washington Ave</a>, open 10–7</li>
+              <li>Home: <span class="b o">F</span> from <a href="https://www.google.com/maps/search/?api=1&amp;query=15+St-Prospect+Park+Subway+Station+Brooklyn+NY">15 St–Prospect Park</a></li>
+              <li><span class="free">Prospect Park: Free</span></li>
+            </ul>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">From 6:30</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Walk to the water</h3>
+            <p>Aditya carries the pager tonight and could get called in, so stay close to home. Walk down to Gantry Plaza State Park for the Pepsi-Cola sign and the Midtown skyline across the East River, then keep going south through Hunters Point South Park and eat dinner on Vernon Blvd.</p>
+            <p class="vibe"><b>Feels like</b> New glass towers on one side, open water on the other. This is the view everyone photographs Manhattan from, and it's a 25-minute walk from the apartment.</p>
+            <ul class="meta">
+              <li>About 25 min on foot, or <span class="b p">7</span> to <a href="https://www.google.com/maps/search/?api=1&amp;query=Vernon+Blvd-Jackson+Av+Subway+Station+Long+Island+City+NY">Vernon Blvd–Jackson Av</a></li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Gantry+Plaza+State+Park+Long+Island+City+NY">Gantry Plaza State Park</a></li>
+              <li><span class="free">Free</span></li>
+              <li class="sun">Sunset 6:54</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+    <article class="day" id="sep23">
+      <header class="sign">
+        <h2>Wednesday<span class="date">Sep 23</span></h2>
+        <p class="status">Aditya: Inpatient, home around 6</p>
+      </header>
+      <ol class="slots">
+        <li class="slot">
+          <div class="when"><span class="time">Daytime</span><span class="who parents">Mom &amp; Dad</span></div>
+          <div class="what">
+            <h3>Central Park's wild north end</h3>
+            <p>Start in the Conservatory Garden, three formal gardens just inside 5th Ave at 105th St. Then walk west past Harlem Meer into the North Woods and follow the Loch, a stream with three small waterfalls running through a wooded ravine. Stay in Manhattan afterward, since the play is at 7.</p>
+            <p class="vibe"><b>Feels like</b> Actual forest: dirt paths, running water, birds, and hardly any tourists. The Conservatory Garden is the formal opposite, all hedges and fountains, and it's where people get married.</p>
+            <ul class="meta">
+              <li><span class="b y">N</span><span class="b y">W</span> to Lexington Av/59 St, then <span class="b g">6</span> to <a href="https://www.google.com/maps/search/?api=1&amp;query=103+St+Subway+Station+Lexington+Ave+New+York+NY">103 St</a></li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Conservatory+Garden+Central+Park+New+York+NY">Conservatory Garden</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=The+Loch+Central+Park+New+York+NY">The Loch</a></li>
+              <li><span class="free">Free</span></li>
+            </ul>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">7:00 PM</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>The Play That Goes Wrong <span class="state booked">Booked</span></h3>
+            <p>Four tickets, general admission seating, so get there by about 6:30 to sit together. Aditya is only home around 6, so it's easier to go straight from the hospital and meet everyone at the theater.</p>
+            <p class="vibe"><b>Feels like</b> Off-Broadway rather than a big Broadway house: five small theaters under one roof, a block west of the Times Square crush. The show is a slapstick farce where the set falls apart on purpose.</p>
+            <ul class="meta">
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=New+World+Stages+340+W+50th+St+New+York+NY">New World Stages, 340 W 50th St</a></li>
+              <li><span class="b bl">E</span> from Queens Plaza to 50 St, or <span class="b y">N</span><span class="b y">W</span> to 49 St</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+    <article class="day" id="sep24">
+      <header class="sign">
+        <h2>Thursday<span class="date">Sep 24</span></h2>
+        <p class="status">Aditya: Inpatient, home around 6</p>
+      </header>
+      <ol class="slots">
+        <li class="slot">
+          <div class="when"><span class="time">Daytime</span><span class="who parents">Mom &amp; Dad</span></div>
+          <div class="what">
+            <h3>Roosevelt Island</h3>
+            <p>One stop on the F. Walk the river path south, past the ruins of the old Smallpox Hospital, to Four Freedoms Park at the island's tip (open 9 to 7). To see the skyline from above, ride the tram over to Manhattan and back.</p>
+            <p class="vibe"><b>Feels like</b> A two-mile island in the middle of the East River with almost no traffic: quiet, low-key, a bit suburban, with Manhattan standing right across the water.</p>
+            <ul class="meta">
+              <li><span class="b o">F</span> from 21 St–Queensbridge to <a href="https://www.google.com/maps/search/?api=1&amp;query=Roosevelt+Island+Subway+Station+New+York+NY">Roosevelt Island</a></li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Four+Freedoms+Park+Roosevelt+Island+New+York+NY">Four Freedoms Park</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=Roosevelt+Island+Tramway+E+59th+St+2nd+Ave+New+York+NY">Tram</a></li>
+              <li><span class="free">Four Freedoms Park: Free</span></li>
+            </ul>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">6:30 PM</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Magic show in Park Slope <span class="state booked">Booked</span></h3>
+            <p>The show starts at 6:30, and Park Slope is 45 to 55 minutes from home. The F runs straight from Roosevelt Island to 15 St–Prospect Park, so Mom and Dad can go directly from the island: leave by about 5:30. Aditya is only home around 6 on inpatient days, so he should leave the hospital by about 5:15 and meet everyone there.</p>
+            <p class="vibe"><b>Feels like</b> Park Slope's 5th Ave: a long low strip of bars and restaurants under three-storey buildings, all locals. The show is in the back room of Young Ethel's, a neighborhood cocktail bar with a small stage.</p>
+            <ul class="meta">
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=506+5th+Ave+Brooklyn+NY+11215">506 5th Ave, Brooklyn</a></li>
+              <li><span class="b o">F</span> to <a href="https://www.google.com/maps/search/?api=1&amp;query=15+St-Prospect+Park+Subway+Station+Brooklyn+NY">15 St–Prospect Park</a>, then 10 min downhill</li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+    <article class="day" id="sep25">
+      <header class="sign">
+        <h2>Friday<span class="date">Sep 25</span></h2>
+        <p class="status">Aditya: Inpatient, home around 6</p>
+      </header>
+      <ol class="slots">
+        <li class="slot">
+          <div class="when"><span class="time">Daytime</span><span class="who parents">Mom &amp; Dad</span></div>
+          <div class="what">
+            <h3>Astoria Park and Socrates Sculpture Park</h3>
+            <p>An easy last day close to home. Walk about 15 minutes from the station to Astoria Park, with big lawns and a river path between the RFK and Hell Gate bridges. Then walk south on Vernon Blvd, about 30 minutes, to Socrates Sculpture Park, open-air art on the East River. Home is about 30 minutes on foot from there.</p>
+            <p class="vibe"><b>Feels like</b> Greek and Egyptian Astoria: bakeries, hookah cafés, two-storey houses, families out on the grass. Nobody here is a tourist.</p>
+            <ul class="meta">
+              <li><span class="b y">N</span><span class="b y">W</span> from Queensboro Plaza to <a href="https://www.google.com/maps/search/?api=1&amp;query=Astoria+Blvd+Subway+Station+Queens+NY">Astoria Blvd</a></li>
+              <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Astoria+Park+Queens+NY">Astoria Park</a> · <a href="https://www.google.com/maps/search/?api=1&amp;query=Socrates+Sculpture+Park+32-01+Vernon+Blvd+Queens+NY">Socrates Sculpture Park</a>, 9 AM to sunset</li>
+              <li><span class="free">Free</span></li>
+            </ul>
+            <p class="alt"><strong>Rainy?</strong> <a href="https://www.google.com/maps/search/?api=1&amp;query=MoMA+PS1+22-25+Jackson+Ave+Long+Island+City+NY">MoMA PS1</a> is free and about 10 minutes from home, open noon to 6.</p>
+          </div>
+        </li>
+        <li class="slot">
+          <div class="when"><span class="time">6:30 PM</span><span class="who together">Everyone</span></div>
+          <div class="what">
+            <h3>Farewell dinner in the West Village</h3>
+            <p>Stop at the Whitney first if you like. It's free every Friday from 5 to 10 PM (book free tickets online), and it sits at the south end of the High Line, a short walk from West Village restaurants.</p>
+            <p class="vibe"><b>Feels like</b> Low brick townhouses and crooked tree-lined streets, the prettiest part of Manhattan to wander after dark.</p>
+            <ul class="meta">
+              <li><span class="b bl">E</span> from Queens Plaza to <a href="https://www.google.com/maps/search/?api=1&amp;query=14+St-8+Av+Subway+Station+New+York+NY">14 St–8 Av</a></li>
+              <li>Whitney: <a href="https://www.google.com/maps/search/?api=1&amp;query=Whitney+Museum+of+American+Art+99+Gansevoort+St+New+York+NY">99 Gansevoort St</a></li>
+              <li><span class="free">Whitney on Fridays: Free</span></li>
+            </ul>
+          </div>
+        </li>
+      </ol>
+    </article>
+
+  </section>
+  <p class="fine after">Still here on Sat Sep 26? Aditya is off that weekend too.</p>
+
+  <section class="section" id="shopping">
+    <h2>Shopping plans</h2>
+    <p class="sub">For Sat 19 evening and Sun 20 afternoon. Browse is for places that are fun to wander but not where you'd buy much. Buy is for places that are fun to actually shop.</p>
+    <div class="plans">
+      <div class="plan">
+        <header>
+          <h3><span class="pick browse">Browse</span> Look around</h3>
+          <p>Beautiful stores, great streets, window-shopping pace.</p>
+        </header>
+        <div class="route">
+          <h4>SoHo</h4>
+          <p>Flagships and boutiques along Broadway and on Prince, Spring, Greene and Mercer Streets. Worth a stop: <a href="https://www.google.com/maps/search/?api=1&amp;query=Apple+SoHo+103+Prince+St+New+York+NY">Apple SoHo</a>, the <a href="https://www.google.com/maps/search/?api=1&amp;query=MoMA+Design+Store+SoHo+81+Spring+St+New+York+NY">MoMA Design Store</a> (open until 7) and <a href="https://www.google.com/maps/search/?api=1&amp;query=Housing+Works+Bookstore+126+Crosby+St+New+York+NY">Housing Works Bookstore Cafe</a>.</p>
+          <p class="vibe"><b>Feels like</b> Cast-iron buildings, cobblestone side streets, luxury logos in every window, and a crowd. Beautiful, and pricey enough that it stays browsing.</p>
+          <ul class="meta">
+            <li><span class="b y">W</span> from Queensboro Plaza to <a href="https://www.google.com/maps/search/?api=1&amp;query=Prince+St+Subway+Station+New+York+NY">Prince St</a> (weekdays)</li>
+            <li><span class="b y">R</span> from Queens Plaza (any day)</li>
+          </ul>
+        </div>
+        <div class="route">
+          <h4>Williamsburg</h4>
+          <p>Independent shops along Bedford Ave, and <a href="https://www.google.com/maps/search/?api=1&amp;query=Artists+and+Fleas+70+N+7th+St+Brooklyn+NY">Artists &amp; Fleas</a> (70 N 7th St), an indoor market of local makers and vintage sellers, open Fri–Sun 11–7. End at <a href="https://www.google.com/maps/search/?api=1&amp;query=Marsha+P+Johnson+State+Park+Brooklyn+NY">Marsha P. Johnson State Park</a> on the water for the skyline.</p>
+          <p class="vibe"><b>Feels like</b> Young and scruffy-stylish: old warehouses, murals, coffee shops, vintage racks on the sidewalk. Cheaper and more relaxed than SoHo.</p>
+          <ul class="meta">
+            <li><span class="b lg">G</span> from <a href="https://www.google.com/maps/search/?api=1&amp;query=Court+Square+Subway+Station+Long+Island+City+NY">Court Sq</a> to <a href="https://www.google.com/maps/search/?api=1&amp;query=Nassau+Av+Subway+Station+Brooklyn+NY">Nassau Av</a>, then walk down Bedford Ave</li>
+            <li>Home: NYC Ferry from <a href="https://www.google.com/maps/search/?api=1&amp;query=NYC+Ferry+North+Williamsburg+Landing+Brooklyn+NY">North Williamsburg</a> to <a href="https://www.google.com/maps/search/?api=1&amp;query=NYC+Ferry+Hunters+Point+South+Landing+Long+Island+City+NY">Hunters Point South</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="plan">
+        <header>
+          <h3><span class="pick buy">Buy</span> Actually shop</h3>
+          <p>Fun places where bags actually get filled.</p>
+        </header>
+        <div class="route">
+          <h4>Canal Street and Century 21</h4>
+          <p>Knockoff bags, sunglasses and souvenirs along <a href="https://www.google.com/maps/search/?api=1&amp;query=Canal+St+New+York+NY">Canal St</a> near Broadway. Bring cash and bargain. The better bags usually aren't on display, so ask, stay together, and walk away if a back room feels off. San Gennaro is a block over on <a href="https://www.google.com/maps/search/?api=1&amp;query=Mulberry+St+Little+Italy+New+York+NY">Mulberry St</a> through Sep 27. Then take the R two stops to Cortlandt St for <a href="https://www.google.com/maps/search/?api=1&amp;query=Century+21+22+Cortlandt+St+New+York+NY">Century 21</a>, the discount designer department store.</p>
+          <p class="vibe"><b>Feels like</b> Loud, crowded and chaotic, sellers calling from doorways, Chinatown on one side and Little Italy's festival on the other. Keep bags zipped and in front.</p>
+          <ul class="meta">
+            <li><span class="b y">N</span><span class="b y">W</span> from Queensboro Plaza to <a href="https://www.google.com/maps/search/?api=1&amp;query=Canal+St+Subway+Station+New+York+NY">Canal St</a></li>
+            <li>Century 21: Mon–Sat 9–9, Sun 11–8</li>
+          </ul>
+        </div>
+        <div class="route">
+          <h4>Nordstrom Rack and Macy's</h4>
+          <p><a href="https://www.google.com/maps/search/?api=1&amp;query=Nordstrom+Rack+60+E+14th+St+New+York+NY">Nordstrom Rack Union Square</a>, then <a href="https://www.google.com/maps/search/?api=1&amp;query=Macys+Herald+Square+151+W+34th+St+New+York+NY">Macy's Herald Square</a>, the giant flagship a few stops back up the same line.</p>
+          <p class="vibe"><b>Feels like</b> Ordinary big-city shopping, in the best way: bright, busy, endless racks, and a store that takes up a whole city block.</p>
+          <ul class="meta">
+            <li><span class="b y">N</span><span class="b y">W</span> to <a href="https://www.google.com/maps/search/?api=1&amp;query=14+St-Union+Square+Subway+Station+New+York+NY">14 St–Union Sq</a></li>
+            <li>Rack: Mon–Sat 10–9, Sun 11–7</li>
+            <li>Macy's: Mon–Thu 10–9, Fri–Sat 10–10, Sun 11–9</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="near">
+    <h2>Close to home, if a day opens up</h2>
+    <p class="sub">Not on the schedule, and all easy to reach from One QPS.</p>
+    <ul class="near">
+      <li><span><span class="near-name">MoMA PS1</span><span class="near-what">Contemporary art in a former public school, about 10 minutes on foot. Open Thu–Mon, noon to 6 (Saturday from 10). <a href="https://www.google.com/maps/search/?api=1&amp;query=MoMA+PS1+22-25+Jackson+Ave+Long+Island+City+NY">22-25 Jackson Ave</a>.</span></span><span class="free">Free</span></li>
+      <li><span><span class="near-name">Flushing Meadows–Corona Park</span><span class="near-what">The <a href="https://www.google.com/maps/search/?api=1&amp;query=Unisphere+Flushing+Meadows+Corona+Park+Queens+NY">Unisphere</a> and wide lawns left from the 1964 World's Fair. <span class="b p">7</span> to <a href="https://www.google.com/maps/search/?api=1&amp;query=Mets-Willets+Point+Subway+Station+Queens+NY">Mets–Willets Point</a>.</span></span><span class="free">Free</span></li>
+      <li><span><span class="near-name">Jackson Heights</span><span class="near-what">Indian sweets, groceries and sari shops around 74th St, and the closest thing to a Delhi market in the city. <span class="b p">7</span> to <a href="https://www.google.com/maps/search/?api=1&amp;query=74+St-Broadway+Subway+Station+Jackson+Heights+NY">74 St–Broadway</a>.</span></span><span></span></li>
+    </ul>
+  </section>
+
+  <section class="section" id="ideas">
+    <h2>Every plan, and where it landed</h2>
+    <ul class="ideas">
+      <li><span class="idea-name">Dinner with Ayush &amp; Nidhi</span><span class="idea-where">Thu 17 evening</span><span class="state planned">Set</span></li>
+      <li><span class="idea-name">Movies in the park</span><span class="idea-where">Fri 18 · Brooklyn Bridge Park, one of the season's last</span><span class="state planned">Planned</span></li>
+      <li><span class="idea-name">F45 class</span><span class="idea-where">Sat 19 morning · F45 Long Island City, near home</span><span class="state optional">Optional</span></li>
+      <li><span class="idea-name">Vegetarian omakase</span><span class="idea-where">Omakaseed Vegan · Sat 19, 2:00 PM</span><span class="state booked">Booked</span></li>
+      <li><span class="idea-name">Pickleball</span><span class="idea-where">Sat 19, 4:00 PM · JJ Walker Park, West Village</span><span class="state planned">Planned</span></li>
+      <li><span class="idea-name">Shopping</span><span class="idea-where">Sat 19 evening and Sun 20 afternoon · browse or buy each time</span><span class="state planned">Planned</span></li>
+      <li><span class="idea-name">Hangawi lunch</span><span class="idea-where">Sun 20, 1:00 PM with Christina · table for five</span><span class="state tobook">To book</span></li>
+      <li><span class="idea-name">Dinner with Henna Mohan</span><span class="idea-where">Mon 21</span><span class="state pencil">Pencilled in</span></li>
+      <li><span class="idea-name">Walk to the water</span><span class="idea-where">Tue 22 evening · Gantry Plaza, close to home on a call night</span><span class="state planned">Planned</span></li>
+      <li><span class="idea-name">The Play That Goes Wrong</span><span class="idea-where">Wed 23, 7:00 PM · New World Stages, 4 tickets</span><span class="state booked">Booked</span></li>
+      <li><span class="idea-name">Magic show</span><span class="idea-where">Thu 24, 6:30 PM · Park Slope, 506 5th Ave</span><span class="state booked">Booked</span></li>
+      <li class="nope"><span class="idea-name">Shakespeare in the Park</span><span class="idea-where">Season ended Aug 23; the park movie on Fri 18 replaces it</span><span class="state nope">Not running</span></li>
+    </ul>
+  </section>
+
+  <section class="section" id="book">
+    <h2>Book ahead</h2>
+    <p class="sub">Checkmarks are saved in this browser.</p>
+    <ul class="todo">
+      <li><label for="todo-hangawi"><input type="checkbox" id="todo-hangawi"><span><span class="t">Reserve Hangawi for Sun 9/20, 1:00 PM, table for five</span><span class="d">OpenTable, or call (212) 213-0077</span></span></label></li>
+      <li><label for="todo-henna"><input type="checkbox" id="todo-henna"><span><span class="t">Confirm dinner with Henna Mohan, Mon 9/21</span></span></label></li>
+      <li><label for="todo-paddles"><input type="checkbox" id="todo-paddles"><span><span class="t">Pack paddles and balls for Saturday</span><span class="d">JJ Walker has nets and painted lines, nothing else</span></span></label></li>
+      <li><label for="todo-whitney"><input type="checkbox" id="todo-whitney"><span><span class="t">Get free Whitney tickets for Fri 9/25</span><span class="d">Free, but capacity is limited</span></span></label></li>
+      <li><label for="todo-f45"><input type="checkbox" id="todo-f45"><span><span class="t">Book an F45 class for Sat 9/19</span><span class="d">F45 app · Long Island City studio, 22-18 Jackson Ave</span></span></label></li>
+      <li><label for="todo-omny"><input type="checkbox" id="todo-omny"><span><span class="t">Set up tap-to-pay on Mom's and Dad's phones</span><span class="d">Each person taps their own card or phone</span></span></label></li>
+      <li><label for="todo-cash"><input type="checkbox" id="todo-cash"><span><span class="t">Bring cash if you pick Canal Street</span><span class="d">Most stalls are cash only</span></span></label></li>
+    </ul>
+  </section>
+
+  <section class="section" id="tips">
+    <h2>Good to know</h2>
+    <div class="tips">
+      <div class="tip">
+        <h3>Trains near home</h3>
+        <p><a href="https://www.google.com/maps/search/?api=1&amp;query=Queensboro+Plaza+Subway+Station+Queens+NY">Queensboro Plaza</a>, next to One QPS: 7 and N, plus the W on weekdays. <a href="https://www.google.com/maps/search/?api=1&amp;query=Queens+Plaza+Subway+Station+Queens+NY">Queens Plaza</a>, about 5 minutes away: E and R, plus the M on weekdays. The F is at <a href="https://www.google.com/maps/search/?api=1&amp;query=21+St-Queensbridge+Subway+Station+Queens+NY">21 St–Queensbridge</a>, about 10 minutes away.</p>
+      </div>
+      <div class="tip">
+        <h3>Tap to ride</h3>
+        <p>Tap a contactless card or phone at the turnstile, one per person. After about a dozen rides on the same card in 7 days, the rest of that week is free.</p>
+      </div>
+      <div class="tip">
+        <h3>UN week, Sep 22–28</h3>
+        <p>Midtown East is worst Tuesday–Thursday, when 1st Ave is shut from 42nd to 48th St. Take the subway.</p>
+      </div>
+      <div class="tip">
+        <h3>Check the day</h3>
+        <p>MoMA PS1 is closed Tuesdays and Wednesdays, Four Freedoms Park on Tuesdays, and both botanical gardens on Mondays. Artists &amp; Fleas is open Friday to Sunday only. The plan already works around all of these.</p>
+      </div>
+      <div class="tip">
+        <h3>Sunset gets earlier</h3>
+        <p>7:03 PM on the 17th, 6:49 PM by the 25th. Start waterfront walks by about 6:30.</p>
+      </div>
+      <div class="tip">
+        <h3>Two festivals this week</h3>
+        <p>The Ganesh Chaturthi festival at the Flushing temple runs through Sep 20. The Feast of San Gennaro is in Little Italy Sep 17–27.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="today">
+    <h2>What to do today</h2>
+    <p class="sub">Set the three dials, press the button, and get one idea at a time. Press again for another.</p>
+    <div class="rec">
+      <div class="dials">
+        <div class="dial">
+          <label for="dial-t">How touristy</label>
+          <input type="range" id="dial-t" min="0" max="100" step="1" value="45">
+          <div class="ends"><span>Only locals</span><span>Tourist classic</span></div>
+        </div>
+        <div class="dial">
+          <label for="dial-u">Classic or offbeat</label>
+          <input type="range" id="dial-u" min="0" max="100" step="1" value="60">
+          <div class="ends"><span>Classic New York</span><span>Offbeat</span></div>
+        </div>
+        <div class="dial">
+          <label for="dial-o">Indoors or out</label>
+          <input type="range" id="dial-o" min="0" max="100" step="1" value="70">
+          <div class="ends"><span>Indoors</span><span>Outdoors</span></div>
+        </div>
+      </div>
+      <div class="rec-actions">
+        <button type="button" class="gen" id="gen">Suggest something</button>
+        <p class="rec-note">Hours change. Tap the address and check before setting off.</p>
+      </div>
+      <div class="card" id="rec-out" aria-live="polite">
+        <h3>Green-Wood Cemetery</h3>
+        <p class="area">Sunset Park, Brooklyn</p>
+        <div class="tagrow"><span class="tag">Some tourists</span><span class="tag">Offbeat</span><span class="tag">Outdoors</span></div>
+        <p class="why">478 acres of hills, ponds and Victorian monuments, with a colony of wild green parrots nesting in the Gothic gate. One of the highest points in Brooklyn, looking out over the harbor.</p>
+        <ul class="meta">
+          <li><span class="b y">R</span> from Queens Plaza to 25 St, then a block</li>
+          <li><a href="https://www.google.com/maps/search/?api=1&amp;query=Green-Wood%20Cemetery%20500%2025th%20St%20Brooklyn%20NY">Open in Maps</a></li>
+          <li><span class="free">Free</span></li>
+        </ul>
+        <p class="day">Open daily, 7 to 7.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="sources">
+    <h2>Checked against</h2>
+    <ul>
+      <li><a href="https://www.yelp.com/biz/omakaseed-new-york-2">Omakaseed Vegan</a></li>
+      <li><a href="https://hangawirestaurant.com/">Hangawi hours</a></li>
+      <li><a href="https://www.vivereny.com/free-outdoor-movies-nyc/">Outdoor movies</a></li>
+      <li><a href="https://www.un.org/en/high-level-week-2026">UN high-level week</a></li>
+      <li><a href="https://nyganeshtemple.org/">Ganesh Temple</a></li>
+      <li><a href="https://queensbotanical.org/hours_admission/">Queens Botanical Garden</a></li>
+      <li><a href="https://www.bbg.org/visit/hours">Brooklyn Botanic Garden</a></li>
+      <li><a href="https://www.paleypark.org/vistorinfo">Paley Park</a></li>
+      <li><a href="https://www.centralparknyc.org/activities/guides/north-woods-tour">North Woods</a></li>
+      <li><a href="https://parks.ny.gov/visit/state-parks/franklin-d-roosevelt-four-freedoms-state-park">Four Freedoms Park</a></li>
+      <li><a href="https://socratessculpturepark.org/visit/directions-and-hours/">Socrates Sculpture Park</a></li>
+      <li><a href="https://press.moma.org/news/moma-ps1-to-become-new-york-citys-largest-free-museum-in-2026-made-possible-by-gift-from-sonya-yu-celebrating-50th-anniversary/">MoMA PS1 free admission</a></li>
+      <li><a href="https://store.moma.org/pages/design-store-soho-nyc">MoMA Design Store SoHo</a></li>
+      <li><a href="https://www.artistsandfleas.com/williamsburg/">Artists &amp; Fleas</a></li>
+      <li><a href="https://c21stores.com/pages/contact">Century 21</a></li>
+      <li><a href="https://stores.nordstromrack.com/us/ny/new-york/60-e-14th-st">Nordstrom Rack</a></li>
+      <li><a href="https://www.macys.com/stores/ny/newyork/herald-square_3.html">Macy's Herald Square</a></li>
+      <li><a href="https://www.ferry.nyc/routes-and-schedules/east-river/">NYC Ferry</a></li>
+      <li><a href="https://f45training.com/studio/longislandcity/">F45 Long Island City</a></li>
+      <li><a href="https://whitney.org/visit/free-admission/free-friday-nights">Whitney free Fridays</a></li>
+      <li><a href="https://www.nycgovparks.org/parks/james-j-walker-park/facilities/pickleball">JJ Walker pickleball</a></li>
+      <li><a href="https://www.noguchi.org/museum/visit/plan/">Noguchi Museum</a></li>
+      <li><a href="http://collection.movingimage.us/visit/hours">Museum of the Moving Image</a></li>
+      <li><a href="https://www.louisarmstronghouse.org/visit/">Louis Armstrong House</a></li>
+      <li><a href="https://www.nytransitmuseum.org/know-before-you-visit/">Transit Museum</a></li>
+      <li><a href="https://www.green-wood.com/visit/">Green-Wood</a></li>
+      <li><a href="https://www.themorgan.org/visit">The Morgan</a></li>
+      <li><a href="https://www.frick.org/visit">The Frick</a></li>
+      <li><a href="https://www.mta.info/fares-tolls/subway-bus">MTA fares</a></li>
+    </ul>
+  </footer>
+</main>
+
+<script>
+(function () {
+  var POOL = [
+    {n:"The Metropolitan Museum of Art",a:"Upper East Side",t:92,u:25,o:10,w:"Two million square feet of everything: an Egyptian temple moved stone by stone, the arms and armor hall, roomfuls of Impressionists. Pick two wings rather than five.",g:'<span class="b y">N</span><span class="b y">W</span> to Lexington Av/59 St, then <span class="b g">6</span> to 77 St',m:"The Metropolitan Museum of Art 1000 5th Ave New York NY",d:"Closed Wednesdays."},
+    {n:"American Museum of Natural History",a:"Upper West Side",t:90,u:25,o:5,w:"The blue whale hanging over the ocean hall, a full floor of dinosaurs, and the Gilder Center's canyon of a new wing. The best rainy-day museum in the city.",g:'<span class="b p">7</span> to Times Sq, then <span class="b r">1</span> to 79 St',m:"American Museum of Natural History 200 Central Park West New York NY"},
+    {n:"The Morgan Library",a:"Murray Hill",t:45,u:65,o:0,w:"J.P. Morgan's private library: three storeys of walnut shelves, a staircase hidden inside the wall, and a Gutenberg Bible in the case. Small enough to do properly in ninety minutes.",g:'<span class="b p">7</span> to Grand Central, then a 10-minute walk south',m:"Morgan Library and Museum 225 Madison Ave New York NY",d:"Closed Mondays."},
+    {n:"The Frick Collection",a:"Upper East Side",t:55,u:60,o:5,w:"Old masters hung in a Gilded Age mansion instead of a gallery, reopened in 2025 with the family's upstairs rooms now open too. The garden court is the quietest room in Manhattan.",g:'<span class="b y">N</span><span class="b y">W</span> to Lexington Av/59 St, then <span class="b g">6</span> to 68 St',m:"The Frick Collection 1 E 70th St New York NY",d:"Closed Tuesdays."},
+    {n:"New York Transit Museum",a:"Brooklyn Heights",t:45,u:90,o:5,w:"A decommissioned 1936 subway station with a platform of vintage cars you can walk through, each fitted out in its own decade, old advertisements still in the frames.",g:'<span class="b bl">E</span> to Jay St–MetroTech, then 5 minutes on foot',m:"New York Transit Museum 99 Schermerhorn St Brooklyn NY",d:"Wed–Sun, 10 to 4. Book a timed ticket."},
+    {n:"The Met Cloisters",a:"Washington Heights",t:70,u:85,o:40,w:"A medieval monastery rebuilt above the Hudson, with walled herb gardens and the Unicorn Tapestries. Fort Tryon Park around it has the best river view on the island.",g:'<span class="b bl">E</span> to 42 St–Port Authority, then <span class="b bl">A</span> to 190 St, about an hour',m:"The Met Cloisters 99 Margaret Corbin Dr New York NY"},
+    {n:"Museum of the City of New York",a:"East Harlem",t:40,u:60,o:0,w:"Four hundred years of the city in one building, including a half-hour film that explains how all of it happened. Across the street from Central Park's Conservatory Garden.",g:'<span class="b y">N</span><span class="b y">W</span> to Lexington Av/59 St, then <span class="b g">6</span> to 103 St',m:"Museum of the City of New York 1220 5th Ave New York NY"},
+    {n:"Green-Wood Cemetery",a:"Sunset Park, Brooklyn",t:35,u:90,o:95,w:"478 acres of hills, ponds and Victorian monuments, with a colony of wild green parrots nesting in the Gothic gate. One of the highest points in Brooklyn, looking out over the harbor.",g:'<span class="b y">R</span> from Queens Plaza to 25 St, then a block',m:"Green-Wood Cemetery 500 25th St Brooklyn NY",f:1,d:"Open daily, 7 to 7."},
+    {n:"Noguchi Museum",a:"Astoria",t:35,u:90,o:35,w:"Isamu Noguchi's own studio, now galleries of stone and paper sculpture wrapped around an open-air garden. Twenty minutes from home and never crowded.",g:'<span class="b y">N</span><span class="b y">W</span> to Broadway, then 15 minutes toward the water',m:"Noguchi Museum 9-01 33rd Rd Queens NY",d:"Wed–Sun, 11 to 6."},
+    {n:"Museum of the Moving Image",a:"Astoria",t:45,u:75,o:0,w:"Film and television you can put your hands on: dub your voice into a famous scene, spin a zoetrope, see the Muppets up close. Next to the studios where the Marx Brothers filmed.",g:'<span class="b y">N</span><span class="b y">W</span> to 36 Av, then 10 minutes on foot',m:"Museum of the Moving Image 36-01 35th Ave Queens NY",d:"Thu–Sun only. Free Thursdays, 2 to 6."},
+    {n:"Louis Armstrong House",a:"Corona, Queens",t:40,u:92,o:15,w:"The modest house Louis and Lucille Armstrong lived in for 28 years, kept exactly as it was down to the wallpaper, with his tapes and trumpets in the new center across the street.",g:'<span class="b p">7</span> to 103 St–Corona Plaza, then 5 minutes on foot',m:"Louis Armstrong House Museum 34-56 107th St Corona NY",d:"Thu–Sat, house tours hourly 11 to 3."},
+    {n:"Governors Island",a:"New York Harbor",t:70,u:65,o:95,w:"A car-free island of lawns, hammocks and old officers' houses, with a head-on view of the Statue of Liberty. The ferry ride over is half the point.",g:'<span class="b y">R</span> from Queens Plaza to Whitehall St, then the ferry',m:"Governors Island Ferry Battery Maritime Building 10 South St New York NY"},
+    {n:"Coney Island and Brighton Beach",a:"South Brooklyn",t:80,u:85,o:95,w:"The boardwalk, the wooden Cyclone from 1927, then a walk east into Brighton Beach for Russian bakeries and a beach chair. One long ride on one train.",g:'<span class="b y">N</span> from Queensboro Plaza all the way to Coney Island–Stillwell Av, about 75 minutes',m:"Coney Island Boardwalk Brooklyn NY",f:1},
+    {n:"New York Botanical Garden",a:"Bronx",t:70,u:60,o:95,w:"250 acres including 50 acres of forest that was never cut, a Victorian glasshouse, and a waterfall on the Bronx River.",g:'<span class="b p">7</span> to Grand Central, then Metro-North to Botanical Garden, 20 minutes',m:"New York Botanical Garden 2900 Southern Blvd Bronx NY",d:"Grounds are free for everyone Wednesdays, 10 to 11 AM."},
+    {n:"Arthur Avenue",a:"Belmont, Bronx",t:45,u:85,o:35,w:"The city's other Little Italy, and the one New Yorkers actually shop in: a covered retail market, cheese counters, fresh pasta, no souvenir stalls.",g:'<span class="b p">7</span> to Grand Central, then Metro-North to Fordham',m:"Arthur Avenue Retail Market 2344 Arthur Ave Bronx NY"},
+    {n:"Chinatown and Columbus Park",a:"Lower Manhattan",t:55,u:80,o:55,w:"Start where the old men play Chinese chess and mahjong under the plane trees in Columbus Park, then wander Mott and Grand for dumplings, bakeries and herb shops.",g:'<span class="b y">N</span><span class="b y">W</span> from Queensboro Plaza to Canal St',m:"Columbus Park 67 Mulberry St New York NY",f:1},
+    {n:"Curry Hill",a:"Murray Hill",t:30,u:75,o:25,w:"Three blocks of Lexington Ave that are entirely South Indian: dosa counters, sweet shops, and Kalustyan's, a spice store with four thousand things on its shelves.",g:'<span class="b y">N</span> to 34 St–Herald Sq, then 10 minutes east',m:"Kalustyans 123 Lexington Ave New York NY"},
+    {n:"The Strand",a:"Greenwich Village",t:60,u:60,o:0,w:"Eighteen miles of books over four floors, new and secondhand, with dollar carts out on the sidewalk. Easy to lose an hour and buy nothing.",g:'<span class="b y">N</span><span class="b y">W</span> to 14 St–Union Sq, then a block east',m:"Strand Book Store 828 Broadway New York NY"},
+    {n:"Chelsea galleries",a:"Chelsea",t:25,u:75,o:20,w:"A hundred free galleries in the West 20s, some the size of aircraft hangars. Walk in, look at whatever is up, walk out. Nobody will approach you.",g:'<span class="b bl">E</span> to 23 St, then walk west',m:"Chelsea Art Galleries W 24th St New York NY",f:1,d:"Usually Tue–Sat. Closed Sundays and Mondays."},
+    {n:"Union Square Greenmarket",a:"Union Square",t:45,u:60,o:90,w:"Farm stands from upstate and New Jersey: cider, a dozen kinds of apple in September, bread and cheese. All locals with tote bags.",g:'<span class="b y">N</span><span class="b y">W</span> to 14 St–Union Sq',m:"Union Square Greenmarket New York NY",f:1,d:"Mondays, Wednesdays, Fridays and Saturdays."},
+    {n:"South Street Seaport",a:"Lower Manhattan",t:65,u:60,o:75,w:"Cobblestone streets and tall ships tied up at the pier, with a rooftop at Pier 17 looking straight up the East River at the Brooklyn Bridge.",g:'<span class="b bl">E</span> to World Trade Center, then 15 minutes on foot',m:"South Street Seaport Pier 17 New York NY"},
+    {n:"Lincoln Center",a:"Upper West Side",t:70,u:40,o:45,w:"Sit at the fountain, look through the glass at the Chagall murals inside the opera house, and see what free performance is on in the atrium around the corner.",g:'<span class="b p">7</span> to Times Sq, then <span class="b r">1</span> to 66 St–Lincoln Center',m:"Lincoln Center 10 Lincoln Center Plaza New York NY"},
+    {n:"Riverside Park",a:"Upper West Side",t:30,u:55,o:95,w:"Four miles of park along the Hudson, with the boat basin at 79th St where people really do live on the water, and benches facing the New Jersey sunset.",g:'<span class="b p">7</span> to Times Sq, then <span class="b r">1</span> to 79 St',m:"Riverside Park 79th Street Boat Basin New York NY",f:1},
+    {n:"Carl Schurz Park",a:"Upper East Side",t:20,u:60,o:95,w:"A small hilly park with a promenade right at the East River's edge, tugboats going past and the mayor's house at the north end.",g:'<span class="b y">N</span><span class="b y">W</span> to Lexington Av/59 St, then <span class="b g">6</span> to 86 St and walk east',m:"Carl Schurz Park East End Ave New York NY",f:1},
+    {n:"Fort Greene Park",a:"Fort Greene, Brooklyn",t:20,u:60,o:95,w:"A hill with a 149-foot marble column on top, brownstone streets on every side, and a farmers market at the bottom on Saturdays.",g:'<span class="b bl">E</span> to Jay St–MetroTech, then 10 minutes on foot',m:"Fort Greene Park Brooklyn NY",f:1},
+    {n:"Industry City",a:"Sunset Park, Brooklyn",t:35,u:70,o:25,w:"Six converted warehouses of design shops, makers' studios and a food hall, with courtyards between them to sit in.",g:'<span class="b y">R</span> from Queens Plaza to 36 St, then 10 minutes on foot',m:"Industry City 220 36th St Brooklyn NY"},
+    {n:"Brooklyn's Chinatown",a:"Sunset Park",t:15,u:85,o:55,w:"Eighth Avenue is the biggest Chinatown in the city by population and the least visited: bakeries, noodle shops and fruit stalls for twenty blocks. The park itself has a skyline view worth the climb.",g:'<span class="b y">N</span> from Queensboro Plaza to 8 Av',m:"8th Avenue Sunset Park Brooklyn NY",f:1},
+    {n:"Bushwick Collective murals",a:"Bushwick, Brooklyn",t:35,u:90,o:90,w:"Blocks of warehouse walls painted by artists from all over and repainted every summer. Walk Troutman St and the streets either side of it.",g:'<span class="b lg">G</span> from Court Sq to Metropolitan Av, then <span class="b gy">L</span> to Jefferson St',m:"Bushwick Collective Troutman St Brooklyn NY",f:1},
+    {n:"Domino Park",a:"Williamsburg",t:45,u:65,o:95,w:"Built on the bones of the Domino sugar refinery, with the old syrup tanks and cranes left standing over the lawn and the Williamsburg Bridge overhead.",g:'<span class="b lg">G</span> from Court Sq to Metropolitan Av, then <span class="b gy">L</span> to Bedford Av',m:"Domino Park 15 River St Brooklyn NY",f:1},
+    {n:"Museum at Eldridge Street",a:"Lower East Side",t:35,u:90,o:0,w:"An 1887 synagogue restored to its full painted, stained-glass glory, hidden on a Chinatown block. Guided tours run through the day.",g:'<span class="b y">N</span><span class="b y">W</span> to Canal St, then 10 minutes on foot',m:"Museum at Eldridge Street 12 Eldridge St New York NY"},
+    {n:"Tenement Museum",a:"Lower East Side",t:70,u:75,o:10,w:"Guided tours through the actual apartments of immigrant families in a preserved 1863 tenement, one family per tour. Tickets are timed, so book before going.",g:'<span class="b y">N</span><span class="b y">W</span> to Canal St, then 10 minutes on foot',m:"Tenement Museum 103 Orchard St New York NY"},
+    {n:"Rockefeller Center and St. Patrick's",a:"Midtown",t:90,u:20,o:45,w:"The flags, the sunken plaza, the Channel Gardens, and the cathedral across 5th Ave. Peak postcard New York, and free to walk through.",g:'<span class="b o">F</span> from 21 St–Queensbridge to 47–50 Sts–Rockefeller Ctr',m:"Rockefeller Center 45 Rockefeller Plaza New York NY",f:1},
+    {n:"Empire State Building",a:"Midtown",t:95,u:25,o:45,w:"Eighty-six floors up in the open air, and the one skyline view with the Chrysler Building in it. Go at opening or after dark; midday is the longest line.",g:'<span class="b y">N</span> to 34 St–Herald Sq, then three blocks east',m:"Empire State Building 20 W 34th St New York NY"},
+    {n:"Times Square",a:"Midtown",t:98,u:15,o:80,w:"Loud, bright and mobbed, and worth twenty minutes once. Best after dark, from the red steps at 47th St.",g:'<span class="b p">7</span> or <span class="b y">N</span> to Times Sq–42 St',m:"Times Square New York NY",f:1},
+    {n:"Flushing food halls",a:"Flushing, Queens",t:40,u:85,o:10,w:"The basement food courts under New World Mall and along Main St hold a dozen regional Chinese stalls each: hand-pulled noodles, lamb skewers, soup dumplings. Bring cash.",g:'<span class="b p">7</span> to Flushing–Main St, the last stop',m:"New World Mall 136-20 Roosevelt Ave Flushing NY"},
+    {n:"Jackson Heights",a:"Queens",t:25,u:85,o:45,w:"74th St is sari shops, gold jewelers and sweet counters; one block over, Roosevelt Ave turns into taquerias and Tibetan momo stalls.",g:'<span class="b p">7</span> to 74 St–Broadway',m:"74th St Jackson Heights Queens NY"},
+    {n:"MoMA PS1",a:"Long Island City",t:40,u:80,o:15,w:"Contemporary art in an old public school ten minutes from the apartment, free for everyone this year, with big strange installations in classroom-sized rooms.",g:'About 10 minutes on foot, or <span class="b p">7</span> one stop to Court Sq',m:"MoMA PS1 22-25 Jackson Ave Long Island City NY",f:1,d:"Closed Tuesdays and Wednesdays."},
+    {n:"Intrepid Museum",a:"Hell's Kitchen",t:80,u:60,o:60,w:"An aircraft carrier tied up at a Hudson pier, with a Concorde and a space shuttle parked alongside. Most of the visit is outdoors on the flight deck.",g:'<span class="b p">7</span> to 34 St–Hudson Yards, then 15 minutes up the river path',m:"Intrepid Museum Pier 86 W 46th St New York NY"},
+    {n:"Brooklyn Museum",a:"Prospect Heights",t:60,u:50,o:0,w:"Egyptian galleries that rival the Met's, a floor of period rooms lifted out of old houses, and Judy Chicago's Dinner Party. Quieter than anything in Manhattan.",g:'<span class="b p">7</span> to Times Sq, then <span class="b r">2</span><span class="b r">3</span> to Eastern Pkwy–Brooklyn Museum',m:"Brooklyn Museum 200 Eastern Pkwy Brooklyn NY"}
+  ];
+
+  var last = null;
+  function dial(id) { var el = document.getElementById(id); return el ? +el.value : 50; }
+  function band(v, a, b, c) { return v < 34 ? a : (v < 67 ? b : c); }
+
+  function render(p) {
+    var maps = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(p.m);
+    var tags = [
+      band(p.t, "No tourists", "Some tourists", "Tourist classic"),
+      band(p.u, "Classic New York", "In between", "Offbeat"),
+      band(p.o, "Indoors", "Indoor and out", "Outdoors")
+    ];
+    var out = document.getElementById("rec-out");
+    if (!out) return;
+    out.innerHTML =
+      "<h3>" + p.n + "</h3>" +
+      '<p class="area">' + p.a + "</p>" +
+      '<div class="tagrow">' + tags.map(function (x) { return '<span class="tag">' + x + "</span>"; }).join("") + "</div>" +
+      '<p class="why">' + p.w + "</p>" +
+      '<ul class="meta"><li>' + p.g + "</li>" +
+      '<li><a href="' + maps + '">Open in Maps</a></li>' +
+      (p.f ? '<li><span class="free">Free</span></li>' : "") + "</ul>" +
+      (p.d ? '<p class="day">' + p.d + "</p>" : "");
+  }
+
+  function suggest() {
+    var t = dial("dial-t"), u = dial("dial-u"), o = dial("dial-o");
+    var scored = POOL.map(function (p) {
+      return { p: p, d: Math.abs(p.t - t) + Math.abs(p.u - u) + 1.2 * Math.abs(p.o - o) + Math.random() * 10 };
+    });
+    scored.sort(function (a, b) { return a.d - b.d; });
+    var top = scored.slice(0, 5).map(function (s) { return s.p; });
+    var fresh = top.filter(function (p) { return p !== last; });
+    if (fresh.length) top = fresh;
+    last = top[Math.floor(Math.random() * top.length)];
+    render(last);
+  }
+
+  var btn = document.getElementById("gen");
+  if (btn) btn.addEventListener("click", suggest);
+})();
+
+(function () {
+  var KEY = "momdad-nyc-2026-todo";
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) { state = {}; }
+  document.querySelectorAll('.todo input[type="checkbox"]').forEach(function (cb) {
+    if (state[cb.id]) cb.checked = true;
+    cb.addEventListener("change", function () {
+      state[cb.id] = cb.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+    });
+  });
+  var now = new Date();
+  if (now.getFullYear() === 2026 && now.getMonth() === 8) {
+    var link = document.querySelector('.strip a[href="#sep' + now.getDate() + '"]');
+    if (link) { link.parentElement.classList.add("today"); link.setAttribute("aria-current", "date"); }
+  }
+})();
+</script>
+</body>
+</html>
