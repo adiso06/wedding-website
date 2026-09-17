@@ -1,0 +1,25 @@
+{
+  "_comment": "Optional per-trip overrides for the generated shelf at /trips/. Keyed by URL. Anything omitted falls back to the page's own trip-* meta tags, then its <title> and <meta name=description>. A page needs no entry here at all. Fields: label, title, blurb, order (lower sorts first), hidden (true keeps it off the shelf).",
+  "/trips/momdad2026": {
+    "label": "September 2026",
+    "order": 10
+  },
+  "/trips/chhaya30th/": {
+    "label": "September 2026",
+    "title": "Chhaya’s Birthday Weekend",
+    "blurb": "Mexico City for four days with thirteen of us: canals, cocktails, one dress-up dinner, and a guest itinerary with all the logistics.",
+    "order": 20
+  },
+  "/trips/mexico/": {
+    "label": "March 2026",
+    "title": "Mexico City",
+    "blurb": "A fully designed trip app with day-by-day planning, reservations, weather, and neighborhood guides.",
+    "order": 30
+  },
+  "/trips/turkey": {
+    "label": "March 2026",
+    "title": "Turkey",
+    "blurb": "Full itinerary, visual planning, hotel ideas, logistics, and budget notes.",
+    "order": 40
+  }
+}

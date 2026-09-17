@@ -18,10 +18,36 @@ Notes for whoever (or whatever) publishes the next trip page. Written 2026-09-17
 
 GitHub Pages serves `.html` files at their extensionless path, and 308-redirects `/trips/foo.html` → `/trips/foo`. So for a URL like `/trips/momdad2026`, add `public/trips/momdad2026.html`. Existing pages use both styles (`turkey.html`, `chhaya30th/`, `mexico/`).
 
+## The /trips/ shelf builds itself
+
+**Do not hand-edit `public/trips/index.html` — it is generated and your edits will be overwritten.**
+
+`scripts/build-trips-index.js` runs as npm's `prebuild`, so every `npm run build` (and therefore every deploy) rebuilds the shelf. It scans `public/trips/` and `trips/`, finds every page, and writes the card grid into `scripts/trips-index-template.html`, replacing the `<!-- TRIPS:CARDS -->` marker.
+
+**A new page needs nothing.** Its `<title>` becomes the card title and its `<meta name="description">` becomes the blurb.
+
+To control a card, add meta tags to the page itself:
+
+```html
+<meta name="trip-label" content="September 2026">   <!-- the small date line -->
+<meta name="trip-title" content="Mom & Dad in New York">
+<meta name="trip-blurb" content="One sentence for the card.">
+<meta name="trip-order" content="10">               <!-- lower sorts first -->
+<meta name="trip-hidden" content="true">            <!-- keep it off the shelf -->
+```
+
+`scripts/trips.meta.json` does the same thing keyed by URL, and wins over the page's own tags. It exists for pages you would rather not edit. Pages with no order sort last, alphabetically.
+
+Two things stay hand-written in `scripts/trips-index-template.html`: the **Featured Trip** block and the page's own copy. Edit the template, not the output.
+
+The generator never fails the build. If the template is missing or malformed it warns and leaves the existing `index.html` alone.
+
+To preview locally: `node scripts/build-trips-index.js`, then look at `public/trips/index.html`.
+
 ## Do not clone this repo
 
 It is ~460 MB shallow and 1.7 GB in full — photos in `public/`. There is already a clone at
-`~/Downloads/_Hub_04_Wedding/wedding-website/wedding-website` (on `main`, usually with uncommitted changes — check `git status` before committing anything from it).
+`~/Downloads/_Hub_04_Wedding/wedding-website/wedding-website` (on `main`; check `git status` before committing from it).
 
 **Add a single file without any clone:**
 
@@ -45,9 +71,8 @@ curl -s https://adityaandchhaya.us/trips/NAME | grep -c "<title>"
 ## Page conventions
 
 - Standalone, self-contained HTML: own `<style>`, no shared stylesheet, no build step. Google Fonts links are fine.
-- Add `<meta name="robots" content="noindex, nofollow">` for personal pages. The site is public and unauthenticated: anything published here can be read by anyone with the URL.
+- Add `<meta name="robots" content="noindex, nofollow">` for personal pages. The site is public and unauthenticated: anything published here can be read by anyone with the URL, and by default it is now listed on `/trips/` too. Use `trip-hidden` if a page should not appear there.
 - Add `<link rel="canonical" href="https://adityaandchhaya.us/trips/NAME">`.
-- `public/trips/index.html` is a hand-maintained shelf of cards. **Adding a page does not list it** — add a card there only when the page is meant to be discoverable.
 
 ## If the source is a Claude artifact
 
